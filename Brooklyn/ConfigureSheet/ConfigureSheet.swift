@@ -76,7 +76,8 @@ struct ConfigureSheet: View {
                 .foregroundStyle(.tertiary)
             Spacer()
             Button("Close") {
-                NSApp.mainWindow?.endSheet(NSApp.keyWindow ?? NSApp.mainWindow!)
+                guard let window = NSApp.keyWindow else { return }
+                window.sheetParent?.endSheet(window)
             }
         }
         .padding()
