@@ -2,14 +2,14 @@ name: Brooklyn
 options:
   bundleIdPrefix: dev.nozomiishii
   deploymentTarget:
-    macOS: "15.0"
-  xcodeVersion: "16.4"
+    macOS: "26.0"
+  xcodeVersion: "26.4"
   createIntermediateGroups: true
 
 settings:
   base:
     SWIFT_VERSION: "6"
-    MACOSX_DEPLOYMENT_TARGET: "15.0"
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
     ARCHS: "arm64 x86_64"
     ONLY_ACTIVE_ARCH: false
 
