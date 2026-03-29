@@ -5,25 +5,17 @@ import ScreenSaver
 ///
 /// Handles the macOS Sonoma+ bugs:
 /// - `stopAnimation()` not being called → listens for `com.apple.screensaver.willstop`
-/// - Instance accumulation → lame-duck pattern via `newInstanceCreated` notification
 /// - `isPreview` always returning true → frame size heuristic
 final class BrooklynView: ScreenSaverView {
-    /// Tracks active instances per screen to handle the Sonoma+ instance accumulation bug.
-    /// Key is the screen's deviceDescription identifier.
-    private static var activeInstances: [UInt32: BrooklynView] = [:]
-
     private var manager: BrooklynManager?
     private var player: LoopPlayer?
     private var playerLayer: AVPlayerLayer?
     private var configureSheetController: ConfigureSheetController?
-    nonisolated(unsafe) private var screenID: UInt32 = 0
-    private var isLameDuck = false
     nonisolated(unsafe) private var willStopObserver: NSObjectProtocol?
 
     // MARK: - Initialization
 
     override init?(frame: NSRect, isPreview: Bool) {
-        // Workaround: isPreview is broken on Sonoma+. Use frame size heuristic.
         let actualIsPreview = frame.width < 400 && frame.height < 300
         super.init(frame: frame, isPreview: actualIsPreview)
         setup()
@@ -41,17 +33,6 @@ final class BrooklynView: ScreenSaverView {
 
         let bundle = Bundle(for: BrooklynView.self)
         manager = BrooklynManager(bundle: bundle)
-
-        // Determine which screen this view belongs to.
-        if let screenNumber = window?.screen?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? UInt32 {
-            screenID = screenNumber
-        }
-
-        // Shut down any previous instance on the same screen (Sonoma+ bug workaround).
-        if let oldInstance = Self.activeInstances[screenID], oldInstance !== self {
-            oldInstance.goLameDuck()
-        }
-        Self.activeInstances[screenID] = self
 
         setupPlayer()
         observeLifecycle()
@@ -74,34 +55,21 @@ final class BrooklynView: ScreenSaverView {
         self.playerLayer = layer
     }
 
-    // MARK: - Lifecycle Workarounds
+    // MARK: - Lifecycle
 
     private func observeLifecycle() {
-        // Sonoma+: stopAnimation() is not called. Listen for willstop instead.
         willStopObserver = DistributedNotificationCenter.default().addObserver(
             forName: NSNotification.Name("com.apple.screensaver.willstop"),
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.handleWillStop()
+            self?.cleanUp()
         }
     }
 
-    private func handleWillStop() {
+    private func cleanUp() {
         player?.tearDown()
         playerLayer?.removeFromSuperlayer()
-        removeObservers()
-    }
-
-    private func goLameDuck() {
-        guard !isLameDuck else { return }
-        isLameDuck = true
-        player?.tearDown()
-        playerLayer?.removeFromSuperlayer()
-        removeObservers()
-    }
-
-    private func removeObservers() {
         if let observer = willStopObserver {
             DistributedNotificationCenter.default().removeObserver(observer)
             willStopObserver = nil
@@ -112,7 +80,6 @@ final class BrooklynView: ScreenSaverView {
 
     override func startAnimation() {
         super.startAnimation()
-        guard !isLameDuck else { return }
         player?.play()
     }
 
@@ -137,8 +104,6 @@ final class BrooklynView: ScreenSaverView {
         return configureSheetController?.window
     }
 
-    // MARK: - Drawing
-
     override func draw(_ rect: NSRect) {
         NSColor(red: 0.0, green: 0.01, blue: 0.0, alpha: 1.0).setFill()
         rect.fill()
@@ -147,9 +112,6 @@ final class BrooklynView: ScreenSaverView {
     deinit {
         if let observer = willStopObserver {
             DistributedNotificationCenter.default().removeObserver(observer)
-        }
-        if Self.activeInstances[screenID] === self {
-            Self.activeInstances.removeValue(forKey: screenID)
         }
     }
 }
