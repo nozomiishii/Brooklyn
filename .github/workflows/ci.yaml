@@ -33,7 +33,7 @@ jobs:
 
       - name: Verify animations are bundled
         run: |
-          count=$(ls build/Build/Products/Release/Brooklyn.saver/Contents/Resources/Animations/*.mp4 | wc -l | tr -d ' ')
+          count=$(find build/Build/Products/Release/Brooklyn.saver/Contents/Resources/Animations -name "*.mp4" | wc -l | tr -d ' ')
           echo "Found $count MP4 files"
           [ "$count" -eq 75 ] || (echo "Expected 75 MP4 files, got $count" && exit 1)
 
