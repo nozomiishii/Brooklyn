@@ -48,7 +48,6 @@ final class LoopPlayer: AVQueuePlayer {
             guard let self, let makePlaylist = self.makePlaylist else { return }
             self.remainingInCycle -= 1
             if self.remainingInCycle <= 0 {
-                // Cycle complete — rebuild the playlist
                 let newItems = makePlaylist()
                 for item in newItems {
                     self.insert(item, after: nil)
