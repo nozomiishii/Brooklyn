@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: macos-15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build Universal Binary
+        run: |
+          xcodebuild \
+            -project Brooklyn.xcodeproj \
+            -scheme Brooklyn \
+            -configuration Release \
+            -arch arm64 -arch x86_64 \
+            ONLY_ACTIVE_ARCH=NO \
+            -derivedDataPath build
+
+      - name: Run tests
+        run: |
+          xcodebuild test \
+            -project Brooklyn.xcodeproj \
+            -scheme BrooklynTests \
+            -destination 'platform=macOS' \
+            -derivedDataPath build
+
+      - name: Package .saver
+        run: |
+          cd build/Build/Products/Release
+          zip -r Brooklyn.saver.zip Brooklyn.saver
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            build/Build/Products/Release/Brooklyn.saver.zip \
+            --title "${{ github.ref_name }}" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
