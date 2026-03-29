@@ -44,16 +44,18 @@ final class BrooklynManager {
     // MARK: - Playback
 
     func makePlayerItems() -> [AVPlayerItem] {
-        let selected = database.selectedAnimations
+        // When customize is OFF, use all animations
+        let selected = database.customize ? database.selectedAnimations : Animation.allCases
         let hasOriginal = selected.contains(.original)
 
         // Separate original from the rest
         var rest = selected.filter { $0 != .original }
-        if database.randomOrder {
+        let shouldShuffle = database.customize ? database.randomOrder : true
+        if shouldShuffle {
             rest.shuffle()
         }
 
-        let loops = database.numberOfLoops + 1
+        let loops = database.customize ? database.numberOfLoops + 1 : 1
 
         var items: [AVPlayerItem] = []
 
