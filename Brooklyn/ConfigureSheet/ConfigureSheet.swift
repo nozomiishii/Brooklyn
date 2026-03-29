@@ -12,13 +12,18 @@ struct ConfigureSheet: View {
         VStack(spacing: 0) {
             header
             Divider()
-            animationList
-            Divider()
-            playbackOptions
+            customizeToggle
+            if viewModel.customize {
+                Divider()
+                animationList
+                Divider()
+                playbackOptions
+            }
             Divider()
             footer
         }
-        .frame(width: 480, height: 560)
+        .frame(width: 480, height: viewModel.customize ? 560 : 200)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.customize)
     }
 
     // MARK: - Header
@@ -32,6 +37,14 @@ struct ConfigureSheet: View {
                 .foregroundStyle(.secondary)
         }
         .padding()
+    }
+
+    // MARK: - Customize Toggle
+
+    private var customizeToggle: some View {
+        Toggle("Customize Selection", isOn: $viewModel.customize)
+            .padding(.horizontal)
+            .padding(.vertical, 10)
     }
 
     // MARK: - Animation List

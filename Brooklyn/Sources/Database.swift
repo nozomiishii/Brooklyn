@@ -4,6 +4,7 @@ import ScreenSaver
 @MainActor
 final class Database {
     private static let selectedAnimationsKey = "selectedAnimations"
+    private static let customizeKey = "customize"
     private static let numberOfLoopsKey = "numberOfLoops"
     private static let randomOrderKey = "randomOrder"
 
@@ -18,6 +19,7 @@ final class Database {
     private func registerDefaults() {
         defaults?.register(defaults: [
             Self.selectedAnimationsKey: Animation.allCases.map(\.rawValue),
+            Self.customizeKey: false,
             Self.numberOfLoopsKey: 0,
             Self.randomOrderKey: false,
         ])
@@ -34,6 +36,14 @@ final class Database {
         set {
             let rawValues = newValue.map(\.rawValue)
             defaults?.set(rawValues, forKey: Self.selectedAnimationsKey)
+            defaults?.synchronize()
+        }
+    }
+
+    var customize: Bool {
+        get { defaults?.bool(forKey: Self.customizeKey) ?? false }
+        set {
+            defaults?.set(newValue, forKey: Self.customizeKey)
             defaults?.synchronize()
         }
     }

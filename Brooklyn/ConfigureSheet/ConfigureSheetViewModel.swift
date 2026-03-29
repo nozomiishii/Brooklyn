@@ -5,6 +5,15 @@ import SwiftUI
 final class ConfigureSheetViewModel: ObservableObject {
     private let manager: BrooklynManager
 
+    @Published var customize: Bool {
+        didSet {
+            manager.database.customize = customize
+            if !customize {
+                manager.selectAll()
+            }
+        }
+    }
+
     @Published var numberOfLoops: Int {
         didSet { manager.database.numberOfLoops = numberOfLoops }
     }
@@ -15,6 +24,7 @@ final class ConfigureSheetViewModel: ObservableObject {
 
     init(manager: BrooklynManager) {
         self.manager = manager
+        self.customize = manager.database.customize
         self.numberOfLoops = manager.database.numberOfLoops
         self.randomOrder = manager.database.randomOrder
     }
