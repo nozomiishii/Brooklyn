@@ -25,16 +25,8 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
 
-      - name: Generate Xcode project
-        run: xcodegen generate --spec project.yaml
-
-      - name: Build Brooklyn.saver
-        run: |
-          xcodebuild \
-            -project Brooklyn.xcodeproj \
-            -scheme Brooklyn \
-            -configuration Release \
-            -derivedDataPath build
+      - name: Build
+        run: make build
 
       - name: Verify arm64 binary
         run: |
@@ -48,9 +40,4 @@ jobs:
           [ "$count" -eq 75 ] || (echo "Expected 75 MP4 files, got $count" && exit 1)
 
       - name: Run tests
-        run: |
-          xcodebuild test \
-            -project Brooklyn.xcodeproj \
-            -scheme BrooklynTests \
-            -destination 'platform=macOS' \
-            -derivedDataPath build
+        run: make test

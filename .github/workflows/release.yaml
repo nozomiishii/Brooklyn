@@ -41,24 +41,11 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
 
-      - name: Generate Xcode project
-        run: xcodegen generate --spec project.yaml
-
       - name: Build
-        run: |
-          xcodebuild \
-            -project Brooklyn.xcodeproj \
-            -scheme Brooklyn \
-            -configuration Release \
-            -derivedDataPath build
+        run: make build
 
       - name: Run tests
-        run: |
-          xcodebuild test \
-            -project Brooklyn.xcodeproj \
-            -scheme BrooklynTests \
-            -destination 'platform=macOS' \
-            -derivedDataPath build
+        run: make test
 
       - name: Package .saver
         run: |
