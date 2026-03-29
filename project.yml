@@ -1,6 +1,6 @@
 name: Brooklyn
 options:
-  bundleIdPrefix: com.nozomiishii
+  bundleIdPrefix: dev.nozomiishii
   deploymentTarget:
     macOS: "26.0"
   xcodeVersion: "26.4"
@@ -26,7 +26,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: Brooklyn
-        PRODUCT_BUNDLE_IDENTIFIER: com.nozomiishii.brooklyn
+        PRODUCT_BUNDLE_IDENTIFIER: dev.nozomiishii.brooklyn
         WRAPPER_EXTENSION: saver
         INFOPLIST_FILE: Brooklyn/Info.plist
         GENERATE_INFOPLIST_FILE: false
@@ -51,7 +51,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: Canvas
-        PRODUCT_BUNDLE_IDENTIFIER: com.nozomiishii.brooklyn.canvas
+        PRODUCT_BUNDLE_IDENTIFIER: dev.nozomiishii.brooklyn.canvas
         INFOPLIST_FILE: Canvas/Info.plist
         GENERATE_INFOPLIST_FILE: false
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
@@ -74,7 +74,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: BrooklynTests
-        PRODUCT_BUNDLE_IDENTIFIER: com.nozomiishii.brooklyn.tests
+        PRODUCT_BUNDLE_IDENTIFIER: dev.nozomiishii.brooklyn.tests
         GENERATE_INFOPLIST_FILE: true
     dependencies:
       - framework: ScreenSaver.framework

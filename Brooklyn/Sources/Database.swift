@@ -11,7 +11,7 @@ final class Database {
     private let defaults: ScreenSaverDefaults?
 
     init(moduleBundle: Bundle) {
-        let identifier = moduleBundle.bundleIdentifier ?? "com.nozomiishii.brooklyn"
+        let identifier = moduleBundle.bundleIdentifier ?? "dev.nozomiishii.brooklyn"
         self.defaults = ScreenSaverDefaults(forModuleWithName: identifier)
         registerDefaults()
     }
