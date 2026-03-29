@@ -1,15 +1,32 @@
 name: Release
 
 on:
+  workflow_dispatch:
   push:
-    tags:
-      - "v*"
+    branches: [main]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
 
 jobs:
-  release:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: .github/.release-please-config.json
+          manifest-file: .github/.release-please-manifest.json
+
+  upload-assets:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
     runs-on: macos-26
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -40,11 +57,9 @@ jobs:
           cd build/Build/Products/Release
           zip -r Brooklyn.saver.zip Brooklyn.saver
 
-      - name: Create GitHub Release
+      - name: Upload to GitHub Release
         run: |
-          gh release create "${{ github.ref_name }}" \
-            build/Build/Products/Release/Brooklyn.saver.zip \
-            --title "${{ github.ref_name }}" \
-            --generate-notes
+          gh release upload "${{ needs.release-please.outputs.tag_name }}" \
+            build/Build/Products/Release/Brooklyn.saver.zip
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
