@@ -17,7 +17,7 @@ final class Database {
 
     private func registerDefaults() {
         defaults?.register(defaults: [
-            Self.selectedAnimationsKey: [Animation.original.rawValue],
+            Self.selectedAnimationsKey: Animation.allCases.map(\.rawValue),
             Self.numberOfLoopsKey: 0,
             Self.randomOrderKey: false,
         ])
@@ -26,7 +26,7 @@ final class Database {
     var selectedAnimations: [Animation] {
         get {
             guard let rawValues = defaults?.stringArray(forKey: Self.selectedAnimationsKey) else {
-                return [.original]
+                return Animation.allCases
             }
             let animations = rawValues.compactMap { Animation(rawValue: $0) }
             return animations.isEmpty ? [.original] : animations

@@ -37,16 +37,26 @@ struct ConfigureSheet: View {
     // MARK: - Animation List
 
     private var animationList: some View {
-        List {
-            ForEach(Animation.allCases) { animation in
-                AnimationRow(
-                    animation: animation,
-                    isSelected: viewModel.isSelected(animation),
-                    onToggle: { viewModel.toggle(animation) }
-                )
+        VStack(spacing: 0) {
+            HStack {
+                Button("Select All") { viewModel.selectAll() }
+                Button("Remove All") { viewModel.removeAll() }
+                Spacer()
             }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+
+            List {
+                ForEach(Animation.allCases) { animation in
+                    AnimationRow(
+                        animation: animation,
+                        isSelected: viewModel.isSelected(animation),
+                        onToggle: { viewModel.toggle(animation) }
+                    )
+                }
+            }
+            .listStyle(.plain)
         }
-        .listStyle(.plain)
     }
 
     // MARK: - Playback Options

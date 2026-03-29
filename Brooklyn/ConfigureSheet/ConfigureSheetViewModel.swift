@@ -27,4 +27,14 @@ final class ConfigureSheetViewModel: ObservableObject {
         manager.toggle(animation)
         objectWillChange.send()
     }
+
+    func selectAll() {
+        manager.selectAll()
+        objectWillChange.send()
+    }
+
+    func removeAll() {
+        manager.removeAll()
+        objectWillChange.send()
+    }
 }

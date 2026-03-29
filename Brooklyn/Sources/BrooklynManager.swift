@@ -33,6 +33,14 @@ final class BrooklynManager {
         database.selectedAnimations = selected
     }
 
+    func selectAll() {
+        database.selectedAnimations = Animation.allCases
+    }
+
+    func removeAll() {
+        database.selectedAnimations = [Animation.allCases.first!]
+    }
+
     // MARK: - Playback
 
     func makePlayerItems() -> [AVPlayerItem] {
