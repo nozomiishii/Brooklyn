@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-and-test:
+    runs-on: macos-26
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Build
+        run: make build
+
+      - name: Verify arm64 binary
+        run: |
+          lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn
+          lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn | grep "arm64"
+
+      - name: Verify animations are bundled
+        run: |
+          count=$(find build/Build/Products/Release/Brooklyn.saver/Contents/Resources/Animations -name "*.mp4" | wc -l | tr -d ' ')
+          echo "Found $count MP4 files"
+          [ "$count" -eq 75 ] || (echo "Expected 75 MP4 files, got $count" && exit 1)
+
+      - name: Run tests
+        run: make test

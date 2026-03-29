@@ -10,8 +10,7 @@ settings:
   base:
     SWIFT_VERSION: "6"
     MACOSX_DEPLOYMENT_TARGET: "26.0"
-    ARCHS: "arm64 x86_64"
-    ONLY_ACTIVE_ARCH: false
+    ARCHS: arm64
 
 targets:
   Brooklyn:

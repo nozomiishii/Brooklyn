@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "0e72eef93fe5e3acdf957e3be59c8301e3b961c2",
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
+  "include-component-in-tag": false,
+  "pull-request-title-pattern": "chore: release ${version}",
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "extra-files": [
+        {
+          "type": "xml",
+          "path": "Brooklyn/Info.plist",
+          "xpath": "//dict/key[text()='CFBundleShortVersionString']/following-sibling::string[1]"
+        }
+      ]
+    }
+  }
+}

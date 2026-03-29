@@ -9,7 +9,7 @@ final class LoopPlayer: AVQueuePlayer {
 
     override init() {
         super.init()
-        setupObserver()
+        itemDidFinishObserver = makeObserver()
     }
 
     override init(items: [AVPlayerItem]) {
@@ -19,20 +19,21 @@ final class LoopPlayer: AVQueuePlayer {
             queue.append(copy)
         }
         super.init(items: queue)
-        setupObserver()
+        itemDidFinishObserver = makeObserver()
     }
 
-    private func setupObserver() {
-        itemDidFinishObserver = NotificationCenter.default.addObserver(
+    private nonisolated func makeObserver() -> NSObjectProtocol {
+        NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: nil,
             queue: .main
         ) { [weak self] notification in
-            guard let self,
-                  let finishedItem = notification.object as? AVPlayerItem,
+            guard let finishedItem = notification.object as? AVPlayerItem,
                   let copy = finishedItem.copy() as? AVPlayerItem
             else { return }
-            self.insert(copy, after: nil)
+            MainActor.assumeIsolated {
+                self?.insert(copy, after: nil)
+            }
         }
     }
 

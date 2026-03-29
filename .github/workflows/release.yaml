@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          config-file: .github/.release-please-config.json
+          manifest-file: .github/.release-please-manifest.json
+
+  upload-assets:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: macos-26
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Build
+        run: make build
+
+      - name: Run tests
+        run: make test
+
+      - name: Package .saver
+        run: |
+          cd build/Build/Products/Release
+          zip -r Brooklyn.saver.zip Brooklyn.saver
+
+      - name: Upload to GitHub Release
+        run: |
+          gh release upload "${{ needs.release-please.outputs.tag_name }}" \
+            build/Build/Products/Release/Brooklyn.saver.zip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

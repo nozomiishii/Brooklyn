@@ -94,7 +94,7 @@ struct ConfigureSheet: View {
 
     private var footer: some View {
         HStack {
-            Text("v1.0.0")
+            Text("v\(Bundle(for: BrooklynView.self).object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?")")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
             Spacer()
