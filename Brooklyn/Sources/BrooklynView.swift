@@ -13,6 +13,7 @@ final class BrooklynView: ScreenSaverView {
     private var manager: BrooklynManager?
     private var player: LoopPlayer?
     private var playerLayer: AVPlayerLayer?
+    private var configureSheetController: ConfigureSheetController?
     private var isLameDuck = false
     nonisolated(unsafe) private var willStopObserver: NSObjectProtocol?
     nonisolated(unsafe) private var newInstanceObserver: NSObjectProtocol?
@@ -133,9 +134,11 @@ final class BrooklynView: ScreenSaverView {
 
     override var configureSheet: NSWindow? {
         guard let manager else { return nil }
-        let sheet = ConfigureSheet(manager: manager)
-        let controller = ConfigureSheetController(rootView: sheet)
-        return controller.window
+        if configureSheetController == nil {
+            let sheet = ConfigureSheet(manager: manager)
+            configureSheetController = ConfigureSheetController(rootView: sheet)
+        }
+        return configureSheetController?.window
     }
 
     // MARK: - Drawing
