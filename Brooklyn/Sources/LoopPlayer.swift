@@ -1,28 +1,64 @@
 import AVFoundation
 
-/// An AVQueuePlayer that endlessly loops through a list of video items.
+/// An AVQueuePlayer that loops through a playlist, rebuilding the full
+/// cycle each time it completes.
 ///
-/// When an item finishes playing, it is copied and re-appended to the queue,
-/// creating an infinite loop effect.
+/// When `makePlaylist` is provided, the player rebuilds the playlist at the
+/// end of each cycle (re-shuffling if needed). Otherwise, it falls back to
+/// simple item-by-item looping.
 final class LoopPlayer: AVQueuePlayer {
     nonisolated(unsafe) private var itemDidFinishObserver: NSObjectProtocol?
+    private var makePlaylist: (() -> [AVPlayerItem])?
+    private var remainingInCycle: Int = 0
 
     override init() {
         super.init()
-        setupObserver()
     }
 
-    override init(items: [AVPlayerItem]) {
+    /// Initialize with a playlist factory that produces a full cycle of items.
+    /// At the end of each cycle, the factory is called again to rebuild the queue.
+    init(makePlaylist: @escaping () -> [AVPlayerItem]) {
+        self.makePlaylist = makePlaylist
+        let items = makePlaylist()
         var queue = items
-        // AVQueuePlayer needs at least 2 items to loop properly.
         if queue.count == 1, let copy = queue.first?.copy() as? AVPlayerItem {
             queue.append(copy)
         }
         super.init(items: queue)
-        setupObserver()
+        self.remainingInCycle = queue.count
+        setupCycleObserver()
     }
 
-    private func setupObserver() {
+    /// Initialize with a fixed list of items that loop individually.
+    override init(items: [AVPlayerItem]) {
+        var queue = items
+        if queue.count == 1, let copy = queue.first?.copy() as? AVPlayerItem {
+            queue.append(copy)
+        }
+        super.init(items: queue)
+        setupSimpleLoopObserver()
+    }
+
+    private func setupCycleObserver() {
+        itemDidFinishObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self, let makePlaylist = self.makePlaylist else { return }
+            self.remainingInCycle -= 1
+            if self.remainingInCycle <= 0 {
+                // Cycle complete — rebuild the playlist
+                let newItems = makePlaylist()
+                for item in newItems {
+                    self.insert(item, after: nil)
+                }
+                self.remainingInCycle = newItems.count
+            }
+        }
+    }
+
+    private func setupSimpleLoopObserver() {
         itemDidFinishObserver = NotificationCenter.default.addObserver(
             forName: .AVPlayerItemDidPlayToEndTime,
             object: nil,

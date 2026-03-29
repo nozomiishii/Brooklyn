@@ -43,12 +43,12 @@ final class BrooklynManager {
 
     // MARK: - Playback
 
+    /// Builds one cycle of player items: original first (if selected), then the rest.
+    /// Called each cycle so that shuffle order varies.
     func makePlayerItems() -> [AVPlayerItem] {
-        // When customize is OFF, use all animations
         let selected = database.customize ? database.selectedAnimations : Animation.allCases
         let hasOriginal = selected.contains(.original)
 
-        // Separate original from the rest
         var rest = selected.filter { $0 != .original }
         let shouldShuffle = database.customize ? database.randomOrder : true
         if shouldShuffle {
@@ -59,12 +59,10 @@ final class BrooklynManager {
 
         var items: [AVPlayerItem] = []
 
-        // Play original first if selected
         if hasOriginal, let url = Animation.original.videoURL(in: bundle) {
             items.append(AVPlayerItem(url: url))
         }
 
-        // Then play the rest
         items += rest.flatMap { animation -> [AVPlayerItem] in
             (0..<loops).compactMap { _ in
                 guard let url = animation.videoURL(in: bundle) else { return nil }
@@ -73,6 +71,11 @@ final class BrooklynManager {
         }
 
         return items
+    }
+
+    /// Creates a LoopPlayer that rebuilds the playlist each cycle.
+    func makeLoopPlayer() -> LoopPlayer {
+        LoopPlayer(makePlaylist: { [self] in makePlayerItems() })
     }
 
     func makePreviewItem(for animation: Animation) -> AVPlayerItem? {
