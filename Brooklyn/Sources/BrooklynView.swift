@@ -63,7 +63,9 @@ final class BrooklynView: ScreenSaverView {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.cleanUp()
+            MainActor.assumeIsolated {
+                self?.cleanUp()
+            }
         }
     }
 
