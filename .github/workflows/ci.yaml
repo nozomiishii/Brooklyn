@@ -31,7 +31,8 @@ jobs:
       - name: Verify Universal Binary
         run: |
           lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn
-          lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn | grep "arm64 x86_64"
+          lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn | grep "arm64"
+          lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn | grep "x86_64"
 
       - name: Verify animations are bundled
         run: |
