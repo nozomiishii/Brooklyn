@@ -8,15 +8,17 @@ import ScreenSaver
 /// - Instance accumulation → lame-duck pattern via `newInstanceCreated` notification
 /// - `isPreview` always returning true → frame size heuristic
 final class BrooklynView: ScreenSaverView {
-    private static let newInstanceNotification = Notification.Name("BrooklynNewInstance")
+    /// Tracks active instances per screen to handle the Sonoma+ instance accumulation bug.
+    /// Key is the screen's deviceDescription identifier.
+    private static var activeInstances: [UInt32: BrooklynView] = [:]
 
     private var manager: BrooklynManager?
     private var player: LoopPlayer?
     private var playerLayer: AVPlayerLayer?
     private var configureSheetController: ConfigureSheetController?
+    nonisolated(unsafe) private var screenID: UInt32 = 0
     private var isLameDuck = false
     nonisolated(unsafe) private var willStopObserver: NSObjectProtocol?
-    nonisolated(unsafe) private var newInstanceObserver: NSObjectProtocol?
 
     // MARK: - Initialization
 
@@ -40,11 +42,19 @@ final class BrooklynView: ScreenSaverView {
         let bundle = Bundle(for: BrooklynView.self)
         manager = BrooklynManager(bundle: bundle)
 
+        // Determine which screen this view belongs to.
+        if let screenNumber = window?.screen?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? UInt32 {
+            screenID = screenNumber
+        }
+
+        // Shut down any previous instance on the same screen (Sonoma+ bug workaround).
+        if let oldInstance = Self.activeInstances[screenID], oldInstance !== self {
+            oldInstance.goLameDuck()
+        }
+        Self.activeInstances[screenID] = self
+
         setupPlayer()
         observeLifecycle()
-
-        // Notify existing instances that a new one was created.
-        NotificationCenter.default.post(name: Self.newInstanceNotification, object: self)
     }
 
     private func setupPlayer() {
@@ -75,16 +85,6 @@ final class BrooklynView: ScreenSaverView {
         ) { [weak self] _ in
             self?.handleWillStop()
         }
-
-        // Lame-duck pattern: when a new instance is created, shut down the old one.
-        newInstanceObserver = NotificationCenter.default.addObserver(
-            forName: Self.newInstanceNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] notification in
-            guard let self, notification.object as AnyObject !== self else { return }
-            self.goLameDuck()
-        }
     }
 
     private func handleWillStop() {
@@ -105,10 +105,6 @@ final class BrooklynView: ScreenSaverView {
         if let observer = willStopObserver {
             DistributedNotificationCenter.default().removeObserver(observer)
             willStopObserver = nil
-        }
-        if let observer = newInstanceObserver {
-            NotificationCenter.default.removeObserver(observer)
-            newInstanceObserver = nil
         }
     }
 
@@ -152,8 +148,8 @@ final class BrooklynView: ScreenSaverView {
         if let observer = willStopObserver {
             DistributedNotificationCenter.default().removeObserver(observer)
         }
-        if let observer = newInstanceObserver {
-            NotificationCenter.default.removeObserver(observer)
+        if Self.activeInstances[screenID] === self {
+            Self.activeInstances.removeValue(forKey: screenID)
         }
     }
 }
