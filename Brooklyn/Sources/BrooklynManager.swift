@@ -73,11 +73,6 @@ final class BrooklynManager {
         return items
     }
 
-    /// Creates a LoopPlayer that rebuilds the playlist each cycle.
-    func makeLoopPlayer() -> LoopPlayer {
-        LoopPlayer(makePlaylist: { [self] in makePlayerItems() })
-    }
-
     func makePreviewItem(for animation: Animation) -> AVPlayerItem? {
         guard let url = animation.videoURL(in: bundle) else { return nil }
         return AVPlayerItem(url: url)

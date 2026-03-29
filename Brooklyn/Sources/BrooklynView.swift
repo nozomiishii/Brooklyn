@@ -50,7 +50,8 @@ final class BrooklynView: ScreenSaverView {
     private func setupPlayer() {
         guard let manager else { return }
 
-        let loopPlayer = manager.makeLoopPlayer()
+        let items = manager.makePlayerItems()
+        let loopPlayer = LoopPlayer(items: items)
         loopPlayer.isMuted = true
 
         let layer = AVPlayerLayer(player: loopPlayer)
