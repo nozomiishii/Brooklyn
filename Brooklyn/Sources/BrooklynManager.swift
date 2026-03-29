@@ -44,18 +44,33 @@ final class BrooklynManager {
     // MARK: - Playback
 
     func makePlayerItems() -> [AVPlayerItem] {
-        var animations = database.selectedAnimations
+        let selected = database.selectedAnimations
+        let hasOriginal = selected.contains(.original)
+
+        // Separate original from the rest
+        var rest = selected.filter { $0 != .original }
         if database.randomOrder {
-            animations.shuffle()
+            rest.shuffle()
         }
 
         let loops = database.numberOfLoops + 1
-        return animations.flatMap { animation -> [AVPlayerItem] in
+
+        var items: [AVPlayerItem] = []
+
+        // Play original first if selected
+        if hasOriginal, let url = Animation.original.videoURL(in: bundle) {
+            items.append(AVPlayerItem(url: url))
+        }
+
+        // Then play the rest
+        items += rest.flatMap { animation -> [AVPlayerItem] in
             (0..<loops).compactMap { _ in
                 guard let url = animation.videoURL(in: bundle) else { return nil }
                 return AVPlayerItem(url: url)
             }
         }
+
+        return items
     }
 
     func makePreviewItem(for animation: Animation) -> AVPlayerItem? {
