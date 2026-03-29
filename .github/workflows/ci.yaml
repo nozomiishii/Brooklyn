@@ -24,15 +24,12 @@ jobs:
             -project Brooklyn.xcodeproj \
             -scheme Brooklyn \
             -configuration Release \
-            -arch arm64 -arch x86_64 \
-            ONLY_ACTIVE_ARCH=NO \
             -derivedDataPath build
 
-      - name: Verify Universal Binary
+      - name: Verify arm64 binary
         run: |
           lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn
           lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn | grep "arm64"
-          lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn | grep "x86_64"
 
       - name: Verify animations are bundled
         run: |
