@@ -60,3 +60,24 @@ targets:
         embed: false
       - sdk: AVFoundation.framework
       - sdk: SwiftUI.framework
+
+  BrooklynTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: BrooklynTests
+      - path: Brooklyn/Sources
+      - path: Brooklyn/ConfigureSheet
+      - path: Brooklyn/Resources/Animations
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_NAME: BrooklynTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.nozomiishii.brooklyn.tests
+        GENERATE_INFOPLIST_FILE: true
+    dependencies:
+      - framework: ScreenSaver.framework
+        embed: false
+      - sdk: AVFoundation.framework
+      - sdk: SwiftUI.framework
