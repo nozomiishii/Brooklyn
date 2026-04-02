@@ -14,15 +14,17 @@ permissions: {}
 
 jobs:
   release-please:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
       contents: write
       issues: write
       pull-requests: write
+
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
+
     steps:
       - name: Load secrets from 1Password
         id: secrets
@@ -55,6 +57,21 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Load secrets from 1Password
+        id: secrets
+        uses: 1password/load-secrets-action@92467eb28f72e8255933372f1e0707c567ce2259 # v4
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          APP_ID: op://github-app/nozomiishii-release/username
+          APP_PRIVATE_KEY: op://github-app/nozomiishii-release/credential
+
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
+        with:
+          app-id: ${{ steps.secrets.outputs.APP_ID }}
+          private-key: ${{ steps.secrets.outputs.APP_PRIVATE_KEY }}
+
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
@@ -77,4 +94,4 @@ jobs:
           gh release upload "${{ needs.release-please.outputs.tag_name }}" \
             build/Build/Products/Release/Brooklyn.saver.zip
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
