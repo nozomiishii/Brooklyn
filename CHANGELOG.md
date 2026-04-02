@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/nozomiishii/Brooklyn/compare/v0.1.2...v0.1.3) (2026-04-02)
+
+
+### Bug Fixes
+
+* **ci:** use GitHub App token for release asset upload ([#10](https://github.com/nozomiishii/Brooklyn/issues/10)) ([9abe83d](https://github.com/nozomiishii/Brooklyn/commit/9abe83def7b3bbeced5419a73407b40337017954))
+
 ## [0.1.2](https://github.com/nozomiishii/Brooklyn/compare/v0.1.1...v0.1.2) (2026-04-02)
 
 
