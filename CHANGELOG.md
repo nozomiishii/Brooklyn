@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/nozomiishii/Brooklyn/compare/v0.1.3...v0.1.4) (2026-04-02)
+
+
+### Bug Fixes
+
+* **ci:** use draft release to support immutable release uploads ([#12](https://github.com/nozomiishii/Brooklyn/issues/12)) ([269b5d0](https://github.com/nozomiishii/Brooklyn/commit/269b5d0c605c1538299ec42434261b8723ac8886))
+
 ## [0.1.3](https://github.com/nozomiishii/Brooklyn/compare/v0.1.2...v0.1.3) (2026-04-02)
 
 
