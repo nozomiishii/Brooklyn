@@ -95,3 +95,10 @@ jobs:
             build/Build/Products/Release/Brooklyn.saver.zip
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Publish Release
+        run: |
+          gh release edit "${{ needs.release-please.outputs.tag_name }}" \
+            --draft=false
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
