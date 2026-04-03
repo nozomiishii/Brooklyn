@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/nozomiishii/Brooklyn/compare/v0.1.6...v0.1.7) (2026-04-03)
+
+
+### Bug Fixes
+
+* **docs:** correct CHANGELOG entries for v0.1.2, v0.1.3, v0.1.5 ([#19](https://github.com/nozomiishii/Brooklyn/issues/19)) ([840e0d1](https://github.com/nozomiishii/Brooklyn/commit/840e0d1fde944d27f4af4c73afd54d5f54ac85f8))
+
 ## [0.1.6](https://github.com/nozomiishii/Brooklyn/compare/v0.1.5...v0.1.6) (2026-04-03)
 
 
