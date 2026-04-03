@@ -1,1 +1,12 @@
-{ "extends": ["github>nozomiishii/renovate"] }
+{
+  "extends": ["github>nozomiishii/renovate"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["\\.github/workflows/release\\.yaml$"],
+      "matchStrings": ["npx --yes release-please@(?<currentValue>\\S+)"],
+      "depNameTemplate": "release-please",
+      "datasourceTemplate": "npm"
+    }
+  ]
+}
