@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/nozomiishii/Brooklyn/compare/v0.1.7...v0.1.8) (2026-04-03)
+
+
+### Miscellaneous
+
+* **ci:** simplify commit types to feat, fix, and chore ([#21](https://github.com/nozomiishii/Brooklyn/issues/21)) ([e51e5ac](https://github.com/nozomiishii/Brooklyn/commit/e51e5ace7acedbcb0f8ff3b85e5de1fc799d3af9))
+
 ## [0.1.7](https://github.com/nozomiishii/Brooklyn/compare/v0.1.6...v0.1.7) (2026-04-03)
 
 
