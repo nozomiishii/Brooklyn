@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/nozomiishii/Brooklyn/compare/v0.1.8...v0.1.9) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** add concurrency group to prevent release workflow race condition ([#24](https://github.com/nozomiishii/Brooklyn/issues/24)) ([9e9ecaa](https://github.com/nozomiishii/Brooklyn/commit/9e9ecaa6a9f71583ba72777cee6b4eaace0a5520))
+
 ## [0.1.8](https://github.com/nozomiishii/Brooklyn/compare/v0.1.7...v0.1.8) (2026-04-03)
 
 
