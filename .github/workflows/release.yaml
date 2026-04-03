@@ -197,29 +197,43 @@ jobs:
           owner: nozomiishii
           repositories: homebrew-tap
 
-      - name: Update Homebrew cask
+      - name: Download release asset
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
+        run: |
+          gh release download "$TAG_NAME" \
+            --repo nozomiishii/Brooklyn \
+            --pattern "Brooklyn.saver.zip" \
+            --dir /tmp
+
+      - name: Calculate sha256
+        id: hash
+        run: echo "sha256=$(sha256sum /tmp/Brooklyn.saver.zip | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+
+      - name: Clone homebrew-tap
+        run: git clone https://github.com/nozomiishii/homebrew-tap.git /tmp/homebrew-tap
+
+      - name: Update cask
+        working-directory: /tmp/homebrew-tap
+        env:
+          TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
+          SHA256: ${{ steps.hash.outputs.sha256 }}
+        run: |
+          VERSION="${TAG_NAME#v}"
+          sed -i "s/version \".*\"/version \"$VERSION\"/" Casks/brooklyn.rb
+          sed -i "s/sha256 \".*\"/sha256 \"$SHA256\"/" Casks/brooklyn.rb
+
+      - name: Commit and push
+        working-directory: /tmp/homebrew-tap
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
         run: |
           VERSION="${TAG_NAME#v}"
-
-          # Download release asset and calculate sha256
-          gh release download "$TAG_NAME" \
-            --repo nozomiishii/Brooklyn \
-            --pattern "Brooklyn.saver.zip" \
-            --dir /tmp
-          SHA256=$(shasum -a 256 /tmp/Brooklyn.saver.zip | awk '{print $1}')
-
-          # Clone homebrew-tap and update cask
-          git clone "https://x-access-token:${GH_TOKEN}@github.com/nozomiishii/homebrew-tap.git" /tmp/homebrew-tap
-          cd /tmp/homebrew-tap
-
-          sed -i "s/version \".*\"/version \"$VERSION\"/" Casks/brooklyn.rb
-          sed -i "s/sha256 \".*\"/sha256 \"$SHA256\"/" Casks/brooklyn.rb
-
           git config user.name "nozomiishii-release[bot]"
           git config user.email "nozomiishii-release[bot]@users.noreply.github.com"
           git add Casks/brooklyn.rb
           git commit -m "brooklyn $VERSION"
-          git push origin main
+          AUTH=$(echo -n "x-access-token:${GH_TOKEN}" | base64)
+          git -c "http.extraheader=Authorization: Basic ${AUTH}" push origin main
