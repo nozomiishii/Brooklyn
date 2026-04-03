@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/nozomiishii/Brooklyn/compare/v0.1.5...v0.1.6) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** split release-please into separate CLI commands to fix draft bug ([#17](https://github.com/nozomiishii/Brooklyn/issues/17)) ([3b6d12b](https://github.com/nozomiishii/Brooklyn/commit/3b6d12bc44ef8904f476d191ecd43046ef61f427))
+
 ## [0.1.5](https://github.com/nozomiishii/Brooklyn/compare/v0.1.4...v0.1.5) (2026-04-02)
 
 
