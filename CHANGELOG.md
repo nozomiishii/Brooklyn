@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/nozomiishii/Brooklyn/compare/v0.1.9...v0.1.10) (2026-04-04)
+
+
+### Bug Fixes
+
+* use MARKETING_VERSION as single source of truth for bundle version ([#27](https://github.com/nozomiishii/Brooklyn/issues/27)) ([5c4d796](https://github.com/nozomiishii/Brooklyn/commit/5c4d796a4771d01f9ec35d3541b46feb1f5ddda7))
+
 ## [0.1.9](https://github.com/nozomiishii/Brooklyn/compare/v0.1.8...v0.1.9) (2026-04-03)
 
 
