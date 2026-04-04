@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.12](https://github.com/nozomiishii/Brooklyn/compare/v0.1.11...v0.1.12) (2026-04-04)
+
+
+### Features
+
+* add make reset to clear screen saver caches before testing ([#31](https://github.com/nozomiishii/Brooklyn/issues/31)) ([adde766](https://github.com/nozomiishii/Brooklyn/commit/adde766326b36088cd0812b7d92a493912f04e56))
+
 ## [0.1.11](https://github.com/nozomiishii/Brooklyn/compare/v0.1.10...v0.1.11) (2026-04-04)
 
 
