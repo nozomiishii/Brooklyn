@@ -3,14 +3,16 @@ import ScreenSaver
 
 /// The main screen saver view that plays Brooklyn animations.
 ///
-/// Handles the macOS Sonoma+ bugs:
+/// Handles macOS Sonoma+ / Tahoe bugs:
 /// - `stopAnimation()` not being called → listens for `com.apple.screensaver.willstop`
 /// - `isPreview` always returning true → frame size heuristic
+/// - Ghost instances with zero frame on Tahoe → early return in init
 final class BrooklynView: ScreenSaverView {
     private var manager: BrooklynManager?
     private var player: LoopPlayer?
     private var playerLayer: AVPlayerLayer?
     private var configureSheetController: ConfigureSheetController?
+    private var isAnimationStarted = false
     nonisolated(unsafe) private var willStopObserver: NSObjectProtocol?
 
     // MARK: - Initialization
@@ -18,6 +20,13 @@ final class BrooklynView: ScreenSaverView {
     override init?(frame: NSRect, isPreview: Bool) {
         let actualIsPreview = frame.width < 400 && frame.height < 300
         super.init(frame: frame, isPreview: actualIsPreview)
+
+        // macOS 26 Tahoe: legacyScreenSaver.appex creates ghost instances with zero frame.
+        // Skip setup entirely to avoid wasting resources.
+        if frame == .zero {
+            return
+        }
+
         setup()
     }
 
@@ -70,8 +79,13 @@ final class BrooklynView: ScreenSaverView {
     }
 
     private func cleanUp() {
+        if isAnimationStarted {
+            stopAnimation()
+        }
         player?.tearDown()
+        player = nil
         playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
         if let observer = willStopObserver {
             DistributedNotificationCenter.default().removeObserver(observer)
             willStopObserver = nil
@@ -81,17 +95,26 @@ final class BrooklynView: ScreenSaverView {
     // MARK: - ScreenSaverView Overrides
 
     override func startAnimation() {
+        guard !isAnimationStarted, player != nil else { return }
         super.startAnimation()
+        isAnimationStarted = true
         player?.play()
     }
 
     override func stopAnimation() {
+        guard isAnimationStarted else { return }
         super.stopAnimation()
+        isAnimationStarted = false
         player?.pause()
     }
 
     override func resize(withOldSuperviewSize oldSize: NSSize) {
         super.resize(withOldSuperviewSize: oldSize)
+        playerLayer?.frame = bounds
+    }
+
+    override func layout() {
+        super.layout()
         playerLayer?.frame = bounds
     }
 
