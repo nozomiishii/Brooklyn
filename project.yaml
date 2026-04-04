@@ -11,7 +11,7 @@ settings:
     SWIFT_VERSION: "6"
     MACOSX_DEPLOYMENT_TARGET: "26.0"
     ARCHS: arm64
-    MARKETING_VERSION: "0.1.9" # x-release-please-version
+    MARKETING_VERSION: "0.1.10" # x-release-please-version
 
 targets:
   Brooklyn:
