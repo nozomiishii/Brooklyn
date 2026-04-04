@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.13](https://github.com/nozomiishii/Brooklyn/compare/v0.1.12...v0.1.13) (2026-04-04)
+
+
+### Bug Fixes
+
+* remove deprecated -kill flag from lsregister command ([#33](https://github.com/nozomiishii/Brooklyn/issues/33)) ([d85487c](https://github.com/nozomiishii/Brooklyn/commit/d85487c814adde495f01449977539ae00cd6a500))
+
 ## [0.1.12](https://github.com/nozomiishii/Brooklyn/compare/v0.1.11...v0.1.12) (2026-04-04)
 
 
