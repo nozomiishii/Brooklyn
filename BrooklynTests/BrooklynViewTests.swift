@@ -143,4 +143,13 @@ final class BrooklynViewTests: XCTestCase {
 
         XCTAssertTrue(view.hasConfigureSheet, "BrooklynView must report having a configure sheet")
     }
+
+    /// Regression: macOS 26 Tahoe ghost instances (frame .zero) must still provide
+    /// a configure sheet so the Options button works in System Settings.
+    func testGhostInstanceProvidesConfigureSheet() {
+        let view = BrooklynView(frame: .zero, isPreview: true)
+        XCTAssertNotNil(view, "Ghost view should be created")
+        XCTAssertTrue(view!.hasConfigureSheet)
+        XCTAssertNotNil(view!.configureSheet, "Ghost instance must still provide a configure sheet")
+    }
 }

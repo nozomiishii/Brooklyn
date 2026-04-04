@@ -21,30 +21,26 @@ final class BrooklynView: ScreenSaverView {
         let actualIsPreview = frame.width < 400 && frame.height < 300
         super.init(frame: frame, isPreview: actualIsPreview)
 
+        // Always create manager so configureSheet works even for ghost instances.
+        manager = BrooklynManager(bundle: Bundle(for: BrooklynView.self))
+
         // macOS 26 Tahoe: legacyScreenSaver.appex creates ghost instances with zero frame.
-        // Skip setup entirely to avoid wasting resources.
+        // Skip visual/player setup to avoid wasting resources.
         if frame == .zero {
             return
         }
 
-        setup()
+        wantsLayer = true
+        layer?.backgroundColor = NSColor(red: 0.0, green: 0.01, blue: 0.0, alpha: 1.0).cgColor
+        animationTimeInterval = 1.0 / 30.0
+
+        setupPlayer()
+        observeLifecycle()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) is not supported")
-    }
-
-    private func setup() {
-        wantsLayer = true
-        layer?.backgroundColor = NSColor(red: 0.0, green: 0.01, blue: 0.0, alpha: 1.0).cgColor
-        animationTimeInterval = 1.0 / 30.0
-
-        let bundle = Bundle(for: BrooklynView.self)
-        manager = BrooklynManager(bundle: bundle)
-
-        setupPlayer()
-        observeLifecycle()
     }
 
     private func setupPlayer() {
