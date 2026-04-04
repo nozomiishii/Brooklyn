@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.14](https://github.com/nozomiishii/Brooklyn/compare/v0.1.13...v0.1.14) (2026-04-04)
+
+
+### Bug Fixes
+
+* initialize BrooklynManager before zero-frame guard for ghost instances ([#37](https://github.com/nozomiishii/Brooklyn/issues/37)) ([4008381](https://github.com/nozomiishii/Brooklyn/commit/400838185cfeb55954fbbfe37e764e66839cdd2d))
+
+
+### Miscellaneous
+
+* add BrooklynView tests for macOS 26 Tahoe compatibility ([#35](https://github.com/nozomiishii/Brooklyn/issues/35)) ([3cb6b69](https://github.com/nozomiishii/Brooklyn/commit/3cb6b69ac0e92424e1f3b83ee2b7be9f3a718775))
+
 ## [0.1.13](https://github.com/nozomiishii/Brooklyn/compare/v0.1.12...v0.1.13) (2026-04-04)
 
 
