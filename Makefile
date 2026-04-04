@@ -1,4 +1,4 @@
-.PHONY: generate build test lint clean install uninstall
+.PHONY: generate build test lint clean install uninstall reset
 
 # Generate Xcode project from project.yaml
 generate:
@@ -32,6 +32,15 @@ install: build
 # Uninstall the screen saver
 uninstall:
 	rm -rf ~/Library/Screen\ Savers/Brooklyn.saver
+
+# Reset screen saver caches and processes before testing
+reset:
+	-killall legacyScreenSaver 2>/dev/null
+	-killall WallpaperAgent 2>/dev/null
+	-killall "System Settings" 2>/dev/null
+	rm -rf ~/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/Library/Caches/*
+	rm -f ~/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/Library/Preferences/ByHost/dev.nozomiishii.brooklyn.*.plist
+	/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain user
 
 # Clean build artifacts
 clean:
