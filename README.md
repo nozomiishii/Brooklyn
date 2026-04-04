@@ -2,6 +2,12 @@
 
 English | [日本語](./README.ja.md)
 
+<br>
+<div align="center">
+  <img src="demo/demo.gif" alt="Brooklyn" width="600" />
+</div>
+<br>
+
 A macOS screen saver inspired by [Apple's 2018 Brooklyn event](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/). 75 mesmerizing Apple logo animations looping endlessly on your screen.
 
 A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pedrommcarrasco/Brooklyn), rebuilt for Swift 6, macOS 26 (Tahoe), and Apple Silicon.
@@ -13,11 +19,11 @@ A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pe
 
 ## Install
 
-### From GitHub Releases
+### Homebrew
 
-1. Download `Brooklyn.saver.zip` from the [latest release](https://github.com/nozomiishii/Brooklyn/releases/latest)
-2. Unzip and double-click `Brooklyn.saver`
-3. macOS will ask if you want to install it — click **Install**
+```sh
+brew install nozomiishii/tap/brooklyn
+```
 
 ### Build from source
 
@@ -30,10 +36,10 @@ This builds the `.saver` bundle, copies it to `~/Library/Screen Savers/`, and si
 ## Uninstall
 
 ```sh
-make uninstall
+brew uninstall nozomiishii/tap/brooklyn
 ```
 
-Or remove it manually from **System Settings > Screen Saver**.
+If you built from source, run `make uninstall` instead. Or remove it manually from **System Settings > Screen Saver**.
 
 ## Customization
 
