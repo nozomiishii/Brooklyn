@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.11](https://github.com/nozomiishii/Brooklyn/compare/v0.1.10...v0.1.11) (2026-04-04)
+
+
+### Bug Fixes
+
+* add macOS 26 Tahoe compatibility for screen saver ([#30](https://github.com/nozomiishii/Brooklyn/issues/30)) ([febdf83](https://github.com/nozomiishii/Brooklyn/commit/febdf83fedecc0581483daa294cd29bcbc184377))
+
+
+### Miscellaneous
+
+* add README in English and Japanese ([#26](https://github.com/nozomiishii/Brooklyn/issues/26)) ([606fedd](https://github.com/nozomiishii/Brooklyn/commit/606feddbc09638452da348ad268ab52b3eada4ef))
+
 ## [0.1.10](https://github.com/nozomiishii/Brooklyn/compare/v0.1.9...v0.1.10) (2026-04-04)
 
 
