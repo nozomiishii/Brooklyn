@@ -28,6 +28,7 @@ lint:
 install: build
 	cp -R build/Build/Products/Release/Brooklyn.saver ~/Library/Screen\ Savers/
 	codesign --force --sign - ~/Library/Screen\ Savers/Brooklyn.saver
+	-killall legacyScreenSaver 2>/dev/null
 
 # Uninstall the screen saver
 uninstall:
