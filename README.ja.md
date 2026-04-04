@@ -25,27 +25,17 @@
 brew install nozomiishii/tap/brooklyn
 ```
 
-### ソースからビルド
-
-```sh
-make install
-```
-
-`.saver` バンドルをビルドし、`~/Library/Screen Savers/` にコピーして署名します。
-
 ## Uninstall
 
 ```sh
 brew uninstall nozomiishii/tap/brooklyn
 ```
 
-ソースからビルドした場合は `make uninstall` を実行してください。または **システム設定 > スクリーンセーバー** から手動で削除できます。
-
 ## Customization
 
 **システム設定 > スクリーンセーバー > Brooklyn** を開いてオプションボタンをクリックします。
 
-- **Customize OFF（デフォルト）**: 全 75 アニメーションがランダム順で再生。オリジナルの Apple ロゴが最初に流れます
+- **Customize OFF（デフォルト）**: オリジナルの Apple ロゴアニメーションを最初に再生したあと、残りの 74 種をシャッフルして無限ループします
 - **Customize ON**: お気に入りのアニメーションを選んで、ループ回数やシャッフル順を設定できます
 
 ## 謝辞
@@ -53,7 +43,7 @@ brew uninstall nozomiishii/tap/brooklyn
 Brooklyn はこれらの素晴らしいプロジェクトなしには存在しませんでした。Screen Saver中のMacも美しいです。
 
 - [Brooklyn by Pedro Carrasco](https://github.com/pedrommcarrasco/Brooklyn) オリジナルの Brooklyn スクリーンセーバー。伝説的です。
-- [Apple の Brooklyn イベント (2018)](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/) 僕がAppleに入社した時Zのイベント。同時期にあった[Apple 渋谷のリニューアルオープンビデオ](https://www.youtube.com/watch?v=30rXa448tGA)とも重なって[ANIMAL HACKさんのFranny](https://open.spotify.com/track/31a06sRIW6qMMfONkhl9yR)がずっと脳内再生されてます。思い出深いです。しみじみです。
+- [Apple の Brooklyn イベント (2018)](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/) 同時期にあった[Apple 渋谷のリニューアルオープンビデオ](https://www.youtube.com/watch?v=30rXa448tGA)とも重なって[ANIMAL HACKさんのFranny](https://open.spotify.com/track/31a06sRIW6qMMfONkhl9yR)がずっと脳内再生されてます。思い出深いです。しみじみです。
 
 ## License
 
