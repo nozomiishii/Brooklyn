@@ -17,9 +17,8 @@
       "release-type": "simple",
       "extra-files": [
         {
-          "type": "xml",
-          "path": "Brooklyn/Info.plist",
-          "xpath": "//dict/key[text()='CFBundleShortVersionString']/following-sibling::string[1]"
+          "type": "generic",
+          "path": "project.yaml"
         }
       ]
     }
