@@ -2,12 +2,14 @@ import AppKit
 import ScreenSaver
 
 /// Debug application that hosts the BrooklynView without installing the screen saver.
-@main
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow?
     private var saverView: BrooklynView?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.regular)
+        NSApp.activate()
+
         let screenFrame = NSScreen.main?.frame ?? NSRect(x: 0, y: 0, width: 1920, height: 1080)
         let windowFrame = NSRect(
             x: screenFrame.midX - 640,
