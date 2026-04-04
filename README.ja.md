@@ -25,27 +25,17 @@
 brew install nozomiishii/tap/brooklyn
 ```
 
-### ソースからビルド
-
-```sh
-make install
-```
-
-`.saver` バンドルをビルドし、`~/Library/Screen Savers/` にコピーして署名します。
-
 ## Uninstall
 
 ```sh
 brew uninstall nozomiishii/tap/brooklyn
 ```
 
-ソースからビルドした場合は `make uninstall` を実行してください。または **システム設定 > スクリーンセーバー** から手動で削除できます。
-
 ## Customization
 
 **システム設定 > スクリーンセーバー > Brooklyn** を開いてオプションボタンをクリックします。
 
-- **Customize OFF（デフォルト）**: 全 75 アニメーションがランダム順で再生。オリジナルの Apple ロゴが最初に流れます
+- **Customize OFF（デフォルト）**: オリジナルの Apple ロゴアニメーションを最初に再生したあと、残りの 74 種をシャッフルして無限ループします
 - **Customize ON**: お気に入りのアニメーションを選んで、ループ回数やシャッフル順を設定できます
 
 ## 謝辞
