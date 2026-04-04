@@ -12,11 +12,11 @@ final class BrooklynViewTests: XCTestCase {
 
     /// Regression: macOS 26 Tahoe creates instances with frame (0,0,0,0).
     /// These ghost instances must not set up AVPlayer to avoid resource waste.
-    func testGhostInstanceWithZeroFrameHasNoPlayer() {
+    /// startAnimation on a ghost instance must be harmless (player is nil).
+    func testGhostInstanceDoesNotCrashOnStart() {
         let view = BrooklynView(frame: .zero, isPreview: true)
         XCTAssertNotNil(view, "View should still be created even with zero frame")
 
-        // Ghost instances should not have a player or configureSheet
         view?.startAnimation()
         // Should not crash — startAnimation guards against nil player
     }
@@ -34,23 +34,49 @@ final class BrooklynViewTests: XCTestCase {
     /// BrooklynView uses frame size to determine the actual preview state.
     func testSmallFrameIsDetectedAsPreview() {
         let smallFrame = NSRect(x: 0, y: 0, width: 300, height: 200)
-        let view = BrooklynView(frame: smallFrame, isPreview: false)
-        XCTAssertNotNil(view)
-        XCTAssertTrue(view!.isPreview, "Small frame (< 400x300) should be detected as preview")
+        guard let view = BrooklynView(frame: smallFrame, isPreview: false) else {
+            XCTFail("View should be created")
+            return
+        }
+        XCTAssertTrue(view.isPreview, "Small frame (< 400x300) should be detected as preview")
     }
 
     func testLargeFrameIsNotPreview() {
         let largeFrame = NSRect(x: 0, y: 0, width: 1920, height: 1080)
-        let view = BrooklynView(frame: largeFrame, isPreview: true)
-        XCTAssertNotNil(view)
-        XCTAssertFalse(view!.isPreview, "Large frame (>= 400x300) should not be preview")
+        guard let view = BrooklynView(frame: largeFrame, isPreview: true) else {
+            XCTFail("View should be created")
+            return
+        }
+        XCTAssertFalse(view.isPreview, "Large frame (>= 400x300) should not be preview")
     }
 
     func testBoundaryFrameIsNotPreview() {
         let boundaryFrame = NSRect(x: 0, y: 0, width: 400, height: 300)
-        let view = BrooklynView(frame: boundaryFrame, isPreview: true)
-        XCTAssertNotNil(view)
-        XCTAssertFalse(view!.isPreview, "Frame exactly 400x300 should not be preview")
+        guard let view = BrooklynView(frame: boundaryFrame, isPreview: true) else {
+            XCTFail("View should be created")
+            return
+        }
+        XCTAssertFalse(view.isPreview, "Frame exactly 400x300 should not be preview")
+    }
+
+    /// AND condition edge case: width below threshold but height at threshold.
+    func testWidthBelowThresholdButHeightAtThresholdIsNotPreview() {
+        let frame = NSRect(x: 0, y: 0, width: 399, height: 300)
+        guard let view = BrooklynView(frame: frame, isPreview: true) else {
+            XCTFail("View should be created")
+            return
+        }
+        XCTAssertFalse(view.isPreview, "Width < 400 but height >= 300 should not be preview")
+    }
+
+    /// AND condition edge case: width at threshold but height below threshold.
+    func testWidthAtThresholdButHeightBelowIsNotPreview() {
+        let frame = NSRect(x: 0, y: 0, width: 400, height: 299)
+        guard let view = BrooklynView(frame: frame, isPreview: true) else {
+            XCTFail("View should be created")
+            return
+        }
+        XCTAssertFalse(view.isPreview, "Width >= 400 but height < 300 should not be preview")
     }
 
     // MARK: - startAnimation / stopAnimation Guards
@@ -66,6 +92,21 @@ final class BrooklynViewTests: XCTestCase {
 
         view.startAnimation()
         view.startAnimation() // Should not crash or double-play
+        view.stopAnimation()
+    }
+
+    /// Regression: isAnimationStarted flag must be reset by stopAnimation,
+    /// allowing a subsequent startAnimation to succeed.
+    func testAnimationCanRestartAfterStop() {
+        let frame = NSRect(x: 0, y: 0, width: 1920, height: 1080)
+        guard let view = BrooklynView(frame: frame, isPreview: false) else {
+            XCTFail("View should be created")
+            return
+        }
+
+        view.startAnimation()
+        view.stopAnimation()
+        view.startAnimation() // Should not be blocked by stale flag
         view.stopAnimation()
     }
 
@@ -91,7 +132,7 @@ final class BrooklynViewTests: XCTestCase {
         view.stopAnimation()  // Should not crash
     }
 
-    // MARK: - hasConfigureSheet
+    // MARK: - General
 
     func testHasConfigureSheet() {
         let frame = NSRect(x: 0, y: 0, width: 1920, height: 1080)
