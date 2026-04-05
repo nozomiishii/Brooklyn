@@ -6,7 +6,6 @@ import XCTest
 /// LoopPlayer must duplicate the item to keep the queue alive.
 @MainActor
 final class LoopPlayerTests: XCTestCase {
-
     func testSingleItemIsDuplicatedForLooping() {
         let bundle = Bundle(for: type(of: self))
         guard let url = Animation.appleBits.videoURL(in: bundle) else {
@@ -27,7 +26,8 @@ final class LoopPlayerTests: XCTestCase {
     func testMultipleItemsArePreserved() {
         let bundle = Bundle(for: type(of: self))
         guard let url1 = Animation.appleBits.videoURL(in: bundle),
-              let url2 = Animation.ballPit.videoURL(in: bundle) else {
+              let url2 = Animation.ballPit.videoURL(in: bundle)
+        else {
             XCTFail("MP4 files not found in test bundle")
             return
         }

@@ -56,7 +56,8 @@ final class BrooklynManagerTests: XCTestCase {
 
         let items = manager.makePlayerItems()
         guard let firstItem = items.first,
-              let firstURL = (firstItem.asset as? AVURLAsset)?.url else {
+              let firstURL = (firstItem.asset as? AVURLAsset)?.url
+        else {
             XCTFail("First item must have a URL")
             return
         }
@@ -72,10 +73,10 @@ final class BrooklynManagerTests: XCTestCase {
         manager.database.randomOrder = false
 
         let items = manager.makePlayerItems()
-        let originalCount = items.filter { item in
+        let originalCount = items.count { item in
             guard let url = (item.asset as? AVURLAsset)?.url else { return false }
             return url.lastPathComponent == "original.mp4"
-        }.count
+        }
 
         XCTAssertEqual(originalCount, 1, "Original should appear exactly once (at the start)")
     }
@@ -133,7 +134,7 @@ final class BrooklynManagerTests: XCTestCase {
     func testLoopsMultipliesItems() {
         manager.database.customize = true
         manager.database.selectedAnimations = [.appleBits]
-        manager.database.numberOfLoops = 2  // means 3 plays
+        manager.database.numberOfLoops = 2 // means 3 plays
 
         let items = manager.makePlayerItems()
         XCTAssertEqual(items.count, 3, "numberOfLoops=2 means each animation plays 3 times")

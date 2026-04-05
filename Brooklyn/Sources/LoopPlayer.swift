@@ -5,7 +5,7 @@ import AVFoundation
 /// When an item finishes playing, it is copied and re-appended to the queue,
 /// creating an infinite loop effect.
 final class LoopPlayer: AVQueuePlayer {
-    nonisolated(unsafe) private var itemDidFinishObserver: NSObjectProtocol?
+    private nonisolated(unsafe) var itemDidFinishObserver: NSObjectProtocol?
 
     override init() {
         super.init()

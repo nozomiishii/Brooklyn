@@ -1,4 +1,6 @@
-.PHONY: generate build test lint clean install uninstall reset
+.PHONY: generate build test format format-check lint clean install uninstall reset
+
+SWIFT_SOURCES = Brooklyn BrooklynTests Canvas
 
 # Generate Xcode project from project.yaml
 generate:
@@ -20,9 +22,17 @@ test: generate
 		-destination 'platform=macOS' \
 		-derivedDataPath build
 
+# Format Swift code (in-place)
+format:
+	mint run swiftformat $(SWIFT_SOURCES)
+
+# Check formatting without modifying files (for CI)
+format-check:
+	mint run swiftformat $(SWIFT_SOURCES) --lint
+
 # Lint Swift code
 lint:
-	swiftlint --config .swiftlint.yaml
+	mint run swiftlint --strict --config .swiftlint.yaml --cache-path .swiftlint-cache $(SWIFT_SOURCES)
 
 # Install the screen saver
 install: build
@@ -45,4 +55,4 @@ reset:
 
 # Clean build artifacts
 clean:
-	rm -rf build Brooklyn.xcodeproj
+	rm -rf build Brooklyn.xcodeproj .swiftlint-cache

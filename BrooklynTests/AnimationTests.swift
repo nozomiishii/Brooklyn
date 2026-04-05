@@ -6,7 +6,6 @@ import XCTest
 /// match the actual files (appleBits, auroraBorealis, etc.), causing silent
 /// video load failures.
 final class AnimationTests: XCTestCase {
-
     // MARK: - File Name Matching
 
     func testAllAnimationsHaveMatchingMP4Files() {
@@ -16,7 +15,7 @@ final class AnimationTests: XCTestCase {
             XCTAssertNotNil(
                 url,
                 "Missing MP4 file for animation '\(animation.rawValue)'. "
-                + "Ensure \(animation.rawValue).mp4 exists in Resources/Animations/"
+                    + "Ensure \(animation.rawValue).mp4 exists in Resources/Animations/"
             )
         }
     }

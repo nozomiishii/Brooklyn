@@ -12,7 +12,9 @@ Apple の 2018 年 Brooklyn イベントにインスパイアされた macOS ス
 make generate     # XcodeGen で project.yaml から Xcode プロジェクトを生成
 make build        # generate + Release ビルド
 make test         # generate + テスト実行
-make lint         # SwiftLint（swiftlint --config .swiftlint.yaml）
+make format       # SwiftFormat で自動整形
+make format-check # フォーマット差分チェック（CI 用）
+make lint         # SwiftLint（--strict）
 make install      # build + ~/Library/Screen Savers/ にコピー + codesign
 make uninstall    # スクリーンセーバーを削除
 make clean        # build/ と Brooklyn.xcodeproj を削除

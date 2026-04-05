@@ -6,7 +6,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow?
     private var saverView: BrooklynView?
 
-    func applicationDidFinishLaunching(_ notification: Notification) {
+    func applicationDidFinishLaunching(_: Notification) {
         NSApp.setActivationPolicy(.regular)
         NSApp.activate()
 
@@ -30,18 +30,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if let view = BrooklynView(frame: windowFrame, isPreview: false) {
             window.contentView = view
             view.startAnimation()
-            self.saverView = view
+            saverView = view
         }
 
         window.makeKeyAndOrderFront(nil)
         self.window = window
     }
 
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+    func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
         true
     }
 
-    func applicationWillTerminate(_ notification: Notification) {
+    func applicationWillTerminate(_: Notification) {
         saverView?.stopAnimation()
     }
 }

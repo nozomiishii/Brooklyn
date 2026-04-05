@@ -1,7 +1,7 @@
 import Foundation
 
 /// All 75 Brooklyn animations from the original Apple event.
-enum Animation: String, CaseIterable, Identifiable, Sendable {
+enum Animation: String, CaseIterable, Identifiable {
     case appleBits
     case auroraBorealis
     case avatarTissue
@@ -78,7 +78,9 @@ enum Animation: String, CaseIterable, Identifiable, Sendable {
     case zelda
     case zoetrope
 
-    var id: String { rawValue }
+    var id: String {
+        rawValue
+    }
 
     /// Display name derived from the raw value (e.g., "ballPit" → "Ball Pit").
     var displayName: String {

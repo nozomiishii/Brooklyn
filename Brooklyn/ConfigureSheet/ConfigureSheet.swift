@@ -5,7 +5,7 @@ struct ConfigureSheet: View {
     @ObservedObject private var viewModel: ConfigureSheetViewModel
 
     init(manager: BrooklynManager) {
-        self._viewModel = ObservedObject(wrappedValue: ConfigureSheetViewModel(manager: manager))
+        _viewModel = ObservedObject(wrappedValue: ConfigureSheetViewModel(manager: manager))
     }
 
     var body: some View {
@@ -78,7 +78,7 @@ struct ConfigureSheet: View {
         HStack(spacing: 20) {
             Picker("Loops:", selection: $viewModel.numberOfLoops) {
                 Text("Infinite").tag(0)
-                ForEach(1...10, id: \.self) { count in
+                ForEach(1 ... 10, id: \.self) { count in
                     Text("\(count)").tag(count)
                 }
             }
