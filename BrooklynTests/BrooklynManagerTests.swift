@@ -88,7 +88,8 @@ final class BrooklynManagerTests: XCTestCase {
 
         let items = manager.makePlayerItems()
         let hasOriginal = items.contains { item in
-            (item.asset as? AVURLAsset)?.url?.lastPathComponent == "original.mp4"
+            guard let url = (item.asset as? AVURLAsset)?.url else { return false }
+            return url.lastPathComponent == "original.mp4"
         }
 
         XCTAssertFalse(hasOriginal, "Original should not be in playlist when not selected")
