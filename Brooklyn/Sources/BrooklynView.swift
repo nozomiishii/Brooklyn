@@ -13,11 +13,11 @@ final class BrooklynView: ScreenSaverView {
     private var playerLayer: AVPlayerLayer?
     private var configureSheetController: ConfigureSheetController?
     private var isAnimationStarted = false
-    nonisolated(unsafe) private var willStopObserver: NSObjectProtocol?
+    private nonisolated(unsafe) var willStopObserver: NSObjectProtocol?
 
     // MARK: - Initialization
 
-    override init?(frame: NSRect, isPreview: Bool) {
+    override init?(frame: NSRect, isPreview _: Bool) {
         let actualIsPreview = frame.width < 400 && frame.height < 300
         super.init(frame: frame, isPreview: actualIsPreview)
 
@@ -39,7 +39,7 @@ final class BrooklynView: ScreenSaverView {
     }
 
     @available(*, unavailable)
-    required init?(coder: NSCoder) {
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) is not supported")
     }
 
@@ -56,8 +56,8 @@ final class BrooklynView: ScreenSaverView {
         layer.videoGravity = .resizeAspect
         self.layer?.addSublayer(layer)
 
-        self.player = loopPlayer
-        self.playerLayer = layer
+        player = loopPlayer
+        playerLayer = layer
     }
 
     // MARK: - Lifecycle
@@ -114,7 +114,9 @@ final class BrooklynView: ScreenSaverView {
         playerLayer?.frame = bounds
     }
 
-    override var hasConfigureSheet: Bool { true }
+    override var hasConfigureSheet: Bool {
+        true
+    }
 
     override var configureSheet: NSWindow? {
         guard let manager else { return nil }

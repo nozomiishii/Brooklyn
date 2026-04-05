@@ -7,7 +7,6 @@ import XCTest
 /// calls startAnimation multiple times, and fails to call stopAnimation.
 @MainActor
 final class BrooklynViewTests: XCTestCase {
-
     // MARK: - Ghost Instance Detection
 
     /// Regression: macOS 26 Tahoe creates instances with frame (0,0,0,0).
@@ -129,7 +128,7 @@ final class BrooklynViewTests: XCTestCase {
         }
 
         view.startAnimation() // Should not crash — player is nil
-        view.stopAnimation()  // Should not crash
+        view.stopAnimation() // Should not crash
     }
 
     // MARK: - General
@@ -146,10 +145,9 @@ final class BrooklynViewTests: XCTestCase {
 
     /// Regression: macOS 26 Tahoe ghost instances (frame .zero) must still provide
     /// a configure sheet so the Options button works in System Settings.
-    func testGhostInstanceProvidesConfigureSheet() {
-        let view = BrooklynView(frame: .zero, isPreview: true)
-        XCTAssertNotNil(view, "Ghost view should be created")
-        XCTAssertTrue(view!.hasConfigureSheet)
-        XCTAssertNotNil(view!.configureSheet, "Ghost instance must still provide a configure sheet")
+    func testGhostInstanceProvidesConfigureSheet() throws {
+        let view = try XCTUnwrap(BrooklynView(frame: .zero, isPreview: true), "Ghost view should be created")
+        XCTAssertTrue(view.hasConfigureSheet)
+        XCTAssertNotNil(view.configureSheet, "Ghost instance must still provide a configure sheet")
     }
 }

@@ -15,6 +15,23 @@ defaults:
     shell: bash
 
 jobs:
+  lint:
+    runs-on: macos-26
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Install Mint
+        run: brew install mint
+
+      - name: Bootstrap tools
+        run: mint bootstrap
+
+      - name: Lint
+        run: make lint
+
   build-and-test:
     runs-on: macos-26
     timeout-minutes: 30

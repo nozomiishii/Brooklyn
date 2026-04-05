@@ -8,7 +8,7 @@ final class BrooklynManager {
 
     init(bundle: Bundle) {
         self.bundle = bundle
-        self.database = Database(moduleBundle: bundle)
+        database = Database(moduleBundle: bundle)
     }
 
     // MARK: - Animation Selection
@@ -63,8 +63,8 @@ final class BrooklynManager {
             items.append(AVPlayerItem(url: url))
         }
 
-        items += rest.flatMap { animation -> [AVPlayerItem] in
-            (0..<loops).compactMap { _ in
+        items += rest.flatMap { animation in
+            (0 ..< loops).compactMap { _ in
                 guard let url = animation.videoURL(in: bundle) else { return nil }
                 return AVPlayerItem(url: url)
             }

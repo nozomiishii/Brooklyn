@@ -1,4 +1,4 @@
-.PHONY: generate build test lint clean install uninstall reset
+.PHONY: generate build test format format-check lint clean install uninstall reset
 
 # Generate Xcode project from project.yaml
 generate:
@@ -20,9 +20,18 @@ test: generate
 		-destination 'platform=macOS' \
 		-derivedDataPath build
 
+# Format Swift code (in-place)
+format:
+	mint run swiftformat .
+
+# Check formatting without modifying files (for CI)
+format-check:
+	mint run swiftformat --lint .
+
 # Lint Swift code
 lint:
-	swiftlint --config .swiftlint.yaml
+	mint run swiftlint --strict --config .swiftlint.yaml
+	mint run swiftformat --lint .
 
 # Install the screen saver
 install: build

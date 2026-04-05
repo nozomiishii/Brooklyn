@@ -24,9 +24,9 @@ final class ConfigureSheetViewModel: ObservableObject {
 
     init(manager: BrooklynManager) {
         self.manager = manager
-        self.customize = manager.database.customize
-        self.numberOfLoops = manager.database.numberOfLoops
-        self.randomOrder = manager.database.randomOrder
+        customize = manager.database.customize
+        numberOfLoops = manager.database.numberOfLoops
+        randomOrder = manager.database.randomOrder
     }
 
     func isSelected(_ animation: Animation) -> Bool {
