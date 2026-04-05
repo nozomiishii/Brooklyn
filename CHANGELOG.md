@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.15](https://github.com/nozomiishii/Brooklyn/compare/v0.1.14...v0.1.15) (2026-04-05)
+
+
+### Miscellaneous
+
+* add SwiftLint and SwiftFormat with Mint ([#43](https://github.com/nozomiishii/Brooklyn/issues/43)) ([663dda0](https://github.com/nozomiishii/Brooklyn/commit/663dda039a214a7853a0fc23f8748154cde43842))
+* update README ([#39](https://github.com/nozomiishii/Brooklyn/issues/39)) ([05c5849](https://github.com/nozomiishii/Brooklyn/commit/05c58497409398f020eae0e4baa06004956a374e))
+
 ## [0.1.14](https://github.com/nozomiishii/Brooklyn/compare/v0.1.13...v0.1.14) (2026-04-04)
 
 
