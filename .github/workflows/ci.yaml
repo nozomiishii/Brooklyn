@@ -39,6 +39,9 @@ jobs:
       - name: Lint
         run: make lint
 
+      - name: Format check
+        run: make format-check
+
   build-and-test:
     runs-on: macos-26
     timeout-minutes: 30

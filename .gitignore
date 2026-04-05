@@ -12,6 +12,9 @@ build/
 .build/
 .swiftpm/
 
+# SwiftLint
+.swiftlint-cache/
+
 # Claude Code
 **/.claude/settings.local.json
 **/CLAUDE.local.md
