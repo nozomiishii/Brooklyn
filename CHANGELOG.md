@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.16](https://github.com/nozomiishii/Brooklyn/compare/v0.1.15...v0.1.16) (2026-04-05)
+
+
+### Bug Fixes
+
+* narrow lsregister scope to Brooklyn.saver path ([#44](https://github.com/nozomiishii/Brooklyn/issues/44)) ([2a20d20](https://github.com/nozomiishii/Brooklyn/commit/2a20d2023dfb4056b9fa8f4157513c18efbe046e))
+
 ## [0.1.15](https://github.com/nozomiishii/Brooklyn/compare/v0.1.14...v0.1.15) (2026-04-05)
 
 
