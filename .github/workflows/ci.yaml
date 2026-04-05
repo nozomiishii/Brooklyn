@@ -17,19 +17,27 @@ defaults:
 jobs:
   lint:
     runs-on: macos-26
-    timeout-minutes: 5
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
-      - name: Install SwiftLint and SwiftFormat
-        run: brew install swiftlint swiftformat
+      - name: Install Mint
+        run: brew install mint
+
+      - name: Cache Mint packages
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+        with:
+          path: ~/.mint
+          key: mint-${{ runner.os }}-${{ hashFiles('Mintfile') }}
+          restore-keys: mint-${{ runner.os }}-
+
+      - name: Bootstrap tools
+        run: mint bootstrap
 
       - name: Lint
-        run: |
-          swiftlint --strict --config .swiftlint.yaml
-          swiftformat --lint .
+        run: make lint
 
   build-and-test:
     runs-on: macos-26
