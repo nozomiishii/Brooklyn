@@ -53,7 +53,7 @@ jobs:
 
       - name: Run release-please github-release
         run: |
-          npx --yes release-please@17.3.0 github-release \
+          npx --yes release-please@17.6.0 github-release \
             --repo-url="${{ github.repository }}" \
             --config-file=.github/.release-please-config.json \
             --manifest-file=.github/.release-please-manifest.json \
@@ -165,7 +165,7 @@ jobs:
 
       - name: Run release-please release-pr
         run: |
-          npx --yes release-please@17.3.0 release-pr \
+          npx --yes release-please@17.6.0 release-pr \
             --repo-url="${{ github.repository }}" \
             --config-file=.github/.release-please-config.json \
             --manifest-file=.github/.release-please-manifest.json \
