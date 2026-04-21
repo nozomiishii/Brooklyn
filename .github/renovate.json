@@ -3,7 +3,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["\\.github/workflows/release\\.yaml$"],
+      "managerFilePatterns": [
+        "/\\.github/workflows/release\\.yaml$/"
+      ],
       "matchStrings": ["npx --yes release-please@(?<currentValue>\\S+)"],
       "depNameTemplate": "release-please",
       "datasourceTemplate": "npm"
