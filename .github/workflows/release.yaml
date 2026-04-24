@@ -122,18 +122,20 @@ jobs:
           zip -r Brooklyn.saver.zip Brooklyn.saver
 
       - name: Upload to GitHub Release
-        run: |
-          gh release upload "${{ needs.create-draft-release.outputs.tag_name }}" \
-            build/Build/Products/Release/Brooklyn.saver.zip
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
+        run: |
+          gh release upload "${TAG_NAME}" \
+            build/Build/Products/Release/Brooklyn.saver.zip
 
       - name: Publish Release
-        run: |
-          gh release edit "${{ needs.create-draft-release.outputs.tag_name }}" \
-            --draft=false
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
+        run: |
+          gh release edit "${TAG_NAME}" \
+            --draft=false
 
   # publish 後に次の release PR を作成/更新
   release-pr:
