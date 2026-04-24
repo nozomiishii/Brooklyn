@@ -23,8 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write  # required by release-please to create draft releases and tags
+      pull-requests: write  # required by release-please to create/update release PRs
 
     outputs:
       release_created: ${{ steps.detect.outputs.release_created }}
@@ -50,16 +50,18 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Run release-please github-release
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO_URL: ${{ github.repository }}
         run: |
           npx --yes release-please@17.6.0 github-release \
-            --repo-url="${{ github.repository }}" \
+            --repo-url="${REPO_URL}" \
             --config-file=.github/.release-please-config.json \
             --manifest-file=.github/.release-please-manifest.json \
             --token="${GITHUB_TOKEN}"
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Detect created release
         id: detect
@@ -82,7 +84,7 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 30
     permissions:
-      contents: write
+      contents: write  # required by gh release upload/edit to publish release assets
     steps:
       - name: Load secrets from 1Password
         id: secrets
@@ -103,6 +105,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ needs.create-draft-release.outputs.tag_name }}
+          persist-credentials: false
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -139,8 +142,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write  # required by release-please to create the release PR branch
+      pull-requests: write  # required by release-please to create/update release PRs
 
     steps:
       - name: Load secrets from 1Password
@@ -162,16 +165,18 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Run release-please release-pr
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO_URL: ${{ github.repository }}
         run: |
           npx --yes release-please@17.6.0 release-pr \
-            --repo-url="${{ github.repository }}" \
+            --repo-url="${REPO_URL}" \
             --config-file=.github/.release-please-config.json \
             --manifest-file=.github/.release-please-manifest.json \
             --token="${GITHUB_TOKEN}"
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
   homebrew-update:
     needs: [create-draft-release, upload-assets]
