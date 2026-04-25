@@ -80,3 +80,7 @@ BrooklynView (ScreenSaverView)
 - PR タイトルは英語、semantic commit 形式、小文字開始（`_pull-request.yaml` で検証）
 - Release Please が CHANGELOG とバージョンを自動管理。手動でバージョンを変更しない
 - YAML ファイルの拡張子は `.yaml` に統一（ツールのデフォルトが `.yml` の場合は Makefile で `--config` / `--spec` を指定）
+
+## リリース・Conventional Commits
+
+- `BREAKING CHANGE:` フッターと `feat!:` / `fix!:` の `!` 修飾は、**リリースされるパッケージ・公開アセットの互換性を破る変更にのみ**使用する。CI / workflows / branch protection / リポジトリ運用上の変更には使わない。これらの注意事項は PR 本文に記述する（release-please など自動リリースツールが major / minor バンプを誤って行い、CHANGELOG に `⚠ BREAKING CHANGES` セクションを誤生成するのを防ぐため。実例: 2026-04-25 にこのリポジトリ群で `chore: migrate reusable workflows to v3.0.0` PR が誤って BREAKING CHANGE として記録された）。
