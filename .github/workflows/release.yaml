@@ -240,4 +240,5 @@ jobs:
         if: steps.bump.outputs.pr_url != ''
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh pr merge "${{ steps.bump.outputs.pr_url }}" --auto --squash
+          PR_URL: ${{ steps.bump.outputs.pr_url }}
+        run: gh pr merge "$PR_URL" --auto --squash
