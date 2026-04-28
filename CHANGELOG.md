@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.18](https://github.com/nozomiishii/Brooklyn/compare/v0.1.17...v0.1.18) (2026-04-28)
+
+
+### Bug Fixes
+
+* **ci:** use brew bump-cask-pr for homebrew-tap updates ([#64](https://github.com/nozomiishii/Brooklyn/issues/64)) ([4ce9509](https://github.com/nozomiishii/Brooklyn/commit/4ce95097b74cc888b902c62197497118641f823e))
+
+
+### Miscellaneous
+
+* update nozomiishii/workflows action to v3.0.1 ([#65](https://github.com/nozomiishii/Brooklyn/issues/65)) ([d5b7d93](https://github.com/nozomiishii/Brooklyn/commit/d5b7d93366363868ec7b8478a66c0c63b2a58a6a))
+
 ## [0.1.17](https://github.com/nozomiishii/Brooklyn/compare/v0.1.16...v0.1.17) (2026-04-25)
 
 
