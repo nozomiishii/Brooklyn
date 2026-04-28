@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.20](https://github.com/nozomiishii/Brooklyn/compare/v0.1.19...v0.1.20) (2026-04-28)
+
+
+### Bug Fixes
+
+* **ci:** drop unsupported --tap flag from brew bump-cask-pr ([#69](https://github.com/nozomiishii/Brooklyn/issues/69)) ([ae67461](https://github.com/nozomiishii/Brooklyn/commit/ae674614164c478aca4ab823de0ced515cd3389e))
+
 ## [0.1.19](https://github.com/nozomiishii/Brooklyn/compare/v0.1.18...v0.1.19) (2026-04-28)
 
 
