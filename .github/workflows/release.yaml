@@ -246,6 +246,20 @@ jobs:
           AUTH=$(echo -n "x-access-token:${HOMEBREW_GITHUB_API_TOKEN}" | base64)
           git -c "http.extraheader=Authorization: Basic ${AUTH}" push -u origin "$BRANCH"
 
+          # `gh pr create` が失敗すると push したブランチだけが remote に残り、
+          # 孤立ブランチが溜まる。EXIT trap で roll-back し、PR 作成成功後は
+          # PR_CREATED=1 で抑止する。`gh pr merge --auto` の失敗時はブランチを
+          # 残す（PR は作成済みなので手動 merge で進められる）。
+          PR_CREATED=0
+          cleanup_orphan_branch() {
+            if [ "$PR_CREATED" = "0" ]; then
+              echo "::warning::PR not created — deleting orphan branch ${BRANCH}"
+              git -c "http.extraheader=Authorization: Basic ${AUTH}" \
+                push origin --delete "$BRANCH" || true
+            fi
+          }
+          trap cleanup_orphan_branch EXIT
+
           # release-please の release PR (head commit が `chore: release X.Y.Z (#N)`)
           # から起動した場合は `(#N)` を抽出して release PR リンクも併記する。
           BODY="Bumped from [Brooklyn ${TAG_NAME}](https://github.com/nozomiishii/Brooklyn/releases/tag/${TAG_NAME})."
@@ -260,4 +274,6 @@ jobs:
             --head "$BRANCH" \
             --title "$MSG" \
             --body "$BODY")
+          PR_CREATED=1
+
           gh pr merge "$PR_URL" --auto --squash
