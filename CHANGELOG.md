@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.19](https://github.com/nozomiishii/Brooklyn/compare/v0.1.18...v0.1.19) (2026-04-28)
+
+
+### Bug Fixes
+
+* **ci:** make brew bump-cask-pr failures visible in logs ([#67](https://github.com/nozomiishii/Brooklyn/issues/67)) ([8b7f9be](https://github.com/nozomiishii/Brooklyn/commit/8b7f9be2711cb8e21c552d978e812fe20c660ef5))
+
 ## [0.1.18](https://github.com/nozomiishii/Brooklyn/compare/v0.1.17...v0.1.18) (2026-04-28)
 
 
