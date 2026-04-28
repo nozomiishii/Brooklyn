@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.1.17](https://github.com/nozomiishii/Brooklyn/compare/v0.1.16...v0.1.17) (2026-04-25)
+
+
+### Bug Fixes
+
+* **ci:** scope github-actions trigger to pull_request only ([#61](https://github.com/nozomiishii/Brooklyn/issues/61)) ([f9303b4](https://github.com/nozomiishii/Brooklyn/commit/f9303b4d44a638ecd9f6aee0d48fc8cd8e5a1424))
+* forbid BREAKING CHANGE footer for ops-only changes ([#63](https://github.com/nozomiishii/Brooklyn/issues/63)) ([0c1eded](https://github.com/nozomiishii/Brooklyn/commit/0c1eded36e1e2999022ebb5613188a7cb1782fcf))
+
+
+### Miscellaneous
+
+* **config:** migrate config .github/renovate.json ([ad675b5](https://github.com/nozomiishii/Brooklyn/commit/ad675b5d2dce24406663afb08264e6391cd70da4))
+* **config:** migrate Renovate config ([#53](https://github.com/nozomiishii/Brooklyn/issues/53)) ([ad675b5](https://github.com/nozomiishii/Brooklyn/commit/ad675b5d2dce24406663afb08264e6391cd70da4))
+* migrate reusable workflows to v3.0.0 ([#59](https://github.com/nozomiishii/Brooklyn/issues/59)) ([1f21bb4](https://github.com/nozomiishii/Brooklyn/commit/1f21bb485a2bcdd67a2e69dad06ef9a3723c205c))
+* migrate shared CI workflows to nozomiishii/workflows v1.1.0 ([#46](https://github.com/nozomiishii/Brooklyn/issues/46)) ([9266fdd](https://github.com/nozomiishii/Brooklyn/commit/9266fdd271d9a0866dc8e167bb723171ff2703f3))
+* update actions/cache action to v5 ([#52](https://github.com/nozomiishii/Brooklyn/issues/52)) ([d14d74f](https://github.com/nozomiishii/Brooklyn/commit/d14d74f3707145dee6b6be743a2cbc9c808e5b45))
+* update actions/cache action to v5.0.5 ([#55](https://github.com/nozomiishii/Brooklyn/issues/55)) ([3f21612](https://github.com/nozomiishii/Brooklyn/commit/3f21612c6ec5aaba8831fce3f46eb09d0a588394))
+* update actions/cache digest to 0057852 ([#48](https://github.com/nozomiishii/Brooklyn/issues/48)) ([79f6bb3](https://github.com/nozomiishii/Brooklyn/commit/79f6bb30168b004f98000aa5055f9c4f8135a2c0))
+* update actions/checkout action to v6.0.2 ([#56](https://github.com/nozomiishii/Brooklyn/issues/56)) ([fe928bd](https://github.com/nozomiishii/Brooklyn/commit/fe928bdd50dbb468e9908f905a446f77e0e53374))
+* update actions/create-github-app-token action to v3.1.1 ([#57](https://github.com/nozomiishii/Brooklyn/issues/57)) ([bb63702](https://github.com/nozomiishii/Brooklyn/commit/bb63702e18ea7ee52c6343fb27c8118903d6cf2d))
+* update actions/create-github-app-token digest to 1b10c78 ([#49](https://github.com/nozomiishii/Brooklyn/issues/49)) ([c550a7a](https://github.com/nozomiishii/Brooklyn/commit/c550a7aca32940465c231d613e3b62b2aa893500))
+* update dependency nicklockwood/swiftformat to v0.61.0 ([#50](https://github.com/nozomiishii/Brooklyn/issues/50)) ([a178b0e](https://github.com/nozomiishii/Brooklyn/commit/a178b0e192fc07ad37e1ce9f52a7197b700f9fc6))
+* update dependency release-please to v17.6.0 ([#51](https://github.com/nozomiishii/Brooklyn/issues/51)) ([c75664d](https://github.com/nozomiishii/Brooklyn/commit/c75664d82ca55c9389863bc8abdc9b81538828d4))
+* update nozomiishii/workflows digest to f0cee3c ([#62](https://github.com/nozomiishii/Brooklyn/issues/62)) ([be6d356](https://github.com/nozomiishii/Brooklyn/commit/be6d3567a1f5be3164bc4a75ed85305dab0af178))
+
 ## [0.1.16](https://github.com/nozomiishii/Brooklyn/compare/v0.1.15...v0.1.16) (2026-04-05)
 
 
