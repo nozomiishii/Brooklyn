@@ -226,9 +226,8 @@ jobs:
           brew bump-cask-pr \
             --no-browse \
             --no-fork \
-            --tap=nozomiishii/homebrew-tap \
             --version="$VERSION" \
-            brooklyn 2>&1 | tee "$BUMP_LOG"
+            nozomiishii/tap/brooklyn 2>&1 | tee "$BUMP_LOG"
 
           PR_URL="$(grep -oE 'https://github\.com/nozomiishii/homebrew-tap/pull/[0-9]+' "$BUMP_LOG" | tail -1)"
           if [ -n "$PR_URL" ]; then
