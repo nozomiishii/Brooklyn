@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.21](https://github.com/nozomiishii/Brooklyn/compare/v0.1.20...v0.1.21) (2026-04-28)
+
+
+### Bug Fixes
+
+* **ci:** rollback orphan branch when PR creation fails ([#73](https://github.com/nozomiishii/Brooklyn/issues/73)) ([d629508](https://github.com/nozomiishii/Brooklyn/commit/d629508ca0338fa235abe18ee6eb0d838d1f3c3a))
+* **ci:** use brew bump-cask-pr --write-only and open PR ourselves ([#71](https://github.com/nozomiishii/Brooklyn/issues/71)) ([4cb1624](https://github.com/nozomiishii/Brooklyn/commit/4cb162469bc3d2f36b7b561de6e03fd0d491c786))
+
 ## [0.1.20](https://github.com/nozomiishii/Brooklyn/compare/v0.1.19...v0.1.20) (2026-04-28)
 
 
