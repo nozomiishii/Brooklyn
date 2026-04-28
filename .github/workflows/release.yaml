@@ -209,33 +209,35 @@ jobs:
           owner: nozomiishii
           repositories: homebrew-tap
 
-      - name: Bump cask and enable auto-merge
+      - name: Bump cask
+        id: bump
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ steps.app-token.outputs.token }}
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
         run: |
           VERSION="${TAG_NAME#v}"
           brew tap nozomiishii/homebrew-tap
 
-          # `brew bump-cask-pr` の出力 (stdout/stderr) に作成 PR の URL が含まれる。
-          # `gh pr list` でタイトル検索する代わりにそれを直接捕捉して
-          # `gh pr merge` に渡すことで、push 直後の検索レース・誤解決を避ける。
-          BUMP_OUTPUT=$(brew bump-cask-pr \
+          # `tee` で stdout に流しつつログファイルにも残し、PR URL を後段で抽出する。
+          # `$()` で stderr を取り込む書き方だと bash の `-e -o pipefail` 下で
+          # brew が失敗したときログが標準出力されず原因不明になるため避ける。
+          BUMP_LOG="$(mktemp)"
+          brew bump-cask-pr \
             --no-browse \
             --no-fork \
             --tap=nozomiishii/homebrew-tap \
             --version="$VERSION" \
-            brooklyn 2>&1)
-          echo "$BUMP_OUTPUT"
+            brooklyn 2>&1 | tee "$BUMP_LOG"
 
-          PR_URL=$(echo "$BUMP_OUTPUT" \
-            | grep -oE 'https://github\.com/nozomiishii/homebrew-tap/pull/[0-9]+' \
-            | tail -1)
-
-          if [ -z "$PR_URL" ]; then
-            echo "::warning::PR URL not found in brew output; auto-merge skipped"
-            exit 0
+          PR_URL="$(grep -oE 'https://github\.com/nozomiishii/homebrew-tap/pull/[0-9]+' "$BUMP_LOG" | tail -1)"
+          if [ -n "$PR_URL" ]; then
+            echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::PR URL not found in brew output; auto-merge will be skipped"
           fi
 
-          gh pr merge "$PR_URL" --auto --squash
+      - name: Enable auto-merge on the bump PR
+        if: steps.bump.outputs.pr_url != ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh pr merge "${{ steps.bump.outputs.pr_url }}" --auto --squash
