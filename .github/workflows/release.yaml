@@ -262,7 +262,7 @@ jobs:
 
           # release-please の release PR (head commit が `chore: release X.Y.Z (#N)`)
           # から起動した場合は `(#N)` を抽出して release PR リンクも併記する。
-          BODY="Bumped from [Brooklyn ${TAG_NAME}](https://github.com/nozomiishii/Brooklyn/releases/tag/${TAG_NAME})."
+          BODY="Release Note: [Brooklyn ${TAG_NAME}](https://github.com/nozomiishii/Brooklyn/releases/tag/${TAG_NAME})"
           RELEASE_PR_NUMBER="$(printf '%s\n' "$HEAD_COMMIT_MESSAGE" | head -1 | grep -oE '#[0-9]+' | head -1 | tr -d '#')"
           if [ -n "$RELEASE_PR_NUMBER" ]; then
             BODY="${BODY}"$'\n\n'"Release PR: https://github.com/nozomiishii/Brooklyn/pull/${RELEASE_PR_NUMBER}"
