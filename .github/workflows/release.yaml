@@ -215,6 +215,7 @@ jobs:
           HOMEBREW_GITHUB_API_TOKEN: ${{ steps.app-token.outputs.token }}
           TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
         run: |
+          set -x
           VERSION="${TAG_NAME#v}"
           brew tap nozomiishii/homebrew-tap
 
