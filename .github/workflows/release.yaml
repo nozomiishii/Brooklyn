@@ -183,7 +183,7 @@ jobs:
   homebrew-update:
     needs: [create-draft-release, upload-assets]
     if: needs.create-draft-release.outputs.release_created == 'true'
-    runs-on: ubuntu-latest
+    runs-on: macos-26
     timeout-minutes: 10
     concurrency:
       group: homebrew-update
@@ -208,9 +208,6 @@ jobs:
           private-key: ${{ steps.secrets.outputs.APP_PRIVATE_KEY }}
           owner: nozomiishii
           repositories: homebrew-tap
-
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@f1cc9df7a62b7f6244414d21a3ebc3ba9156a082 # main
 
       - name: Bump cask and enable auto-merge
         env:
