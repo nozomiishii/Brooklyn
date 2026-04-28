@@ -183,7 +183,7 @@ jobs:
   homebrew-update:
     needs: [create-draft-release, upload-assets]
     if: needs.create-draft-release.outputs.release_created == 'true'
-    runs-on: ubuntu-latest
+    runs-on: macos-26
     timeout-minutes: 10
     concurrency:
       group: homebrew-update
@@ -209,43 +209,33 @@ jobs:
           owner: nozomiishii
           repositories: homebrew-tap
 
-      - name: Download release asset
+      - name: Bump cask and enable auto-merge
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
-        run: |
-          gh release download "$TAG_NAME" \
-            --repo nozomiishii/Brooklyn \
-            --pattern "Brooklyn.saver.zip" \
-            --dir /tmp
-
-      - name: Calculate sha256
-        id: hash
-        run: echo "sha256=$(sha256sum /tmp/Brooklyn.saver.zip | awk '{print $1}')" >> "$GITHUB_OUTPUT"
-
-      - name: Clone homebrew-tap
-        run: git clone https://github.com/nozomiishii/homebrew-tap.git /tmp/homebrew-tap
-
-      - name: Update cask
-        working-directory: /tmp/homebrew-tap
-        env:
-          TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
-          SHA256: ${{ steps.hash.outputs.sha256 }}
-        run: |
-          VERSION="${TAG_NAME#v}"
-          sed -i "s/version \".*\"/version \"$VERSION\"/" Casks/brooklyn.rb
-          sed -i "s/sha256 \".*\"/sha256 \"$SHA256\"/" Casks/brooklyn.rb
-
-      - name: Commit and push
-        working-directory: /tmp/homebrew-tap
-        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ steps.app-token.outputs.token }}
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
         run: |
           VERSION="${TAG_NAME#v}"
-          git config user.name "nozomiishii-release[bot]"
-          git config user.email "nozomiishii-release[bot]@users.noreply.github.com"
-          git add Casks/brooklyn.rb
-          git commit -m "brooklyn $VERSION"
-          AUTH=$(echo -n "x-access-token:${GH_TOKEN}" | base64)
-          git -c "http.extraheader=Authorization: Basic ${AUTH}" push origin main
+          brew tap nozomiishii/homebrew-tap
+
+          # `brew bump-cask-pr` の出力 (stdout/stderr) に作成 PR の URL が含まれる。
+          # `gh pr list` でタイトル検索する代わりにそれを直接捕捉して
+          # `gh pr merge` に渡すことで、push 直後の検索レース・誤解決を避ける。
+          BUMP_OUTPUT=$(brew bump-cask-pr \
+            --no-browse \
+            --no-fork \
+            --tap=nozomiishii/homebrew-tap \
+            --version="$VERSION" \
+            brooklyn 2>&1)
+          echo "$BUMP_OUTPUT"
+
+          PR_URL=$(echo "$BUMP_OUTPUT" \
+            | grep -oE 'https://github\.com/nozomiishii/homebrew-tap/pull/[0-9]+' \
+            | tail -1)
+
+          if [ -z "$PR_URL" ]; then
+            echo "::warning::PR URL not found in brew output; auto-merge skipped"
+            exit 0
+          fi
+
+          gh pr merge "$PR_URL" --auto --squash
