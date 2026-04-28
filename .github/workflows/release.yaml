@@ -209,8 +209,7 @@ jobs:
           owner: nozomiishii
           repositories: homebrew-tap
 
-      - name: Bump cask
-        id: bump
+      - name: Bump cask file (write only)
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ steps.app-token.outputs.token }}
           TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
@@ -218,27 +217,47 @@ jobs:
           set -x
           VERSION="${TAG_NAME#v}"
           brew tap nozomiishii/homebrew-tap
-
-          # `tee` で stdout に流しつつログファイルにも残し、PR URL を後段で抽出する。
-          # `$()` で stderr を取り込む書き方だと bash の `-e -o pipefail` 下で
-          # brew が失敗したときログが標準出力されず原因不明になるため避ける。
-          BUMP_LOG="$(mktemp)"
+          # `--write-only` だとファイル書き換え + brew style --fix + brew audit のみ
+          # 走り、commit/push/PR 作成は行われない。後段で自前に PR を作ることで
+          # PR title を最初から Conventional Commits 形式にし、CI の二重起動を避ける。
           brew bump-cask-pr \
-            --no-browse \
-            --no-fork \
+            --write-only \
             --version="$VERSION" \
-            nozomiishii/tap/brooklyn 2>&1 | tee "$BUMP_LOG"
+            nozomiishii/tap/brooklyn
 
-          PR_URL="$(grep -oE 'https://github\.com/nozomiishii/homebrew-tap/pull/[0-9]+' "$BUMP_LOG" | tail -1)"
-          if [ -n "$PR_URL" ]; then
-            echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::PR URL not found in brew output; auto-merge will be skipped"
-          fi
-
-      - name: Enable auto-merge on the bump PR
-        if: steps.bump.outputs.pr_url != ''
+      - name: Commit, push and open PR
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          PR_URL: ${{ steps.bump.outputs.pr_url }}
-        run: gh pr merge "$PR_URL" --auto --squash
+          HOMEBREW_GITHUB_API_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
+          HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          set -x
+          TAP_DIR="$(brew --repository nozomiishii/homebrew-tap)"
+          cd "$TAP_DIR"
+
+          BRANCH="bump-brooklyn-${TAG_NAME}"
+          MSG="chore: update brooklyn to ${TAG_NAME}"
+          git config user.name "nozomiishii-release[bot]"
+          git config user.email "nozomiishii-release[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add Casks/brooklyn.rb
+          git commit -m "$MSG"
+          AUTH=$(echo -n "x-access-token:${HOMEBREW_GITHUB_API_TOKEN}" | base64)
+          git -c "http.extraheader=Authorization: Basic ${AUTH}" push -u origin "$BRANCH"
+
+          # release-please の release PR (head commit が `chore: release X.Y.Z (#N)`)
+          # から起動した場合は `(#N)` を抽出して release PR リンクも併記する。
+          BODY="Bumped from [Brooklyn ${TAG_NAME}](https://github.com/nozomiishii/Brooklyn/releases/tag/${TAG_NAME})."
+          RELEASE_PR_NUMBER="$(printf '%s\n' "$HEAD_COMMIT_MESSAGE" | head -1 | grep -oE '#[0-9]+' | head -1 | tr -d '#')"
+          if [ -n "$RELEASE_PR_NUMBER" ]; then
+            BODY="${BODY}"$'\n\n'"Release PR: https://github.com/nozomiishii/Brooklyn/pull/${RELEASE_PR_NUMBER}"
+          fi
+
+          PR_URL=$(gh pr create \
+            --repo nozomiishii/homebrew-tap \
+            --base main \
+            --head "$BRANCH" \
+            --title "$MSG" \
+            --body "$BODY")
+          gh pr merge "$PR_URL" --auto --squash
