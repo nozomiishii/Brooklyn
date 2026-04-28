@@ -236,6 +236,29 @@ jobs:
             echo "::warning::PR URL not found in brew output; auto-merge will be skipped"
           fi
 
+      - name: Decorate the bump PR
+        if: steps.bump.outputs.pr_url != ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_URL: ${{ steps.bump.outputs.pr_url }}
+          TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
+          HEAD_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          # `brew bump-cask-pr` のデフォルト PR title (`brooklyn 0.1.20`) は
+          # homebrew-tap の `pull-request / validate` (Conventional Commits) を
+          # 通らないので、ここで書き換える。
+          gh pr edit "$PR_URL" --title "chore: update brooklyn to ${TAG_NAME}"
+
+          # Brooklyn release tag を本文末尾に追記。release-please の release
+          # PR から起動している場合 (head commit が `chore: release X.Y.Z (#N)`)、
+          # `(#N)` を抽出して release PR リンクも併記する。
+          BODY="Bumped from [Brooklyn ${TAG_NAME}](https://github.com/nozomiishii/Brooklyn/releases/tag/${TAG_NAME})."
+          RELEASE_PR_NUMBER="$(printf '%s\n' "$HEAD_COMMIT_MESSAGE" | head -1 | grep -oE '#[0-9]+' | head -1 | tr -d '#')"
+          if [ -n "$RELEASE_PR_NUMBER" ]; then
+            BODY="${BODY}"$'\n\n'"Release PR: https://github.com/nozomiishii/Brooklyn/pull/${RELEASE_PR_NUMBER}"
+          fi
+          gh pr comment "$PR_URL" --body "$BODY"
+
       - name: Enable auto-merge on the bump PR
         if: steps.bump.outputs.pr_url != ''
         env:
