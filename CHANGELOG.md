@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.22](https://github.com/nozomiishii/Brooklyn/compare/v0.1.21...v0.1.22) (2026-04-29)
+
+
+### Miscellaneous
+
+* **ci:** relabel bump PR body 'Bumped from' to 'Release Note:' ([#74](https://github.com/nozomiishii/Brooklyn/issues/74)) ([2b6f113](https://github.com/nozomiishii/Brooklyn/commit/2b6f113b4179b375599a1f2d12a8db5caafccb1f))
+
 ## [0.1.21](https://github.com/nozomiishii/Brooklyn/compare/v0.1.20...v0.1.21) (2026-04-28)
 
 
