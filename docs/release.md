@@ -1,3 +1,11 @@
+---
+paths:
+  - ".github/workflows/release.yaml"
+  - "Makefile"
+  - "release-please-config.json"
+  - ".release-please-manifest.json"
+---
+
 # リリースフロー詳細
 
 CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/workflows/*` / Homebrew Cask 関連を変更する前に必ず読むこと。

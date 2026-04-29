@@ -46,8 +46,6 @@ BrooklynView (ScreenSaverView)
         └── ConfigureSheetController (NSWindowController ブリッジ)
 ```
 
-**詳細（再生ロジック・macOS バグ回避の根本原因・Swift 6 詳細）は [docs/architecture.md](docs/architecture.md) を必読。**
-
 ## ハードルール
 
 ### macOS Sonoma+ バグ回避（変更時はテストで regression を確認）
@@ -72,8 +70,6 @@ BrooklynView (ScreenSaverView)
 - **Release（release.yaml）**: `main` push / `workflow_dispatch` で 4 ジョブ実行（`create-draft-release` → `upload-assets` → `homebrew-update` → `release-pr`）
 - **actionlint / secretlint / pull-request title**: git-harvest と共通の品質チェック
 
-**リリース関連 (`release.yaml` / `.github/workflows/*` / Homebrew Cask) を触る時は必ず先に [docs/release.md](docs/release.md) を読むこと。** 4 ジョブ詳細・Homebrew Cask 更新の不採用案・runner 選定理由・周辺前提が記載されている。
-
 ## Git・GitHub・Conventional Commits
 
 - PR タイトルは英語、semantic commit 形式、小文字開始（`_pull-request.yaml` で検証）
@@ -81,3 +77,13 @@ BrooklynView (ScreenSaverView)
 - YAML ファイルの拡張子は `.yaml` に統一（ツールのデフォルトが `.yml` の場合は Makefile で `--config` / `--spec` を指定）
 - `BREAKING CHANGE:` フッターと `feat!:` / `fix!:` の `!` 修飾は、**リリースされるパッケージ・公開アセットの互換性を破る変更にのみ**使用する。CI / workflows / branch protection / リポジトリ運用上の変更には使わない。これらの注意事項は PR 本文に記述する
   <!-- 2026-04-25 に chore: migrate reusable workflows to v3.0.0 PR が誤って BREAKING CHANGE として記録された経緯あり。release-please の major bump 誤発火を防ぐため、ops-only な変更は ! / BREAKING CHANGE フッターを絶対につけない -->
+
+<!--
+Convention: docs/ は人間ドキュメント兼 Claude rules。
+.claude/rules は ../docs への symlink (Pattern A、Path E)。
+docs/*.md に YAML frontmatter `paths:` を書くと、マッチするファイル編集時に自動 inject される。
+- docs/architecture.md → Swift 編集時
+- docs/release.md → release.yaml / Makefile 編集時
+新しい docs を追加する際も同じ規約に従うこと。人間専用 doc は root (README.md) や .github/ に置く。
+-->
+

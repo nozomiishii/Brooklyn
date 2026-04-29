@@ -1,3 +1,11 @@
+---
+paths:
+  - "Brooklyn/**/*.swift"
+  - "Canvas/**/*.swift"
+  - "BrooklynTests/**/*.swift"
+  - "project.yaml"
+---
+
 # アーキテクチャ詳細
 
 CLAUDE.md の「アーキテクチャ」「ハードルール」節の補足。コードを変更する前に該当箇所を読むこと。
