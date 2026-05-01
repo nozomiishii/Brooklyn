@@ -1,4 +1,2 @@
 disabled_rules:
   - trailing_comma # SwiftFormat が trailing comma を管理
-
-line_length: 200
