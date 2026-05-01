@@ -93,8 +93,10 @@ struct ConfigureSheet: View {
     // MARK: - Footer
 
     private var footer: some View {
-        HStack {
-            Text("v\(Bundle(for: BrooklynView.self).object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?")")
+        let bundle = Bundle(for: BrooklynView.self)
+        let version = bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
+        return HStack {
+            Text("v\(version)")
                 .font(.caption)
                 .foregroundStyle(.tertiary)
             Spacer()
