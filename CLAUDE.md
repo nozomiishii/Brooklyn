@@ -6,21 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Apple の 2018 年 Brooklyn イベントにインスパイアされた macOS スクリーンセーバー。[Pedro Carrasco のオリジナル](https://github.com/pedrommcarrasco/Brooklyn)を Swift 6 / macOS 26 (Tahoe) / Apple Silicon 向けにモダンに再実装したもの。75 個の MP4 アニメーションを `AVPlayerLayer` でループ再生する。
 
-## コマンド
+## Canvas での動作確認
 
-```bash
-make generate     # XcodeGen で project.yaml から Xcode プロジェクトを生成
-make build        # generate + Release ビルド
-make test         # generate + テスト実行
-make format       # SwiftFormat で自動整形
-make format-check # フォーマット差分チェック（CI 用）
-make lint         # SwiftLint（--strict）
-make install      # build + ~/Library/Screen Savers/ にコピー + codesign
-make uninstall    # スクリーンセーバーを削除
-make clean        # build/ と Brooklyn.xcodeproj を削除
-```
+`.saver` をインストールせずにデバッグするには Canvas ターゲットを使う:
 
-Canvas（デバッグ用アプリ）で `.saver` をインストールせずに動作確認:
 ```bash
 make generate && open Brooklyn.xcodeproj  # Xcode で Canvas スキームを実行
 ```
