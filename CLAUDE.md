@@ -49,10 +49,6 @@ BrooklynView (ScreenSaverView)
 - NotificationCenter オブザーバーは `nonisolated(unsafe)` で保持
 - 通知コールバックから `@MainActor` メソッドを呼ぶ際は `MainActor.assumeIsolated` を使用
 
-### Animation enum と MP4 ファイルの対応
-
-`Animation` enum の `rawValue` が `Resources/Animations/` 内のファイル名（拡張子なし）と一致する必要がある。不一致があると黒画面になる。`AnimationTests.testAllAnimationsHaveMatchingMP4Files` で検証済み。
-
 ## Git・GitHub・Conventional Commits
 
 - PR タイトルは英語、semantic commit 形式、小文字開始（`_pull-request.yaml` で検証）
