@@ -53,12 +53,6 @@ BrooklynView (ScreenSaverView)
 
 `Animation` enum の `rawValue` が `Resources/Animations/` 内のファイル名（拡張子なし）と一致する必要がある。不一致があると黒画面になる。`AnimationTests.testAllAnimationsHaveMatchingMP4Files` で検証済み。
 
-## CI / リリース
-
-- **CI（ci.yaml）**: push / 全 PR で `make build` + arm64 検証 + 75 MP4 検証 + `make test`
-- **Release（release.yaml）**: `main` push / `workflow_dispatch` で 4 ジョブ実行（`create-draft-release` → `upload-assets` → `homebrew-update` → `release-pr`）
-- **actionlint / secretlint / pull-request title**: git-harvest と共通の品質チェック
-
 ## Git・GitHub・Conventional Commits
 
 - PR タイトルは英語、semantic commit 形式、小文字開始（`_pull-request.yaml` で検証）
