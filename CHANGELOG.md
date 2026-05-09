@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.23](https://github.com/nozomiishii/Brooklyn/compare/v0.1.22...v0.1.23) (2026-05-03)
+
+
+### Miscellaneous
+
+* drop systematized rules from claude.md ([#82](https://github.com/nozomiishii/Brooklyn/issues/82)) ([ce9f411](https://github.com/nozomiishii/Brooklyn/commit/ce9f411384d3f5da1eed12dcf61aebd90c975172))
+* drop systematized rules from claude.md (animation enum verified by test) ([ce9f411](https://github.com/nozomiishii/Brooklyn/commit/ce9f411384d3f5da1eed12dcf61aebd90c975172))
+* restructure CLAUDE.md with progressive disclosure ([#76](https://github.com/nozomiishii/Brooklyn/issues/76)) ([8efe176](https://github.com/nozomiishii/Brooklyn/commit/8efe1763b5a2d41f83a48f1a3bb7e0510aa62d05))
+* trim derivable sections from claude.md ([#81](https://github.com/nozomiishii/Brooklyn/issues/81)) ([01a5b39](https://github.com/nozomiishii/Brooklyn/commit/01a5b39a169dd061649be1bf3c33df7afdd767c4))
+* trim redundant command sections from claude.md ([#80](https://github.com/nozomiishii/Brooklyn/issues/80)) ([8f1f0a8](https://github.com/nozomiishii/Brooklyn/commit/8f1f0a842fe67939a9081eff7bdc7a41691a4188))
+* use swiftlint default line_length ([#78](https://github.com/nozomiishii/Brooklyn/issues/78)) ([e4ae005](https://github.com/nozomiishii/Brooklyn/commit/e4ae0054802fa04b728911d46b9bd71577df4ead))
+
 ## [0.1.22](https://github.com/nozomiishii/Brooklyn/compare/v0.1.21...v0.1.22) (2026-04-29)
 
 
