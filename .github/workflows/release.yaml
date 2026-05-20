@@ -34,6 +34,9 @@ jobs:
       - name: Load secrets from 1Password
         id: secrets
         uses: 1password/load-secrets-action@92467eb28f72e8255933372f1e0707c567ce2259 # v4
+        with:
+          # renovate: datasource=docker depName=1password/op versioning=semver
+          version: "2.34.0"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           APP_ID: op://github-app/nozomiishii-release/username
@@ -45,6 +48,8 @@ jobs:
         with:
           client-id: ${{ steps.secrets.outputs.APP_ID }}
           private-key: ${{ steps.secrets.outputs.APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
 
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -89,6 +94,9 @@ jobs:
       - name: Load secrets from 1Password
         id: secrets
         uses: 1password/load-secrets-action@92467eb28f72e8255933372f1e0707c567ce2259 # v4
+        with:
+          # renovate: datasource=docker depName=1password/op versioning=semver
+          version: "2.34.0"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           APP_ID: op://github-app/nozomiishii-release/username
@@ -100,6 +108,7 @@ jobs:
         with:
           client-id: ${{ steps.secrets.outputs.APP_ID }}
           private-key: ${{ steps.secrets.outputs.APP_PRIVATE_KEY }}
+          permission-contents: write
 
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -151,6 +160,9 @@ jobs:
       - name: Load secrets from 1Password
         id: secrets
         uses: 1password/load-secrets-action@92467eb28f72e8255933372f1e0707c567ce2259 # v4
+        with:
+          # renovate: datasource=docker depName=1password/op versioning=semver
+          version: "2.34.0"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           APP_ID: op://github-app/nozomiishii-release/username
@@ -162,6 +174,8 @@ jobs:
         with:
           client-id: ${{ steps.secrets.outputs.APP_ID }}
           private-key: ${{ steps.secrets.outputs.APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
 
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -195,6 +209,9 @@ jobs:
       - name: Load secrets from 1Password
         id: secrets
         uses: 1password/load-secrets-action@92467eb28f72e8255933372f1e0707c567ce2259 # v4
+        with:
+          # renovate: datasource=docker depName=1password/op versioning=semver
+          version: "2.34.0"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           APP_ID: op://github-app/nozomiishii-release/username
@@ -208,6 +225,8 @@ jobs:
           private-key: ${{ steps.secrets.outputs.APP_PRIVATE_KEY }}
           owner: nozomiishii
           repositories: homebrew-tap
+          permission-contents: write
+          permission-pull-requests: write
 
       - name: Bump cask file (write only)
         env:
