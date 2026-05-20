@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.24](https://github.com/nozomiishii/Brooklyn/compare/v0.1.23...v0.1.24) (2026-05-20)
+
+
+### Bug Fixes
+
+* scope release app token permissions and pin op cli version ([#90](https://github.com/nozomiishii/Brooklyn/issues/90)) ([011adce](https://github.com/nozomiishii/Brooklyn/commit/011adceb7fb2984b440a11bad301da78c870018d))
+
+
+### Miscellaneous
+
+* add startup hook for session sync ([#88](https://github.com/nozomiishii/Brooklyn/issues/88)) ([107bd66](https://github.com/nozomiishii/Brooklyn/commit/107bd66558c6e8e8a76954a48c6490e7147c89c9))
+* migrate create-github-app-token input from app-id to client-id ([#86](https://github.com/nozomiishii/Brooklyn/issues/86)) ([e92a55a](https://github.com/nozomiishii/Brooklyn/commit/e92a55a6157a70aa80d54f4eb0fc641bd0ce0856))
+* update actions/create-github-app-token action to v3.2.0 ([#89](https://github.com/nozomiishii/Brooklyn/issues/89)) ([1e357e1](https://github.com/nozomiishii/Brooklyn/commit/1e357e13a173fbff6561bde8c8b1af1b5429b5b0))
+* update nozomiishii/workflows action to v3.0.2 ([#83](https://github.com/nozomiishii/Brooklyn/issues/83)) ([a690693](https://github.com/nozomiishii/Brooklyn/commit/a6906936eabf3a139114924e04fad528bbd732d8))
+* update nozomiishii/workflows action to v3.1.0 ([#84](https://github.com/nozomiishii/Brooklyn/issues/84)) ([18729b5](https://github.com/nozomiishii/Brooklyn/commit/18729b5cd67c7b5249051ca2fac6556bd104d41d))
+* update nozomiishii/workflows action to v3.1.1 ([#87](https://github.com/nozomiishii/Brooklyn/issues/87)) ([6dcd1eb](https://github.com/nozomiishii/Brooklyn/commit/6dcd1eb0c15300eb129f09f092a69f71666e4b66))
+
 ## [0.1.23](https://github.com/nozomiishii/Brooklyn/compare/v0.1.22...v0.1.23) (2026-05-03)
 
 
