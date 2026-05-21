@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.25](https://github.com/nozomiishii/Brooklyn/compare/v0.1.24...v0.1.25) (2026-05-21)
+
+
+### Bug Fixes
+
+* grant workflows permission to release app token for non-head releases ([#94](https://github.com/nozomiishii/Brooklyn/issues/94)) ([64fa659](https://github.com/nozomiishii/Brooklyn/commit/64fa65940bebd63421b5d96f8ca7fba60b993897))
+
+
+### Miscellaneous
+
+* unset stale core.hooksPath in worktree startup hook ([#91](https://github.com/nozomiishii/Brooklyn/issues/91)) ([9868d11](https://github.com/nozomiishii/Brooklyn/commit/9868d1192788a6df232a84eb3d62b285e365aa3f))
+* update nozomiishii/workflows action to v3.1.2 ([#93](https://github.com/nozomiishii/Brooklyn/issues/93)) ([825a8f7](https://github.com/nozomiishii/Brooklyn/commit/825a8f7a9784ea5200896360d322a7a90b0f720a))
+
 ## [0.1.24](https://github.com/nozomiishii/Brooklyn/compare/v0.1.23...v0.1.24) (2026-05-20)
 
 
