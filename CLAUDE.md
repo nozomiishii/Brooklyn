@@ -51,7 +51,6 @@ BrooklynView (ScreenSaverView)
 
 ## Git・GitHub・Conventional Commits
 
-- PR タイトルは英語、semantic commit 形式、小文字開始（`_pull-request.yaml` で検証）
 - Release Please が CHANGELOG とバージョンを自動管理。手動でバージョンを変更しない
 - YAML ファイルの拡張子は `.yaml` に統一（ツールのデフォルトが `.yml` の場合は Makefile で `--config` / `--spec` を指定）
 - `BREAKING CHANGE:` フッターと `feat!:` / `fix!:` の `!` 修飾は、**リリースされるパッケージ・公開アセットの互換性を破る変更にのみ**使用する。CI / workflows / branch protection / リポジトリ運用上の変更には使わない。これらの注意事項は PR 本文に記述する
