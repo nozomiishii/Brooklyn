@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## プロジェクト概要
 
 Apple の 2018 年 Brooklyn イベントにインスパイアされた macOS スクリーンセーバー。[Pedro Carrasco のオリジナル](https://github.com/pedrommcarrasco/Brooklyn)を Swift 6 / macOS 26 (Tahoe) / Apple Silicon 向けにモダンに再実装したもの。75 個の MP4 アニメーションを `AVPlayerLayer` でループ再生する。
@@ -11,7 +9,7 @@ Apple の 2018 年 Brooklyn イベントにインスパイアされた macOS ス
 `.saver` をインストールせずにデバッグするには Canvas ターゲットを使う:
 
 ```bash
-make generate && open Brooklyn.xcodeproj  # Xcode で Canvas スキームを実行
+make generate && open Brooklyn.xcodeproj
 ```
 
 ## アーキテクチャ
@@ -35,7 +33,7 @@ BrooklynView (ScreenSaverView)
         └── ConfigureSheetController (NSWindowController ブリッジ)
 ```
 
-## ハードルール
+## 触る前に読む（壊しやすいポイント）
 
 ### macOS Sonoma+ バグ回避（変更時はテストで regression を確認）
 
@@ -49,19 +47,4 @@ BrooklynView (ScreenSaverView)
 - NotificationCenter オブザーバーは `nonisolated(unsafe)` で保持
 - 通知コールバックから `@MainActor` メソッドを呼ぶ際は `MainActor.assumeIsolated` を使用
 
-## Git・GitHub・Conventional Commits
-
-- Release Please が CHANGELOG とバージョンを自動管理。手動でバージョンを変更しない
-- YAML ファイルの拡張子は `.yaml` に統一（ツールのデフォルトが `.yml` の場合は Makefile で `--config` / `--spec` を指定）
-- `BREAKING CHANGE:` フッターと `feat!:` / `fix!:` の `!` 修飾は、**リリースされるパッケージ・公開アセットの互換性を破る変更にのみ**使用する。CI / workflows / branch protection / リポジトリ運用上の変更には使わない。これらの注意事項は PR 本文に記述する
-  <!-- 2026-04-25 に chore: migrate reusable workflows to v3.0.0 PR が誤って BREAKING CHANGE として記録された経緯あり。release-please の major bump 誤発火を防ぐため、ops-only な変更は ! / BREAKING CHANGE フッターを絶対につけない -->
-
-<!--
-Convention: docs/ は人間ドキュメント兼 Claude rules。
-.claude/rules は ../docs への symlink (Pattern A、Path E)。
-docs/*.md に YAML frontmatter `paths:` を書くと、マッチするファイル編集時に自動 inject される。
-- docs/architecture.md → Swift 編集時
-- docs/release.md → release.yaml / Makefile 編集時
-新しい docs を追加する際も同じ規約に従うこと。人間専用 doc は root (README.md) や .github/ に置く。
--->
 
