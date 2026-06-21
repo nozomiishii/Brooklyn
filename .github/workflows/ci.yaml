@@ -80,3 +80,15 @@ jobs:
 
       - name: Run tests
         run: make test
+
+  required:
+    needs: [lint, build-and-test]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Fail if any required job failed or was cancelled
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: |
+          echo "A required job failed or was cancelled"
+          exit 1
