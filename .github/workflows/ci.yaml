@@ -82,6 +82,8 @@ jobs:
         run: make test
 
   required:
+    # name 変更時は infra 側も更新する
+    name: CI / required
     needs: [lint, build-and-test]
     if: always()
     runs-on: ubuntu-slim
