@@ -82,9 +82,11 @@ jobs:
         run: make test
 
   required:
+    # name 変更時は infra 側の required_status_checks も更新する
+    name: CI / required
     needs: [lint, build-and-test]
     if: always()
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     timeout-minutes: 1
     steps:
       - name: Fail if any required job failed or was cancelled
