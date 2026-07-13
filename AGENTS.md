@@ -1,9 +1,5 @@
 # Repository Guidelines
 
-## プロジェクト概要
-
-Apple の 2018 年 Brooklyn イベントにインスパイアされた macOS スクリーンセーバー。[Pedro Carrasco のオリジナル](https://github.com/pedrommcarrasco/Brooklyn)を Swift 6 / macOS 26 (Tahoe) / Apple Silicon 向けにモダンに再実装したもの。75 個の MP4 アニメーションを `AVPlayerLayer` でループ再生する。
-
 ## Canvas での動作確認
 
 `.saver` をインストールせずにデバッグするには Canvas ターゲットを使う:
