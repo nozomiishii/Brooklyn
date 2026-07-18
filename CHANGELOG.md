@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.1.25](https://github.com/nozomiishii/Brooklyn/compare/v0.1.24...v0.1.25) (2026-07-18)
+
+
+### Features
+
+* add required summary gate job to CI workflow ([#106](https://github.com/nozomiishii/Brooklyn/issues/106)) ([500fec4](https://github.com/nozomiishii/Brooklyn/commit/500fec4599ef2b2d4b150323c3345d014cc5d230))
+
+
+### Bug Fixes
+
+* add unique name to required gate job ([#109](https://github.com/nozomiishii/Brooklyn/issues/109)) ([2a78fbe](https://github.com/nozomiishii/Brooklyn/commit/2a78fbee4882ff06231d0159810253f7ae861944))
+* grant workflows permission to release app token for non-head releases ([#94](https://github.com/nozomiishii/Brooklyn/issues/94)) ([64fa659](https://github.com/nozomiishii/Brooklyn/commit/64fa65940bebd63421b5d96f8ca7fba60b993897))
+
+
+### Miscellaneous
+
+* add .envrc for worktree setup ([#119](https://github.com/nozomiishii/Brooklyn/issues/119)) ([2389525](https://github.com/nozomiishii/Brooklyn/commit/238952587ed4dbc431ce6b84aef4a8a31086bca5))
+* adopt AGENTS.md and .hooks/ ([#105](https://github.com/nozomiishii/Brooklyn/issues/105)) ([aa9952c](https://github.com/nozomiishii/Brooklyn/commit/aa9952c744aa4c0d0dcf14eed83b71707d4cc314))
+* clarify docs constraints section ([#96](https://github.com/nozomiishii/Brooklyn/issues/96)) ([9667019](https://github.com/nozomiishii/Brooklyn/commit/96670193acf911d8c8060f095a6ce01929bc7ff7))
+* move pull-request permission to job level for revert support ([#115](https://github.com/nozomiishii/Brooklyn/issues/115)) ([1c82e68](https://github.com/nozomiishii/Brooklyn/commit/1c82e6809f2647aac53132c435cd6a1c17d6a0ce))
+* pin 1password/load-secrets-action to semver tag ([#103](https://github.com/nozomiishii/Brooklyn/issues/103)) ([ff6f80e](https://github.com/nozomiishii/Brooklyn/commit/ff6f80e57ea89cb5f8f00fd5edf51872f0d30b25))
+* remove commit/PR format rules from CLAUDE.md ([#95](https://github.com/nozomiishii/Brooklyn/issues/95)) ([d02ec92](https://github.com/nozomiishii/Brooklyn/commit/d02ec9228c4a21b7f1212fbbbef8fd291ff9f4fc))
+* remove envrc setup boilerplate ([#124](https://github.com/nozomiishii/Brooklyn/issues/124)) ([98fac3a](https://github.com/nozomiishii/Brooklyn/commit/98fac3a3fb3188197d2521dd9a44faab6f4b13c3))
+* trim readme-duplicated overview from AGENTS.md ([#122](https://github.com/nozomiishii/Brooklyn/issues/122)) ([b0ed44b](https://github.com/nozomiishii/Brooklyn/commit/b0ed44bd4f6318da5414effff2c1f5817fddffe9))
+* unset stale core.hooksPath in worktree startup hook ([#91](https://github.com/nozomiishii/Brooklyn/issues/91)) ([9868d11](https://github.com/nozomiishii/Brooklyn/commit/9868d1192788a6df232a84eb3d62b285e365aa3f))
+* update 1password/op docker tag to v2.34.1 ([#104](https://github.com/nozomiishii/Brooklyn/issues/104)) ([93254e7](https://github.com/nozomiishii/Brooklyn/commit/93254e7cbee6fce56ad34e54827ec73d3c90176e))
+* update 1password/op docker tag to v2.35.0 ([#123](https://github.com/nozomiishii/Brooklyn/issues/123)) ([59bf560](https://github.com/nozomiishii/Brooklyn/commit/59bf560b90ad71ed5f4ae403c047ee52c1bc386a))
+* update actions/cache action to v6 ([#111](https://github.com/nozomiishii/Brooklyn/issues/111)) ([bf35a5a](https://github.com/nozomiishii/Brooklyn/commit/bf35a5a0a357f12088b946aaffc1e1a0a7c627bd))
+* update actions/cache action to v6.1.0 ([#113](https://github.com/nozomiishii/Brooklyn/issues/113)) ([f16f435](https://github.com/nozomiishii/Brooklyn/commit/f16f435923c1c30ae527e255450645f0e7d8b80e))
+* update actions/checkout action to v6.0.3 ([#100](https://github.com/nozomiishii/Brooklyn/issues/100)) ([b23d31b](https://github.com/nozomiishii/Brooklyn/commit/b23d31b752d6bf4f91abe626dbd59843d9f0830f))
+* update actions/checkout action to v7 ([#108](https://github.com/nozomiishii/Brooklyn/issues/108)) ([37435e1](https://github.com/nozomiishii/Brooklyn/commit/37435e151e587e56ca5c940b738e6012fdd3811b))
+* update dependency release-please to v17.10.0 ([#110](https://github.com/nozomiishii/Brooklyn/issues/110)) ([2250040](https://github.com/nozomiishii/Brooklyn/commit/2250040a0befb49b8cf7bb0ddfbbdf01cfd97bc1))
+* update dependency release-please to v17.10.1 ([#118](https://github.com/nozomiishii/Brooklyn/issues/118)) ([cce1cfe](https://github.com/nozomiishii/Brooklyn/commit/cce1cfed45cfa8fbebf081999233657c0d8d2167))
+* update dependency release-please to v17.10.2 ([#120](https://github.com/nozomiishii/Brooklyn/issues/120)) ([dfda684](https://github.com/nozomiishii/Brooklyn/commit/dfda684cba1edd2295e01ba8a26c2015860723e3))
+* update dependency release-please to v17.10.3 ([#121](https://github.com/nozomiishii/Brooklyn/issues/121)) ([397dacb](https://github.com/nozomiishii/Brooklyn/commit/397dacb937c152a2b87332c26ad095074eb8a745))
+* update dependency release-please to v17.6.1 ([#97](https://github.com/nozomiishii/Brooklyn/issues/97)) ([18e45b0](https://github.com/nozomiishii/Brooklyn/commit/18e45b00f39a1cfa02ef1247a00171bde9bd800e))
+* update dependency release-please to v17.7.0 ([#99](https://github.com/nozomiishii/Brooklyn/issues/99)) ([933ef18](https://github.com/nozomiishii/Brooklyn/commit/933ef18ee97b5b816bb3fbff832982fb1630d411))
+* update dependency release-please to v17.9.0 ([#102](https://github.com/nozomiishii/Brooklyn/issues/102)) ([a5ca40c](https://github.com/nozomiishii/Brooklyn/commit/a5ca40ce8f0240f0d6427d40ee0200995b742dbc))
+* update nozomiishii to v3.2.0 ([#107](https://github.com/nozomiishii/Brooklyn/issues/107)) ([5592931](https://github.com/nozomiishii/Brooklyn/commit/55929311025d930eaff3b0cbe9924317896b280c))
+* update nozomiishii/workflows action to v3.1.2 ([#93](https://github.com/nozomiishii/Brooklyn/issues/93)) ([825a8f7](https://github.com/nozomiishii/Brooklyn/commit/825a8f7a9784ea5200896360d322a7a90b0f720a))
+* update nozomiishii/workflows action to v3.3.0 ([#114](https://github.com/nozomiishii/Brooklyn/issues/114)) ([de634ae](https://github.com/nozomiishii/Brooklyn/commit/de634ae4355b03fac6c46fd8da6d66ea5b2e90e6))
+* update nozomiishii/workflows action to v3.3.1 ([#117](https://github.com/nozomiishii/Brooklyn/issues/117)) ([27e1b96](https://github.com/nozomiishii/Brooklyn/commit/27e1b96584fbd05a716a7b4ea6ab983b24bf94b1))
+
 ## [0.1.24](https://github.com/nozomiishii/Brooklyn/compare/v0.1.23...v0.1.24) (2026-05-20)
 
 
