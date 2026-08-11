@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.1.26](https://github.com/nozomiishii/Brooklyn/compare/v0.1.25...v0.1.26) (2026-08-11)
+
+
+### Features
+
+* add Developer ID signing and notarization to release workflow ([#141](https://github.com/nozomiishii/Brooklyn/issues/141)) ([2a28d75](https://github.com/nozomiishii/Brooklyn/commit/2a28d757a22d944443dbf3d39c68d2fc700d0e0c))
+
+
+### Miscellaneous
+
+* replace shared workflow callers with the recommended preset ([#132](https://github.com/nozomiishii/Brooklyn/issues/132)) ([e8e4da0](https://github.com/nozomiishii/Brooklyn/commit/e8e4da0a1606f950743eb4a5301f072046d01281))
+* update 1password/load-secrets-action action to v4.1.1 ([#129](https://github.com/nozomiishii/Brooklyn/issues/129)) ([b990b47](https://github.com/nozomiishii/Brooklyn/commit/b990b476c43fbc7fe32067b14b01fe60871dc13f))
+* update 1password/load-secrets-action action to v5 ([#137](https://github.com/nozomiishii/Brooklyn/issues/137)) ([9aa1bc4](https://github.com/nozomiishii/Brooklyn/commit/9aa1bc4f935b82699291a1b6184c5c1703dffaab))
+* update 1password/op docker tag to v2.38.1 ([#135](https://github.com/nozomiishii/Brooklyn/issues/135)) ([b28c6ba](https://github.com/nozomiishii/Brooklyn/commit/b28c6ba91c3c6e65567f50f7eea11475cf275bf8))
+* update actions/checkout action to v7.0.1 ([#127](https://github.com/nozomiishii/Brooklyn/issues/127)) ([a030986](https://github.com/nozomiishii/Brooklyn/commit/a030986ed3022ffcc61cecf28f05c3d208f7576f))
+* update dependency release-please to v17.10.4 ([#128](https://github.com/nozomiishii/Brooklyn/issues/128)) ([0d9e0ba](https://github.com/nozomiishii/Brooklyn/commit/0d9e0ba7b63f72ff17b98d330bc2b0b9d46163e7))
+* update dependency release-please to v17.11.0 ([#131](https://github.com/nozomiishii/Brooklyn/issues/131)) ([7a978ec](https://github.com/nozomiishii/Brooklyn/commit/7a978ecbe6846fda6b5ec801d1f9d8f505c4588b))
+* update dependency release-please to v17.11.1 ([#136](https://github.com/nozomiishii/Brooklyn/issues/136)) ([4679a8e](https://github.com/nozomiishii/Brooklyn/commit/4679a8ed7745c7c299c933aaf1ab96cc1a724f47))
+* update nozomiishii/workflows action to v3.3.2 ([#125](https://github.com/nozomiishii/Brooklyn/issues/125)) ([cc31eb5](https://github.com/nozomiishii/Brooklyn/commit/cc31eb582e059f0ba62728039daa7c69113078e4))
+* update nozomiishii/workflows action to v3.4.0 ([#130](https://github.com/nozomiishii/Brooklyn/issues/130)) ([8800236](https://github.com/nozomiishii/Brooklyn/commit/8800236b913da330b5fe39b3f25fed410869362f))
+* update nozomiishii/workflows action to v3.4.1 ([#133](https://github.com/nozomiishii/Brooklyn/issues/133)) ([59d355d](https://github.com/nozomiishii/Brooklyn/commit/59d355d6ed316d58db8c43d5a7bb2917fb7b3233))
+* update nozomiishii/workflows action to v4 ([#134](https://github.com/nozomiishii/Brooklyn/issues/134)) ([74cf4ab](https://github.com/nozomiishii/Brooklyn/commit/74cf4ab06113bc0c3d5b0ae26b02e95a2621cfdc))
+* update nozomiishii/workflows action to v4.0.1 ([#139](https://github.com/nozomiishii/Brooklyn/issues/139)) ([55ae777](https://github.com/nozomiishii/Brooklyn/commit/55ae777bb5439b5a04da39672daea9487b256094))
+
 ## [0.1.25](https://github.com/nozomiishii/Brooklyn/compare/v0.1.24...v0.1.25) (2026-07-18)
 
 
