@@ -42,7 +42,7 @@ CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/wor
 - `.p12` ファイルは import 直後に削除する
 - cleanup は公式手順だと self-hosted runner のみ必要とされるが、防御的に常に実行する
 
-### 1Password item `op://github-app/apple-codesign`
+### 1Password item `op://github-app/apple-release`
 
 release workflow が参照するフィールド。既存の service account (`OP_SERVICE_ACCOUNT_TOKEN`) がアクセスできる vault に置く。
 

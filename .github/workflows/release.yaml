@@ -110,11 +110,11 @@ jobs:
           APP_PRIVATE_KEY: op://github-app/nozomiishii-release/credential
           # Developer ID 署名用の証明書 (.p12 を base64 化したもの) と公証用の
           # App Store Connect API キー。作成手順は docs/release.md を参照。
-          APPLE_CERTIFICATE_P12: op://github-app/apple-codesign/certificate-p12
-          APPLE_P12_PASSWORD: op://github-app/apple-codesign/p12-password
-          ASC_KEY_ID: op://github-app/apple-codesign/asc-key-id
-          ASC_ISSUER_ID: op://github-app/apple-codesign/asc-issuer-id
-          ASC_PRIVATE_KEY: op://github-app/apple-codesign/asc-private-key
+          APPLE_CERTIFICATE_P12: op://github-app/apple-release/certificate-p12
+          APPLE_P12_PASSWORD: op://github-app/apple-release/p12-password
+          ASC_KEY_ID: op://github-app/apple-release/asc-key-id
+          ASC_ISSUER_ID: op://github-app/apple-release/asc-issuer-id
+          ASC_PRIVATE_KEY: op://github-app/apple-release/asc-private-key
 
       - name: Generate GitHub App token
         id: app-token
