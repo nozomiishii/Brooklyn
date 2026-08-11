@@ -42,23 +42,26 @@ CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/wor
 - `.p12` ファイルは import 直後に削除する
 - cleanup は公式手順だと self-hosted runner のみ必要とされるが、防御的に常に実行する
 
-### 1Password item `op://github-app/apple-release`
+### 1Password vault `apple-developer`
 
-release workflow が参照するフィールド。既存の service account (`OP_SERVICE_ACCOUNT_TOKEN`) がアクセスできる vault に置く。
+Apple の鍵は共有の `github-app` vault ではなく専用 vault に置き、専用 service account で読む。他リポジトリの CI が侵害されても署名鍵に届かないための分離。vault の切り方は「同じ場所に配る鍵は同じ vault」を基準にする。
 
-| フィールド | 内容 |
-| --- | --- |
-| `certificate-p12` | Developer ID Application 証明書 + 秘密鍵の .p12 を base64 化した文字列 |
-| `p12-password` | .p12 エクスポート時に設定したパスワード |
-| `asc-key-id` | App Store Connect API キーの Key ID |
-| `asc-issuer-id` | App Store Connect API の Issuer ID |
-| `asc-private-key` | API キー .p8 の中身（PEM テキスト） |
+- 専用 service account のトークンは Brooklyn の Actions secret `OP_SERVICE_ACCOUNT_TOKEN_APPLE` にのみ配布する。配布先を増やす基準は「その repo が Apple 署名を実際に行うか」
+- 鍵が漏れた・漏れた疑いがある場合は、この vault の全アイテムをローテーションする
+
+| item | フィールド | 内容 |
+| --- | --- | --- |
+| `developer-id` | `certificate-p12` | Developer ID Application 証明書 + 秘密鍵の .p12 を base64 化した文字列 |
+| `developer-id` | `p12-password` | .p12 エクスポート時に設定したパスワード |
+| `app-store-connect` | `key-id` | App Store Connect API キーの Key ID |
+| `app-store-connect` | `issuer-id` | App Store Connect API の Issuer ID |
+| `app-store-connect` | `private-key` | API キー .p8 の中身（PEM テキスト） |
 
 ### 鍵の更新
 
 - Developer ID Application 証明書は有効期限 5 年。期限が切れたら Xcode → Settings → Accounts → Manage Certificates で作り直し、Keychain Access から .p12 を書き出して `certificate-p12` / `p12-password` を更新する。署名 identity は workflow がキーチェーンから自動検出するため identity 文字列の登録は不要
 - 公証済みの配布物は証明書が失効しても有効なまま（staple されたチケットで検証される）
-- App Store Connect API キーに期限はないが、revoke したら `asc-key-id` / `asc-private-key` を差し替える
+- App Store Connect API キーに期限はないが、revoke したら `app-store-connect` item の `key-id` / `private-key` を差し替える
 
 ## Homebrew Cask 更新の実装方針
 

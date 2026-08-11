@@ -108,13 +108,22 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           APP_ID: op://github-app/nozomiishii-release/username
           APP_PRIVATE_KEY: op://github-app/nozomiishii-release/credential
-          # Developer ID 署名用の証明書 (.p12 を base64 化したもの) と公証用の
-          # App Store Connect API キー。作成手順は docs/release.md を参照。
-          APPLE_CERTIFICATE_P12: op://github-app/apple-release/certificate-p12
-          APPLE_P12_PASSWORD: op://github-app/apple-release/p12-password
-          ASC_KEY_ID: op://github-app/apple-release/asc-key-id
-          ASC_ISSUER_ID: op://github-app/apple-release/asc-issuer-id
-          ASC_PRIVATE_KEY: op://github-app/apple-release/asc-private-key
+
+      # Apple の鍵は専用 vault + 専用 service account で読む。他リポジトリの
+      # CI が侵害されても署名鍵に届かないための分離 (詳細: docs/release.md)
+      - name: Load Apple secrets from 1Password
+        id: apple-secrets
+        uses: 1password/load-secrets-action@e544b780808654ba8ceba5fb2fe2897103d92ff4 # v5.0.0
+        with:
+          # renovate: datasource=docker depName=1password/op versioning=semver
+          version: "2.38.1"
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN_APPLE }}
+          APPLE_CERTIFICATE_P12: op://apple-developer/developer-id/certificate-p12
+          APPLE_P12_PASSWORD: op://apple-developer/developer-id/p12-password
+          ASC_KEY_ID: op://apple-developer/app-store-connect/key-id
+          ASC_ISSUER_ID: op://apple-developer/app-store-connect/issuer-id
+          ASC_PRIVATE_KEY: op://apple-developer/app-store-connect/private-key
 
       - name: Generate GitHub App token
         id: app-token
@@ -144,8 +153,8 @@ jobs:
       # https://github.com/nozomiishii/Brooklyn/issues/140
       - name: Import Developer ID certificate
         env:
-          APPLE_CERTIFICATE_P12: ${{ steps.secrets.outputs.APPLE_CERTIFICATE_P12 }}
-          APPLE_P12_PASSWORD: ${{ steps.secrets.outputs.APPLE_P12_PASSWORD }}
+          APPLE_CERTIFICATE_P12: ${{ steps.apple-secrets.outputs.APPLE_CERTIFICATE_P12 }}
+          APPLE_P12_PASSWORD: ${{ steps.apple-secrets.outputs.APPLE_P12_PASSWORD }}
         run: |
           CERT_PATH="$RUNNER_TEMP/certificate.p12"
           KEYCHAIN_PATH="$RUNNER_TEMP/signing.keychain-db"
@@ -197,9 +206,9 @@ jobs:
       # Apple にスキャンさせ、公証チケットを .saver に staple する
       - name: Notarize and staple
         env:
-          ASC_KEY_ID: ${{ steps.secrets.outputs.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ steps.secrets.outputs.ASC_ISSUER_ID }}
-          ASC_PRIVATE_KEY: ${{ steps.secrets.outputs.ASC_PRIVATE_KEY }}
+          ASC_KEY_ID: ${{ steps.apple-secrets.outputs.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ steps.apple-secrets.outputs.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ steps.apple-secrets.outputs.ASC_PRIVATE_KEY }}
         run: |
           # 公証キー (.p8) をファイルに復元する
           KEY_PATH="$RUNNER_TEMP/asc-key.p8"
