@@ -10,11 +10,13 @@ make generate && open Brooklyn.xcodeproj
 
 ## アーキテクチャ
 
-### ターゲット構成（project.yaml で定義）
+### ターゲット構成
 
-- **Brooklyn** — `.saver` バンドル。`NSPrincipalClass: Brooklyn.BrooklynView` でシステムに登録
-- **Canvas** — デバッグ用 macOS アプリ。Brooklyn と同じソースをビルドし、ウィンドウ内でスクリーンセーバーを表示
-- **BrooklynTests** — ユニットテスト。ソースを直接含めてテスト
+project.yaml で定義する。
+
+- Brooklyn — `.saver` バンドル。`NSPrincipalClass: Brooklyn.BrooklynView` でシステムに登録
+- Canvas — デバッグ用 macOS アプリ。Brooklyn と同じソースをビルドし、ウィンドウ内でスクリーンセーバーを表示
+- BrooklynTests — ユニットテスト。ソースを直接含めてテスト
 
 ### レイヤー構成
 
@@ -29,12 +31,16 @@ BrooklynView (ScreenSaverView)
         └── ConfigureSheetController (NSWindowController ブリッジ)
 ```
 
-## 触る前に読む（壊しやすいポイント）
+## 触る前に読む
 
-### macOS Sonoma+ バグ回避（変更時はテストで regression を確認）
+壊しやすいポイント。
+
+### macOS Sonoma+ バグ回避
+
+変更時はテストで regression を確認する。
 
 - `stopAnimation()` が呼ばれない → `com.apple.screensaver.willstop` 通知で cleanup
-- `isPreview` が常に true → フレームサイズで判定（< 400×300 = プレビュー）
+- `isPreview` が常に true → フレームサイズで判定し、幅 < 400 または高さ < 300 をプレビューと見なす
 - `AVQueuePlayer` が 1 アイテムで停止 → `LoopPlayer` が自動複製
 
 ### Swift 6 Strict Concurrency
