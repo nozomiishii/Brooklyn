@@ -44,7 +44,7 @@ CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/wor
 
 ### 1Password vault `apple-developer`
 
-Apple の鍵は共有の `github-app` vault ではなく専用 vault に置く。vault の切り方は「同じ場所に配る鍵は同じ vault」を基準にする。
+Apple の鍵は共有の `nozomiishii-release` vault ではなく専用 vault に置く。vault の切り方は「同じ場所に配る鍵は同じ vault」を基準にする。
 
 - service account は repo ごとに 1 つ (Brooklyn 用は「Brooklyn」)。`apple-developer` vault を読めるのは Brooklyn の service account だけにし、他リポジトリの CI が侵害されても署名鍵に届かないようにする
 - 1Password の service account は作成後に vault の追加・権限変更ができない ([公式](https://www.1password.dev/service-accounts/manage-service-accounts/))。アクセスする vault を増やすときは service account を作り直し、`OP_SERVICE_ACCOUNT_TOKEN` の値を新トークンに差し替える
