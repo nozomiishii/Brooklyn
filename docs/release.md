@@ -15,9 +15,50 @@ CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/wor
 `release.yaml` は `main` への push / `workflow_dispatch` で起動し、以下 4 ジョブで構成される。
 
 1. **`create-draft-release`** (ubuntu): release-please が conventional commits を集計し、release PR が既にマージされていれば draft release + tag を作成。`release_created` と `tag_name` を outputs として返す
-2. **`upload-assets`** (macos-26, `release_created == 'true'` のみ): XcodeGen + `make build` + `make test` で `.saver` をビルドし、`.saver.zip` を GitHub Release に upload 後 publish
+2. **`upload-assets`** (macos-26, `release_created == 'true'` のみ): XcodeGen + `make build` + `make test` で `.saver` をビルドし、Developer ID 署名 + 公証 + staple を経て `.saver.zip` を GitHub Release に upload 後 publish（詳細は後述「署名と公証」）
 3. **`homebrew-update`** (macos-26, `release_created == 'true'` のみ): `brew bump-cask-pr` で `nozomiishii/homebrew-tap` の `Casks/brooklyn.rb` を新バージョンに更新する PR を作成し、出力から PR URL を捕捉して `gh pr merge --auto --squash` で auto-merge を有効化
 4. **`release-pr`** (ubuntu, `upload-assets` 失敗時を除き常時): release-please で次の release PR を作成 / 更新
+
+## 署名と公証
+
+`upload-assets` はビルド後に次の順で配布物を仕上げる。ローカルビルド (`make build` / `make install`) は ad-hoc 署名のままで、この処理はリリース CI だけで行う。
+
+- `.p12` を一時キーチェーンへ import（job 末尾の cleanup step で削除）
+- `codesign --force --options runtime --timestamp` で `Brooklyn.saver` に Developer ID 署名
+- `ditto` で zip 化して `notarytool submit --wait` で公証。`Accepted` 以外なら `notarytool log` を出力して fail
+- `stapler staple` でチケットをバンドルに貼付し、staple 済みバンドルを配布用 zip に固め直す
+
+補足:
+
+- `--options runtime`（hardened runtime）と `--timestamp` は公証の必須要件
+- `Brooklyn.saver` は framework を embed していないため、バンドル 1 回の codesign で完結する（ネスト署名は不要）
+- 署名 identity は一時キーチェーンから自動検出する。1Password に identity 文字列は持たない
+- 提出用 zip は使い捨てで、配布物は Package step が staple 済みバンドルから作り直す
+
+キーチェーン import は [GitHub 公式手順](https://docs.github.com/ja/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications)に準拠。公式手順との相違点:
+
+- キーチェーンパスワードは secret にせず `openssl rand` で実行ごとに生成する。job の中でしか使わない値なので、長命の secret を増やさない
+- provisioning profile の step はない。Developer ID 直接配布では使わない
+- `.p12` ファイルは import 直後に削除する
+- cleanup は公式手順だと self-hosted runner のみ必要とされるが、防御的に常に実行する
+
+### 1Password item `op://github-app/apple-codesign`
+
+release workflow が参照するフィールド。既存の service account (`OP_SERVICE_ACCOUNT_TOKEN`) がアクセスできる vault に置く。
+
+| フィールド | 内容 |
+| --- | --- |
+| `certificate-p12` | Developer ID Application 証明書 + 秘密鍵の .p12 を base64 化した文字列 |
+| `p12-password` | .p12 エクスポート時に設定したパスワード |
+| `asc-key-id` | App Store Connect API キーの Key ID |
+| `asc-issuer-id` | App Store Connect API の Issuer ID |
+| `asc-private-key` | API キー .p8 の中身（PEM テキスト） |
+
+### 鍵の更新
+
+- Developer ID Application 証明書は有効期限 5 年。期限が切れたら Xcode → Settings → Accounts → Manage Certificates で作り直し、Keychain Access から .p12 を書き出して `certificate-p12` / `p12-password` を更新する。署名 identity は workflow がキーチェーンから自動検出するため identity 文字列の登録は不要
+- 公証済みの配布物は証明書が失効しても有効なまま（staple されたチケットで検証される）
+- App Store Connect API キーに期限はないが、revoke したら `asc-key-id` / `asc-private-key` を差し替える
 
 ## Homebrew Cask 更新の実装方針
 

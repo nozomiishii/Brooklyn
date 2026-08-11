@@ -108,6 +108,13 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           APP_ID: op://github-app/nozomiishii-release/username
           APP_PRIVATE_KEY: op://github-app/nozomiishii-release/credential
+          # Developer ID 署名用の証明書 (.p12 を base64 化したもの) と公証用の
+          # App Store Connect API キー。作成手順は docs/release.md を参照。
+          APPLE_CERTIFICATE_P12: op://github-app/apple-codesign/certificate-p12
+          APPLE_P12_PASSWORD: op://github-app/apple-codesign/p12-password
+          ASC_KEY_ID: op://github-app/apple-codesign/asc-key-id
+          ASC_ISSUER_ID: op://github-app/apple-codesign/asc-issuer-id
+          ASC_PRIVATE_KEY: op://github-app/apple-codesign/asc-private-key
 
       - name: Generate GitHub App token
         id: app-token
@@ -132,6 +139,103 @@ jobs:
       - name: Run tests
         run: make test
 
+      # .p12 を一時キーチェーンに取り込む (詳細: docs/release.md)
+      # Apple 公式の CI 署名ツールが出たら置き換える:
+      # https://github.com/nozomiishii/Brooklyn/issues/140
+      - name: Import Developer ID certificate
+        env:
+          APPLE_CERTIFICATE_P12: ${{ steps.secrets.outputs.APPLE_CERTIFICATE_P12 }}
+          APPLE_P12_PASSWORD: ${{ steps.secrets.outputs.APPLE_P12_PASSWORD }}
+        run: |
+          CERT_PATH="$RUNNER_TEMP/certificate.p12"
+          KEYCHAIN_PATH="$RUNNER_TEMP/signing.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -hex 16)"
+
+          echo -n "$APPLE_CERTIFICATE_P12" | base64 --decode -o "$CERT_PATH"
+
+          # 使い捨てのキーチェーンをマスターパスワード付きで作る
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # 自動ロックまでの時間を 6 時間にし、job 中のロックを防ぐ
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          # マスターパスワードでロックを解除する
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          # 証明書 + 秘密鍵を .p12 から取り込む
+          security import "$CERT_PATH" \
+            -P "$APPLE_P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+
+          # 鍵の使用許可ダイアログの「常に許可」を先に押しておく相当の設定
+          security set-key-partition-list \
+            -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # codesign が鍵を探す検索対象にこのキーチェーンを載せる
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+          rm "$CERT_PATH"
+
+      # Developer ID 署名。フラグは公証の必須要件 (詳細: docs/release.md)
+      - name: Sign .saver
+        run: |
+          # identity はキーチェーンに 1 つだけなので自動検出
+          IDENTITY=$(security find-identity -v -p codesigning "$RUNNER_TEMP/signing.keychain-db" \
+            | grep -o '"Developer ID Application: [^"]*"' | head -1 | tr -d '"')
+          if [ -z "$IDENTITY" ]; then
+            echo "::error::No Developer ID Application identity found in keychain"
+            exit 1
+          fi
+
+          # 秘密鍵でバンドルに署名し、証明書 (公開鍵) を同梱する
+          codesign --force --options runtime --timestamp \
+            --sign "$IDENTITY" \
+            build/Build/Products/Release/Brooklyn.saver
+
+          # 署名が壊れていないか再検証し、署名内容をログに残す
+          codesign --verify --strict --verbose=2 \
+            build/Build/Products/Release/Brooklyn.saver
+          codesign --display --verbose=2 \
+            build/Build/Products/Release/Brooklyn.saver
+
+      # Apple にスキャンさせ、公証チケットを .saver に staple する
+      - name: Notarize and staple
+        env:
+          ASC_KEY_ID: ${{ steps.secrets.outputs.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ steps.secrets.outputs.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ steps.secrets.outputs.ASC_PRIVATE_KEY }}
+        run: |
+          # 公証キー (.p8) をファイルに復元する
+          KEY_PATH="$RUNNER_TEMP/asc-key.p8"
+          printf '%s\n' "$ASC_PRIVATE_KEY" > "$KEY_PATH"
+
+          # 提出用に zip 梱包する
+          cd build/Build/Products/Release
+          ditto -c -k --keepParent Brooklyn.saver notarize.zip
+
+          # 公証キーで本人確認し、Apple の検査に提出して合格を待つ
+          SUBMIT_JSON=$(xcrun notarytool submit notarize.zip \
+            --key "$KEY_PATH" \
+            --key-id "$ASC_KEY_ID" \
+            --issuer "$ASC_ISSUER_ID" \
+            --wait --output-format json)
+          echo "$SUBMIT_JSON" | jq .
+
+          # 不合格なら検査ログを出力して fail する
+          STATUS=$(echo "$SUBMIT_JSON" | jq -r '.status')
+          if [ "$STATUS" != "Accepted" ]; then
+            SUBMISSION_ID=$(echo "$SUBMIT_JSON" | jq -r '.id')
+            echo "::error::Notarization failed with status: ${STATUS}"
+            xcrun notarytool log "$SUBMISSION_ID" \
+              --key "$KEY_PATH" \
+              --key-id "$ASC_KEY_ID" \
+              --issuer "$ASC_ISSUER_ID"
+            exit 1
+          fi
+
+          # 合格チケットをバンドルに添付し、オフラインでも検証できるようにする
+          xcrun stapler staple Brooklyn.saver
+          xcrun stapler validate Brooklyn.saver
+
+          # 提出用 zip を削除する (配布物は後段の Package step で作り直す)
+          rm notarize.zip
+
       - name: Package .saver
         run: |
           cd build/Build/Products/Release
@@ -152,6 +256,13 @@ jobs:
         run: |
           gh release edit "${TAG_NAME}" \
             --draft=false
+
+      # runner は ephemeral だが、署名鍵は job 終了を待たず明示的に破棄する
+      - name: Clean up signing keychain
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/signing.keychain-db" || true
+          rm -f "$RUNNER_TEMP/certificate.p12" "$RUNNER_TEMP/asc-key.p8"
 
   # publish 後に次の release PR を作成/更新
   release-pr:
