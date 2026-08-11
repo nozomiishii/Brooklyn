@@ -202,9 +202,10 @@ jobs:
           ASC_ISSUER_ID: ${{ steps.secrets.outputs.ASC_ISSUER_ID }}
           ASC_PRIVATE_KEY: ${{ steps.secrets.outputs.ASC_PRIVATE_KEY }}
         run: |
-          # 公証キー (.p8) をファイルに復元する
+          # 公証キー (.p8) を base64 から復元する (PEM の改行が
+          # フィールド経由で失われるのを防ぐため base64 で保存している)
           KEY_PATH="$RUNNER_TEMP/asc-key.p8"
-          printf '%s\n' "$ASC_PRIVATE_KEY" > "$KEY_PATH"
+          echo -n "$ASC_PRIVATE_KEY" | base64 --decode -o "$KEY_PATH"
 
           # 提出用に zip 梱包する
           cd build/Build/Products/Release
