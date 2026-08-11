@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0](https://github.com/nozomiishii/Brooklyn/compare/v0.1.26...v1.0.0) (2026-08-11)
+
+
+### Bug Fixes
+
+* store ASC private key as base64 in 1Password ([#143](https://github.com/nozomiishii/Brooklyn/issues/143)) ([16baf4e](https://github.com/nozomiishii/Brooklyn/commit/16baf4e40050f41ca8d705214f30651e07d66595))
+
+
+### Miscellaneous
+
+* align docs style with doc skill ([#145](https://github.com/nozomiishii/Brooklyn/issues/145)) ([5629c2f](https://github.com/nozomiishii/Brooklyn/commit/5629c2fd59180f20515bf827c69f2618e5ad37bb))
+* release 1.0.0 via release-as ([#146](https://github.com/nozomiishii/Brooklyn/issues/146)) ([3f048b7](https://github.com/nozomiishii/Brooklyn/commit/3f048b718fd6148a8a85fea8be1f85360defc6b4))
+* update op:// refs for renamed 1Password vault ([#142](https://github.com/nozomiishii/Brooklyn/issues/142)) ([acf3fe6](https://github.com/nozomiishii/Brooklyn/commit/acf3fe66e381cc2b7fd7ebfc161c595cf7ec4ce8))
+
 ## [0.1.26](https://github.com/nozomiishii/Brooklyn/compare/v0.1.25...v0.1.26) (2026-08-11)
 
 
