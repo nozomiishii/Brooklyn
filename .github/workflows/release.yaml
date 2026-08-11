@@ -40,8 +40,8 @@ jobs:
           version: "2.38.1"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          APP_ID: op://github-app/nozomiishii-release/username
-          APP_PRIVATE_KEY: op://github-app/nozomiishii-release/credential
+          APP_ID: op://nozomiishii-release/github-app/username
+          APP_PRIVATE_KEY: op://nozomiishii-release/github-app/credential
 
       - name: Generate GitHub App token
         id: app-token
@@ -106,8 +106,8 @@ jobs:
           version: "2.38.1"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          APP_ID: op://github-app/nozomiishii-release/username
-          APP_PRIVATE_KEY: op://github-app/nozomiishii-release/credential
+          APP_ID: op://nozomiishii-release/github-app/username
+          APP_PRIVATE_KEY: op://nozomiishii-release/github-app/credential
           # Apple の鍵は専用 vault。apple-developer vault を読めるのは Brooklyn の
           # service account だけにし、他リポジトリの CI 侵害から署名鍵を隔離する
           # (詳細: docs/release.md)
@@ -284,8 +284,8 @@ jobs:
           version: "2.38.1"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          APP_ID: op://github-app/nozomiishii-release/username
-          APP_PRIVATE_KEY: op://github-app/nozomiishii-release/credential
+          APP_ID: op://nozomiishii-release/github-app/username
+          APP_PRIVATE_KEY: op://nozomiishii-release/github-app/credential
 
       - name: Generate GitHub App token
         id: app-token
@@ -333,8 +333,8 @@ jobs:
           version: "2.38.1"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          APP_ID: op://github-app/nozomiishii-release/username
-          APP_PRIVATE_KEY: op://github-app/nozomiishii-release/credential
+          APP_ID: op://nozomiishii-release/github-app/username
+          APP_PRIVATE_KEY: op://nozomiishii-release/github-app/credential
 
       - name: Generate GitHub App token
         id: app-token
