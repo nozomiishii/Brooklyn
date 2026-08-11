@@ -56,7 +56,7 @@ Apple の鍵は共有の `nozomiishii-release` vault ではなく専用 vault �
 | `developer-id` | `p12-password` | .p12 エクスポート時に設定したパスワード |
 | `app-store-connect` | `key-id` | App Store Connect API キーの Key ID |
 | `app-store-connect` | `issuer-id` | App Store Connect API の Issuer ID |
-| `app-store-connect` | `private-key` | API キー .p8 の中身（PEM テキスト） |
+| `app-store-connect` | `private-key` | API キー .p8 を base64 化した文字列（改行を含む PEM をフィールドで壊さず保持するため） |
 
 ### 鍵の更新
 
