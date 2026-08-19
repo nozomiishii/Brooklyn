@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.0](https://github.com/nozomiishii/Brooklyn/compare/v1.0.0...v1.1.0) (2026-08-19)
+
+
+### Features
+
+* sync cask api metadata on release ([#154](https://github.com/nozomiishii/Brooklyn/issues/154)) ([642e326](https://github.com/nozomiishii/Brooklyn/commit/642e3265f4d6bee371438eb440085686aa972b1a))
+
+
+### Miscellaneous
+
+* add ADR for handwritten Apple signing in CI ([#149](https://github.com/nozomiishii/Brooklyn/issues/149)) ([4705630](https://github.com/nozomiishii/Brooklyn/commit/4705630a4de88521432d74165758a61c0fe536c6))
+* remove release-as after v1.0.0 ([#147](https://github.com/nozomiishii/Brooklyn/issues/147)) ([02ba64e](https://github.com/nozomiishii/Brooklyn/commit/02ba64e9981057342cd6083c305bb694e897999c))
+* update 1password/op docker tag to v2.39.0 ([#153](https://github.com/nozomiishii/Brooklyn/issues/153)) ([604b22a](https://github.com/nozomiishii/Brooklyn/commit/604b22ace4ec735a86bb85bd863cfdc9abe65af4))
+* update nozomiishii/workflows action to v4.1.1 ([#150](https://github.com/nozomiishii/Brooklyn/issues/150)) ([258ca7f](https://github.com/nozomiishii/Brooklyn/commit/258ca7f1ad1fcb7a11dead00380ea98b5ec250fa))
+* update nozomiishii/workflows action to v4.2.0 ([#151](https://github.com/nozomiishii/Brooklyn/issues/151)) ([81253e7](https://github.com/nozomiishii/Brooklyn/commit/81253e7d91d25aab63a641a2623b85b095755b16))
+* update nozomiishii/workflows action to v4.2.1 ([#152](https://github.com/nozomiishii/Brooklyn/issues/152)) ([087c905](https://github.com/nozomiishii/Brooklyn/commit/087c9053e56bdae32e33402c851a63c53d095879))
+
 ## [1.0.0](https://github.com/nozomiishii/Brooklyn/compare/v0.1.26...v1.0.0) (2026-08-11)
 
 
