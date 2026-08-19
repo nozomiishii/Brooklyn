@@ -25,6 +25,10 @@
 brew install nozomiishii/tap/brooklyn
 ```
 
+Brooklyn アプリを一度起動するとスクリーンセーバー extension が登録されます。**システム設定 > 壁紙 > スクリーンセーバ** で **Brooklyn** を選択してください。
+
+1.1.x からのアップグレードで、旧 `Brooklyn.saver` を手動インストールしていた場合は、アプリ内の **Remove Legacy Brooklyn.saver** でワンクリック削除できます。
+
 ## Uninstall
 
 ```sh
@@ -33,7 +37,7 @@ brew uninstall nozomiishii/tap/brooklyn
 
 ## Customization
 
-**システム設定 > スクリーンセーバー > Brooklyn** を開いてオプションボタンをクリックします。
+**システム設定 > 壁紙 > スクリーンセーバ** で **Brooklyn** を選択し、**Options…** をクリックします。
 
 - **Customize OFF（デフォルト）**: オリジナルの Apple ロゴアニメーションを最初に再生したあと、残りの 74 種をシャッフルして無限ループします
 - **Customize ON**: お気に入りのアニメーションを選んで、ループ回数やシャッフル順を設定できます

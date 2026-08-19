@@ -2,16 +2,16 @@ import AVFoundation
 import ScreenSaver
 import XCTest
 
-/// Tests for BrooklynView's macOS 26 Tahoe compatibility.
-/// Regression: legacyScreenSaver.appex creates ghost instances with zero frame,
-/// calls startAnimation multiple times, and fails to call stopAnimation.
+/// Tests for BrooklynView's defensive behaviors.
+/// The system side (formerly legacyScreenSaver, now the appex machinery) can
+/// create zero-frame instances, call startAnimation multiple times, and skip
+/// stopAnimation, so the view guards against all of these.
 @MainActor
 final class BrooklynViewTests: XCTestCase {
-    // MARK: - Ghost Instance Detection
+    // MARK: - Degenerate Instance Detection
 
-    /// Regression: macOS 26 Tahoe creates instances with frame (0,0,0,0).
-    /// These ghost instances must not set up AVPlayer to avoid resource waste.
-    /// startAnimation on a ghost instance must be harmless (player is nil).
+    /// Zero-frame instances must not set up AVPlayer to avoid resource waste.
+    /// startAnimation on such an instance must be harmless (player is nil).
     func testGhostInstanceDoesNotCrashOnStart() {
         let view = BrooklynView(frame: .zero, isPreview: true)
         XCTAssertNotNil(view, "View should still be created even with zero frame")
@@ -29,7 +29,7 @@ final class BrooklynViewTests: XCTestCase {
 
     // MARK: - isPreview Heuristic
 
-    /// Regression: macOS Sonoma+ always passes isPreview=true.
+    /// The system does not pass a trustworthy isPreview flag.
     /// BrooklynView uses frame size to determine the actual preview state.
     func testSmallFrameIsDetectedAsPreview() {
         let smallFrame = NSRect(x: 0, y: 0, width: 300, height: 200)
@@ -80,7 +80,7 @@ final class BrooklynViewTests: XCTestCase {
 
     // MARK: - startAnimation / stopAnimation Guards
 
-    /// Regression: legacyScreenSaver.appex calls startAnimation multiple times.
+    /// The system can call startAnimation multiple times.
     /// Duplicate calls must be ignored to prevent multiple play() invocations.
     func testStartAnimationIsIdempotent() {
         let frame = NSRect(x: 0, y: 0, width: 1920, height: 1080)
@@ -129,25 +129,5 @@ final class BrooklynViewTests: XCTestCase {
 
         view.startAnimation() // Should not crash — player is nil
         view.stopAnimation() // Should not crash
-    }
-
-    // MARK: - General
-
-    func testHasConfigureSheet() {
-        let frame = NSRect(x: 0, y: 0, width: 1920, height: 1080)
-        guard let view = BrooklynView(frame: frame, isPreview: false) else {
-            XCTFail("View should be created")
-            return
-        }
-
-        XCTAssertTrue(view.hasConfigureSheet, "BrooklynView must report having a configure sheet")
-    }
-
-    /// Regression: macOS 26 Tahoe ghost instances (frame .zero) must still provide
-    /// a configure sheet so the Options button works in System Settings.
-    func testGhostInstanceProvidesConfigureSheet() throws {
-        let view = try XCTUnwrap(BrooklynView(frame: .zero, isPreview: true), "Ghost view should be created")
-        XCTAssertTrue(view.hasConfigureSheet)
-        XCTAssertNotNil(view.configureSheet, "Ghost instance must still provide a configure sheet")
     }
 }

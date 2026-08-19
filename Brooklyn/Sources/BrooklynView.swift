@@ -3,15 +3,18 @@ import ScreenSaver
 
 /// The main screen saver view that plays Brooklyn animations.
 ///
-/// Handles macOS Sonoma+ / Tahoe bugs:
-/// - `stopAnimation()` not being called → listens for `com.apple.screensaver.willstop`
-/// - `isPreview` always returning true → frame size heuristic
-/// - Ghost instances with zero frame on Tahoe → early return in init
+/// Runs inside BrooklynExtension.appex, driven by BrooklynViewController.
+/// Defensive behaviors that stay even in the appex world:
+/// - `isPreview` is not passed in by the system → frame size heuristic
+/// - `startAnimation()`/`stopAnimation()` are not reliably called on the view →
+///   the view controller drives them; `com.apple.screensaver.willstop` stays
+///   as a second cleanup path
+/// - Degenerate zero-frame instances (seen in System Settings preview
+///   machinery) → skip player setup to avoid loading 75 player items
 final class BrooklynView: ScreenSaverView {
     private var manager: BrooklynManager?
     private var player: LoopPlayer?
     private var playerLayer: AVPlayerLayer?
-    private var configureSheetController: ConfigureSheetController?
     private var isAnimationStarted = false
     private nonisolated(unsafe) var willStopObserver: NSObjectProtocol?
 
@@ -21,11 +24,9 @@ final class BrooklynView: ScreenSaverView {
         let actualIsPreview = frame.width < 400 && frame.height < 300
         super.init(frame: frame, isPreview: actualIsPreview)
 
-        // Always create manager so configureSheet works even for ghost instances.
         manager = BrooklynManager(bundle: Bundle(for: BrooklynView.self))
 
-        // macOS 26 Tahoe: legacyScreenSaver.appex creates ghost instances with zero frame.
-        // Skip visual/player setup to avoid wasting resources.
+        // Skip visual/player setup on degenerate instances to avoid wasting resources.
         if frame == .zero {
             return
         }
@@ -112,19 +113,6 @@ final class BrooklynView: ScreenSaverView {
     override func layout() {
         super.layout()
         playerLayer?.frame = bounds
-    }
-
-    override var hasConfigureSheet: Bool {
-        true
-    }
-
-    override var configureSheet: NSWindow? {
-        guard let manager else { return nil }
-        if configureSheetController == nil {
-            let sheet = ConfigureSheet(manager: manager)
-            configureSheetController = ConfigureSheetController(rootView: sheet)
-        }
-        return configureSheetController?.window
     }
 
     override func draw(_ rect: NSRect) {

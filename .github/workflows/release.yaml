@@ -174,7 +174,7 @@ jobs:
           rm "$CERT_PATH"
 
       # Developer ID 署名。フラグは公証の必須要件 (詳細: docs/release.md)
-      - name: Sign .saver
+      - name: Sign app bundle
         run: |
           # identity はキーチェーンに 1 つだけなので自動検出
           IDENTITY=$(security find-identity -v -p codesigning "$RUNNER_TEMP/signing.keychain-db" \
@@ -184,16 +184,24 @@ jobs:
             exit 1
           fi
 
-          # 秘密鍵でバンドルに署名し、証明書 (公開鍵) を同梱する
+          APP=build/Build/Products/Release/Brooklyn.app
+          APPEX="$APP/Contents/PlugIns/BrooklynExtension.appex"
+
+          # ネストした appex から inside-out で署名する。--force はビルド時の
+          # ad-hoc 署名を上書きし、entitlements を落とすため sandbox 等を
+          # 明示的に付け直す
+          codesign --force --options runtime --timestamp \
+            --entitlements BrooklynExtension/BrooklynExtension.entitlements \
+            --sign "$IDENTITY" \
+            "$APPEX"
           codesign --force --options runtime --timestamp \
             --sign "$IDENTITY" \
-            build/Build/Products/Release/Brooklyn.saver
+            "$APP"
 
           # 署名が壊れていないか再検証し、署名内容をログに残す
-          codesign --verify --strict --verbose=2 \
-            build/Build/Products/Release/Brooklyn.saver
-          codesign --display --verbose=2 \
-            build/Build/Products/Release/Brooklyn.saver
+          codesign --verify --strict --verbose=2 "$APP"
+          codesign --display --verbose=2 "$APP"
+          codesign --display --entitlements - "$APPEX"
 
       # Apple にスキャンさせ、公証チケットを .saver に staple する
       - name: Notarize and staple
@@ -209,7 +217,7 @@ jobs:
 
           # 提出用に zip 梱包する
           cd build/Build/Products/Release
-          ditto -c -k --keepParent Brooklyn.saver notarize.zip
+          ditto -c -k --keepParent Brooklyn.app notarize.zip
 
           # 公証キーで本人確認し、Apple の検査に提出して合格を待つ
           SUBMIT_JSON=$(xcrun notarytool submit notarize.zip \
@@ -232,16 +240,16 @@ jobs:
           fi
 
           # 合格チケットをバンドルに添付し、オフラインでも検証できるようにする
-          xcrun stapler staple Brooklyn.saver
-          xcrun stapler validate Brooklyn.saver
+          xcrun stapler staple Brooklyn.app
+          xcrun stapler validate Brooklyn.app
 
           # 提出用 zip を削除する (配布物は後段の Package step で作り直す)
           rm notarize.zip
 
-      - name: Package .saver
+      - name: Package app
         run: |
           cd build/Build/Products/Release
-          zip -r Brooklyn.saver.zip Brooklyn.saver
+          ditto -c -k --keepParent Brooklyn.app Brooklyn.app.zip
 
       - name: Upload to GitHub Release
         env:
@@ -249,7 +257,7 @@ jobs:
           TAG_NAME: ${{ needs.create-draft-release.outputs.tag_name }}
         run: |
           gh release upload "${TAG_NAME}" \
-            build/Build/Products/Release/Brooklyn.saver.zip
+            build/Build/Products/Release/Brooklyn.app.zip
 
       - name: Publish Release
         env:

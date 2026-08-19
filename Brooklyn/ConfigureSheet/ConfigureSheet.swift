@@ -3,9 +3,11 @@ import SwiftUI
 /// SwiftUI-based configuration sheet for selecting animations and playback options.
 struct ConfigureSheet: View {
     @ObservedObject private var viewModel: ConfigureSheetViewModel
+    private let onClose: () -> Void
 
-    init(manager: BrooklynManager) {
+    init(manager: BrooklynManager, onClose: @escaping () -> Void = {}) {
         _viewModel = ObservedObject(wrappedValue: ConfigureSheetViewModel(manager: manager))
+        self.onClose = onClose
     }
 
     var body: some View {
@@ -100,10 +102,10 @@ struct ConfigureSheet: View {
                 .font(.caption)
                 .foregroundStyle(.tertiary)
             Spacer()
-            Button("Close") {
-                guard let window = NSApp.keyWindow else { return }
-                window.sheetParent?.endSheet(window)
-            }
+            // The sheet lives in a ViewBridge remote context where
+            // NSApp.keyWindow is nil; the hosting controller supplies the
+            // dismissal instead.
+            Button("Close", action: onClose)
         }
         .padding()
     }

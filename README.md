@@ -25,6 +25,10 @@ A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pe
 brew install nozomiishii/tap/brooklyn
 ```
 
+Launch the Brooklyn app once — it registers the screen saver extension. Then select **Brooklyn** in **System Settings > Wallpaper > Screen Saver**.
+
+Upgrading from 1.1.x? If you installed the old `Brooklyn.saver` manually, the app offers a one-click **Remove Legacy Brooklyn.saver**.
+
 ## Uninstall
 
 ```sh
@@ -33,7 +37,7 @@ brew uninstall nozomiishii/tap/brooklyn
 
 ## Customization
 
-Open **System Settings > Screen Saver > Brooklyn** and click the options button.
+Select **Brooklyn** in **System Settings > Wallpaper > Screen Saver** and click **Options…**.
 
 - **Customize OFF (default)**: Plays the original Apple logo animation first, then shuffles the remaining 74 and loops endlessly
 - **Customize ON**: Pick your favorite animations and control the loop count and shuffle order
