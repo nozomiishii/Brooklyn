@@ -67,14 +67,19 @@ jobs:
       - name: Build
         run: make build
 
-      - name: Verify arm64 binary
+      - name: Verify arm64 binaries
         run: |
-          lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn
-          lipo -info build/Build/Products/Release/Brooklyn.saver/Contents/MacOS/Brooklyn | grep "arm64"
+          APP=build/Build/Products/Release/Brooklyn.app
+          lipo -info "$APP/Contents/MacOS/Brooklyn"
+          lipo -info "$APP/Contents/MacOS/Brooklyn" | grep "arm64"
+          APPEX="$APP/Contents/PlugIns/BrooklynExtension.appex"
+          lipo -info "$APPEX/Contents/MacOS/BrooklynExtension"
+          lipo -info "$APPEX/Contents/MacOS/BrooklynExtension" | grep "arm64"
 
       - name: Verify animations are bundled
         run: |
-          count=$(find build/Build/Products/Release/Brooklyn.saver/Contents/Resources/Animations -name "*.mp4" | wc -l | tr -d ' ')
+          APPEX=build/Build/Products/Release/Brooklyn.app/Contents/PlugIns/BrooklynExtension.appex
+          count=$(find "$APPEX/Contents/Resources/Animations" -name "*.mp4" | wc -l | tr -d ' ')
           echo "Found $count MP4 files"
           [ "$count" -eq 75 ] || (echo "Expected 75 MP4 files, got $count" && exit 1)
 

@@ -1,12 +1,13 @@
 .PHONY: generate build test format format-check lint clean install uninstall reset
 
-SWIFT_SOURCES = Brooklyn BrooklynTests Canvas
+SWIFT_SOURCES = Brooklyn BrooklynApp BrooklynExtension BrooklynTests Canvas
+EXTENSION_ID = dev.nozomiishii.brooklyn.extension
 
 # Generate Xcode project from project.yaml
 generate:
 	xcodegen generate --spec project.yaml
 
-# Build the screen saver
+# Build the app with the embedded screen saver extension
 build: generate
 	xcodebuild \
 		-project Brooklyn.xcodeproj \
@@ -34,24 +35,29 @@ format-check:
 lint:
 	mint run swiftlint --strict --config .swiftlint.yaml --cache-path .swiftlint-cache $(SWIFT_SOURCES)
 
-# Install the screen saver
+# Install the app and register the screen saver extension.
+# The build step registers the DerivedData copy with LaunchServices; drop it
+# first so the /Applications registration wins.
 install: build
-	cp -R build/Build/Products/Release/Brooklyn.saver ~/Library/Screen\ Savers/
-	codesign --force --sign - ~/Library/Screen\ Savers/Brooklyn.saver
-	-killall legacyScreenSaver 2>/dev/null
+	rm -rf /Applications/Brooklyn.app
+	ditto build/Build/Products/Release/Brooklyn.app /Applications/Brooklyn.app
+	-pluginkit -r build/Build/Products/Release/Brooklyn.app/Contents/PlugIns/BrooklynExtension.appex 2>/dev/null
+	pluginkit -a /Applications/Brooklyn.app/Contents/PlugIns/BrooklynExtension.appex
+	pluginkit -e use -i $(EXTENSION_ID)
+	-killall WallpaperAgent 2>/dev/null
 
-# Uninstall the screen saver
+# Uninstall the app and unregister the extension
 uninstall:
-	rm -rf ~/Library/Screen\ Savers/Brooklyn.saver
+	-pluginkit -r /Applications/Brooklyn.app/Contents/PlugIns/BrooklynExtension.appex 2>/dev/null
+	rm -rf /Applications/Brooklyn.app
 
-# Reset screen saver caches and processes before testing
+# Reset caches and processes before testing.
+# WallpaperAgent caches resolved extension paths; a stale entry (e.g. a
+# DerivedData copy) makes System Settings silently refuse the selection.
 reset:
-	-killall legacyScreenSaver 2>/dev/null
 	-killall WallpaperAgent 2>/dev/null
 	-killall "System Settings" 2>/dev/null
-	rm -rf ~/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/Library/Caches/*
-	rm -f ~/Library/Containers/com.apple.ScreenSaver.Engine.legacyScreenSaver/Data/Library/Preferences/ByHost/dev.nozomiishii.brooklyn.*.plist
-	-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f ~/Library/Screen\ Savers/Brooklyn.saver
+	rm -f ~/Library/Containers/$(EXTENSION_ID)/Data/Library/Preferences/ByHost/$(EXTENSION_ID).*.plist
 
 # Clean build artifacts
 clean:

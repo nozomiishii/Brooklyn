@@ -14,10 +14,31 @@ settings:
     MARKETING_VERSION: "1.1.1" # x-release-please-version
 
 targets:
+  # Host app. Exists to carry the screen saver extension at a stable path
+  # (/Applications) and to register it; the saver itself is BrooklynExtension.
   Brooklyn:
-    type: bundle
+    type: application
     platform: macOS
     sources:
+      - path: BrooklynApp
+    settings:
+      base:
+        PRODUCT_NAME: Brooklyn
+        PRODUCT_BUNDLE_IDENTIFIER: dev.nozomiishii.brooklyn
+        INFOPLIST_FILE: BrooklynApp/Info.plist
+        GENERATE_INFOPLIST_FILE: false
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks"
+    dependencies:
+      - target: BrooklynExtension
+
+  # ScreenSaver App Extension (NSExtensionPointIdentifier: com.apple.screensaver).
+  # Runs as its own sandboxed process; System Settings lists it next to Apple's
+  # built-in savers.
+  BrooklynExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: BrooklynExtension
       - path: Brooklyn/Sources
       - path: Brooklyn/ConfigureSheet
       - path: Brooklyn/Resources/Animations
@@ -25,11 +46,12 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_NAME: Brooklyn
-        PRODUCT_BUNDLE_IDENTIFIER: dev.nozomiishii.brooklyn
-        WRAPPER_EXTENSION: saver
-        INFOPLIST_FILE: Brooklyn/Info.plist
+        PRODUCT_NAME: BrooklynExtension
+        PRODUCT_BUNDLE_IDENTIFIER: dev.nozomiishii.brooklyn.extension
+        INFOPLIST_FILE: BrooklynExtension/Info.plist
         GENERATE_INFOPLIST_FILE: false
+        SWIFT_OBJC_BRIDGING_HEADER: BrooklynExtension/BrooklynExtension-Bridging-Header.h
+        CODE_SIGN_ENTITLEMENTS: BrooklynExtension/BrooklynExtension.entitlements
         COMBINE_HIDPI_IMAGES: true
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks"
     dependencies:

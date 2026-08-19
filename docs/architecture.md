@@ -1,6 +1,8 @@
 ---
 paths:
   - "Brooklyn/**/*.swift"
+  - "BrooklynApp/**/*.swift"
+  - "BrooklynExtension/**/*"
   - "Canvas/**/*.swift"
   - "BrooklynTests/**/*.swift"
   - "project.yaml"
@@ -8,7 +10,7 @@ paths:
 
 # アーキテクチャ詳細
 
-CLAUDE.md の「アーキテクチャ」「ハードルール」節の補足。コードを変更する前に該当箇所を読むこと。
+CLAUDE.md の「アーキテクチャ」「触る前に読む」節の補足。コードを変更する前に該当箇所を読むこと。
 
 ## 再生ロジック (`BrooklynManager.makePlayerItems`)
 
@@ -20,24 +22,42 @@ CLAUDE.md の「アーキテクチャ」「ハードルール」節の補足。�
 
 ユーザー選択のアニメーションのみ使用。ループ回数・ランダム順も設定 (`Database`) に従う。
 
-## macOS Sonoma+ バグ回避
+## App Extension の構成
 
-`BrooklynView` に実装済み。変更時はテストで regression を確認すること。各回避策の症状と根本原因:
+スクリーンセーバー本体は `Brooklyn.app/Contents/PlugIns/BrooklynExtension.appex`。システムが appex を独立プロセスとして起動し、ディスプレイごとに view controller を生成する。System Settings のプレビューも appex 自身が描画する。
 
-### `stopAnimation()` が呼ばれない
+```
+選択・起動      System Settings / WallpaperAgent
+                     │  pluginkit の登録情報でモジュールを解決
+                     ▼
+プロセス        BrooklynExtension.appex (sandboxed)
+                     │  Info.plist の ScreenSaverViewControllerClass
+                     ▼
+表示            BrooklynViewController → BrooklynView → LoopPlayer
+```
 
-- 症状: macOS Sonoma 以降、`ScreenSaverView.stopAnimation()` がライフサイクル終了時に呼ばれず、`AVPlayer` がメモリに残り続ける。screensaver プロセスが生き残るとリソースリークになる
-- 回避策: `com.apple.screensaver.willstop` 通知を購読し、コールバック内で `AVPlayerLayer` の解放と `LoopPlayer` の停止を実行する
+登録は pluginkit が持つ。ホストアプリが起動時に `pluginkit -a` + `-e use` を実行する。WallpaperAgent は解決済みモジュールパスをキャッシュするため、appex のパスが変わったら `killall WallpaperAgent` (`make reset`) が要る。
 
-### `isPreview` が常に true
+## ライフサイクル (macOS 26 実測)
 
-- 症状: System Settings のプレビュー外、実際のスクリーンセーバー起動時でも `ScreenSaverView.isPreview` が `true` を返す。プレビュー判定ロジックを `isPreview` に依存すると、本番再生でもプレビュー用パスを実行してしまう
-- 回避策: フレームサイズで判定し、幅 < 400 または高さ < 300 をプレビューと見なす。System Settings のプレビューウィンドウサイズを基準にした閾値
+- viewDidAppear / viewWillDisappear は開始・停止のたびに確実に届く。再生の開始・停止はここで駆動する
+- ScreenSaverView の startAnimation / stopAnimation は framework からは確実には呼ばれない。view controller が呼ぶ
+- `com.apple.screensaver.willstop` 通知の購読は BrooklynView に残している。viewWillDisappear が来ない構成が現れたときの第 2 の cleanup 経路
+- framework は principal class (`BrooklynExtension`) のインスタンスをプロセス内で複数回生成・破棄する。principal は stateless に保つ
 
-### `AVQueuePlayer` が 1 アイテムで停止
+### 残っている防御
 
-- 症状: `AVQueuePlayer` がキューを使い切った後、デフォルトではループせず、最後のアイテム再生後に停止する
-- 回避策: `LoopPlayer` クラスが `AVPlayerItemDidPlayToEndTimeNotification` を監視し、終了したアイテムをキュー末尾に再追加して無限ループを実現する
+- `isPreview` は渡ってこない → フレームサイズで判定し、幅 < 400 かつ高さ < 300 をプレビューと見なす
+- サイズ 0 のインスタンスが生成されることがある → `BrooklynView` が player 構築をスキップし、75 本の AVPlayerItem 読み込みを避ける
+- `AVQueuePlayer` はキューを使い切ると停止する仕様 → `LoopPlayer` が `AVPlayerItemDidPlayToEndTimeNotification` を監視し、終了したアイテムを末尾に再追加して無限ループ
+
+## 設定シート
+
+System Settings の Options… で `BrooklynConfigurationViewController` が開き、SwiftUI の `ConfigureSheet` を NSHostingController + addChild で載せる。NSHostingView 単体だと ViewBridge のリモートシートで描画されない。
+
+シートを閉じる経路は extension 側の実装が全て。リモートシートでは NSApp.keyWindow・sheetParent・presentingViewController がすべて nil で、`configureSheetDidEnd` (private API、Apple 純正 saver と同じ) を呼ぶのが唯一の閉じ方。Escape でも閉じない。
+
+設定は `ScreenSaverDefaults` のまま。書き先は appex の sandbox コンテナ (`~/Library/Containers/dev.nozomiishii.brooklyn.extension/Data/Library/Preferences/ByHost/`)。
 
 ## Swift 6 Strict Concurrency
 

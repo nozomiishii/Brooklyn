@@ -15,7 +15,7 @@ CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/wor
 `release.yaml` は `main` への push / `workflow_dispatch` で起動し、以下 4 ジョブで構成される。
 
 - `create-draft-release` (ubuntu): release-please が conventional commits を集計し、release PR が既にマージされていれば draft release + tag を作成。`release_created` と `tag_name` を outputs として返す
-- `upload-assets` (macos-26, `release_created == 'true'` のみ): XcodeGen + `make build` + `make test` で `.saver` をビルドし、Developer ID 署名 + 公証 + staple を経て `.saver.zip` を GitHub Release に upload 後 publish。詳細は「署名と公証」節
+- `upload-assets` (macos-26, `release_created == 'true'` のみ): XcodeGen + `make build` + `make test` で `Brooklyn.app` (screen saver extension 内蔵) をビルドし、Developer ID 署名 + 公証 + staple を経て `Brooklyn.app.zip` を GitHub Release に upload 後 publish。詳細は「署名と公証」節
 - `homebrew-update` (macos-26, `release_created == 'true'` のみ): `brew bump-cask-pr` で `nozomiishii/homebrew-tap` の `Casks/brooklyn.rb` を新バージョンに更新する PR を作成し、出力から PR URL を捕捉して `gh pr merge --auto --squash` で auto-merge を有効化
 - `release-pr` (ubuntu, `upload-assets` 失敗時を除き常時): release-please で次の release PR を作成 / 更新
 
@@ -24,14 +24,14 @@ CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/wor
 `upload-assets` はビルド後に次の順で配布物を仕上げる。ローカルビルド (`make build` / `make install`) は ad-hoc 署名のままで、この処理はリリース CI だけで行う。
 
 - `.p12` を一時キーチェーンへ import。job 末尾の cleanup step で削除する
-- `codesign --force --options runtime --timestamp` で `Brooklyn.saver` に Developer ID 署名
+- `codesign --force --options runtime --timestamp` で inside-out に署名。先にネストした `BrooklynExtension.appex` (sandbox の entitlements を明示的に付け直す)、次に `Brooklyn.app`
 - `ditto` で zip 化して `notarytool submit --wait` で公証。`Accepted` 以外なら `notarytool log` を出力して fail
 - `stapler staple` でチケットをバンドルに貼付し、staple 済みバンドルを配布用 zip に固め直す
 
 補足:
 
 - `--options runtime`（hardened runtime）と `--timestamp` は公証の必須要件
-- `Brooklyn.saver` は framework を embed していないため、バンドル 1 回の codesign で完結する。ネスト署名は不要
+- `codesign --force` は既存の entitlements を落とすため、appex には `--entitlements` で BrooklynExtension/BrooklynExtension.entitlements を渡す。app 側は entitlements 無し
 - 署名 identity は一時キーチェーンから自動検出する。1Password に identity 文字列は持たない
 - 提出用 zip は使い捨てで、配布物は Package step が staple 済みバンドルから作り直す
 
