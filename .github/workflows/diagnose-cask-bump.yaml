@@ -1,0 +1,70 @@
+# release workflow の homebrew-update が失敗する原因を CI 上で採取するための一時 workflow。
+# 原因が判明したら削除する。追跡: https://github.com/nozomiishii/homebrew-tap/pull/66
+name: diagnose cask bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: bump 先のバージョン
+        type: string
+        required: false
+        default: "1.1.0"
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  diagnose:
+    runs-on: macos-26
+    timeout-minutes: 20
+
+    steps:
+      - name: Show Homebrew environment
+        run: |
+          brew --version
+          echo "--- taps ---"
+          brew tap
+          echo "--- config ---"
+          brew config
+
+      - name: Tap
+        run: brew tap nozomiishii/homebrew-tap
+
+      - name: Show what landed in the tap
+        run: |
+          TAP_DIR="$(brew --repository nozomiishii/homebrew-tap)"
+          echo "tap dir: $TAP_DIR"
+          git -C "$TAP_DIR" log --oneline -1
+          ls -la "$TAP_DIR/Casks"
+
+      - name: Load the cask and print the real exception
+        continue-on-error: true
+        run: |
+          cat > "${RUNNER_TEMP}/load.rb" <<'RUBY'
+          begin
+            cask = Cask::CaskLoader.load("nozomiishii/tap/brooklyn")
+            puts "OK: #{cask.token} #{cask.version}"
+          rescue => e
+            puts "#{e.class}: #{e.message}"
+            puts e.backtrace.first(20)
+          end
+          RUBY
+          brew ruby "${RUNNER_TEMP}/load.rb" nozomiishii/tap/brooklyn
+
+      - name: Read the cask through brew info
+        continue-on-error: true
+        run: brew info --json=v2 --cask nozomiishii/tap/brooklyn
+
+      # 本命。--debug で to_casks が投げている例外の backtrace が出る
+      - name: Reproduce bump-cask-pr with debug
+        continue-on-error: true
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          brew bump-cask-pr --debug --verbose --write-only \
+            --version="$VERSION" nozomiishii/tap/brooklyn
