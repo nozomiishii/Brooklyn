@@ -11,6 +11,10 @@ on:
         required: false
         default: "1.1.0"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions: {}
 
 defaults:
