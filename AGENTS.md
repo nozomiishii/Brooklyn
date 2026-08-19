@@ -49,4 +49,11 @@ BrooklynView (ScreenSaverView)
 - NotificationCenter オブザーバーは `nonisolated(unsafe)` で保持
 - 通知コールバックから `@MainActor` メソッドを呼ぶ際は `MainActor.assumeIsolated` を使用
 
+## Homebrew cask の同名衝突
 
+homebrew/cask に pedrommcarrasco/Brooklyn の `brooklyn` がある。素のトークンはそちらに解決されるため、install / upgrade / info / uninstall のすべてでフルトークンを使う。
+
+```bash
+brew upgrade --cask nozomiishii/tap/brooklyn   # 正
+brew upgrade --cask brooklyn                   # 誤。別プロジェクトの 2.1.0 に置き換わる
+```
