@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/nozomiishii/Brooklyn/compare/v1.1.0...v1.1.1) (2026-08-19)
+
+
+### Miscellaneous
+
+* add temporary workflow to diagnose cask bump failure ([#155](https://github.com/nozomiishii/Brooklyn/issues/155)) ([0a12b2c](https://github.com/nozomiishii/Brooklyn/commit/0a12b2ccdc214d8a84c657d2189b1a6bad574f2d))
+
 ## [1.1.0](https://github.com/nozomiishii/Brooklyn/compare/v1.0.0...v1.1.0) (2026-08-19)
 
 
