@@ -39,9 +39,9 @@ targets:
     platform: macOS
     sources:
       - path: BrooklynExtension
-      - path: Brooklyn/Sources
-      - path: Brooklyn/ConfigureSheet
-      - path: Brooklyn/Resources/Animations
+      - path: Shared/Sources
+      - path: Shared/ConfigureSheet
+      - path: Shared/Resources/Animations
         type: folder
         buildPhase: resources
     settings:
@@ -65,9 +65,9 @@ targets:
     platform: macOS
     sources:
       - path: Canvas
-      - path: Brooklyn/Sources
-      - path: Brooklyn/ConfigureSheet
-      - path: Brooklyn/Resources/Animations
+      - path: Shared/Sources
+      - path: Shared/ConfigureSheet
+      - path: Shared/Resources/Animations
         type: folder
         buildPhase: resources
     settings:
@@ -88,9 +88,9 @@ targets:
     platform: macOS
     sources:
       - path: BrooklynTests
-      - path: Brooklyn/Sources
-      - path: Brooklyn/ConfigureSheet
-      - path: Brooklyn/Resources/Animations
+      - path: Shared/Sources
+      - path: Shared/ConfigureSheet
+      - path: Shared/Resources/Animations
         type: folder
         buildPhase: resources
     settings:

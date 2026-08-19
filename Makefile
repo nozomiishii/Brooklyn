@@ -1,6 +1,6 @@
 .PHONY: generate build test format format-check lint clean install uninstall reset
 
-SWIFT_SOURCES = Brooklyn BrooklynApp BrooklynExtension BrooklynTests Canvas
+SWIFT_SOURCES = Shared BrooklynApp BrooklynExtension BrooklynTests Canvas
 EXTENSION_ID = dev.nozomiishii.brooklyn.extension
 
 # Generate Xcode project from project.yaml
