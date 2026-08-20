@@ -12,30 +12,53 @@ CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/wor
 
 ## ジョブ構成
 
-`release.yaml` は `main` への push / `workflow_dispatch` で起動し、以下 4 ジョブで構成される。
+`release.yaml` は `main` への push / `workflow_dispatch` で起動する。
 
-- `create-draft-release` (ubuntu): release-please が conventional commits を集計し、release PR が既にマージされていれば draft release + tag を作成。`release_created` と `tag_name` を outputs として返す
-- `upload-assets` (macos-26, `release_created == 'true'` のみ): XcodeGen + `make build` + `make test` で `Brooklyn.app` (screen saver extension 内蔵) をビルドし、Developer ID 署名 + 公証 + staple を経て `Brooklyn.app.zip` を GitHub Release に upload 後 publish。詳細は「署名と公証」節
-- `homebrew-update` (macos-26, `release_created == 'true'` のみ): `brew bump-cask-pr` で `nozomiishii/homebrew-tap` の `Casks/brooklyn.rb` を新バージョンに更新する PR を作成し、出力から PR URL を捕捉して `gh pr merge --auto --squash` で auto-merge を有効化
-- `release-pr` (ubuntu, `upload-assets` 失敗時を除き常時): release-please で次の release PR を作成 / 更新
+```
+create-draft-release (ubuntu)
+  │  outputs: release_created / tag_name
+  ▼
+upload-assets (macos-26)          release_created == 'true' のときだけ
+  ├── homebrew-update (macos-26)  同上
+  └── release-pr (ubuntu)         upload-assets が失敗したときを除き常に走る
+```
+
+- `create-draft-release`: release-please が conventional commits を集計し、release PR が既にマージされていれば draft release + tag を作成
+- `upload-assets`: XcodeGen + `make build` + `make test` で `Brooklyn.app` (screen saver extension 内蔵) をビルドし、[署名と公証](#署名と公証)を経て `Brooklyn.app.zip` を GitHub Release に upload 後 publish
+- `homebrew-update`: `brew bump-cask-pr` で `nozomiishii/homebrew-tap` の `Casks/brooklyn.rb` を更新する PR を作り、`gh pr merge --auto --squash` で auto-merge を有効化
+- `release-pr`: release-please で次の release PR を作成 / 更新
 
 ## 署名と公証
 
-`upload-assets` はビルド後に次の順で配布物を仕上げる。ローカルビルド (`make build` / `make install`) は ad-hoc 署名のままで、この処理はリリース CI だけで行う。
+`upload-assets` はビルド後に配布物を仕上げる。ローカルビルド (`make build` / `make install`) は ad-hoc 署名のままで、この処理はリリース CI だけで行う。
 
-- `.p12` を一時キーチェーンへ import。job 末尾の cleanup step で削除する
-- `codesign --force --options runtime --timestamp` で inside-out に署名。先にネストした `BrooklynExtension.appex` (sandbox の entitlements を明示的に付け直す)、次に `Brooklyn.app`
-- `ditto` で zip 化して `notarytool submit --wait` で公証。`Accepted` 以外なら `notarytool log` を出力して fail
-- `stapler staple` でチケットをバンドルに貼付し、staple 済みバンドルを配布用 zip に固め直す
+```
+security import      .p12 を一時キーチェーンへ。job 末尾の cleanup step で削除
+      ▼
+codesign             inside-out に署名
+      │                先に BrooklynExtension.appex
+      │                次に Brooklyn.app
+      ▼
+codesign --verify    --deep でネスト込みに検証。appex の署名から
+      │                app-sandbox が落ちていたら fail
+      ▼
+notarytool submit    ditto で固めた zip を提出。Accepted 以外なら
+      │                notarytool log を出力して fail
+      ▼
+stapler staple       チケットをバンドルに貼付
+      ▼
+ditto                staple 済みバンドルを配布用 zip に固め直す
+```
 
-補足:
+`codesign` は `--force --options runtime --timestamp` で呼ぶ。hardened runtime を有効にする `--options runtime` と `--timestamp` は、どちらも公証の必須要件。
 
-- `--options runtime`（hardened runtime）と `--timestamp` は公証の必須要件
-- `codesign --force` は既存の entitlements を落とすため、appex には `--entitlements` で BrooklynExtension/BrooklynExtension.entitlements を渡す。app 側は entitlements 無し
-- 署名 identity は一時キーチェーンから自動検出する。1Password に identity 文字列は持たない
-- 提出用 zip は使い捨てで、配布物は Package step が staple 済みバンドルから作り直す
+`--force` は既存の entitlements を落とすため、appex には `--entitlements` で BrooklynExtension/BrooklynExtension.entitlements を渡し直す。app 側は entitlements 無し。
 
-キーチェーン import は [GitHub 公式手順](https://docs.github.com/ja/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications)に準拠。公式手順との相違点:
+署名 identity は一時キーチェーンから自動検出する。1Password に identity 文字列は持たない。
+
+提出用 zip は使い捨てで、配布物は Package step が staple 済みバンドルから作り直す。
+
+キーチェーン import は [GitHub 公式手順](https://docs.github.com/ja/actions/how-tos/deploy/deploy-to-third-party-platforms/sign-xcode-applications)に準拠する。変えたのは次の 4 点。
 
 - キーチェーンパスワードは secret にせず `openssl rand` で実行ごとに生成する。job の中でしか使わない値なので、長命の secret を増やさない
 - provisioning profile の step はない。Developer ID 直接配布では使わない
@@ -66,30 +89,33 @@ Apple の鍵は共有の `nozomiishii-release` vault ではなく専用 vault �
 
 ## Homebrew Cask 更新の実装方針
 
-`homebrew-update` は Homebrew 公式 CLI `brew bump-cask-pr` を直接呼ぶ実装。検討した代替案を採用しなかった理由:
+`homebrew-update` は Homebrew 公式 CLI `brew bump-cask-pr` を直接呼ぶ。
 
-### 不採用: Renovate に任せる
+| 手段 | 採否 |
+| --- | --- |
+| `brew bump-cask-pr` | 採用。公式 [Autobump](https://docs.brew.sh/Autobump) でも使われている本流 |
+| Renovate に任せる | `homebrew` manager は Formula のみ対応で Cask 未サポート。[要望の issue](https://github.com/renovatebot/renovate/discussions/32965) は open のままコメント 0。`postUpgradeTasks` で sha256 を再計算する手は Mend Cloud では使えない |
+| `mislav/bump-homebrew-formula-action` | サイレント失敗する。下に詳しく書いた |
+| 手書き `git push` + `gh pr create` | 動くが Homebrew エコシステム非標準 |
 
-`homebrew` manager は Formula のみ対応で Cask 未サポート。[renovate#32965](https://github.com/renovatebot/renovate/discussions/32965) が open のまま、コメント 0。`postUpgradeTasks` で sha256 を再計算する手は Mend Cloud では使えない。
-
-### 不採用: `mislav/bump-homebrew-formula-action`
-
-`homebrew-tap` の `main` が GitHub Rulesets で保護されていると、`branchRes.data.protected === true` 判定で `update-<file>-<timestamp>` という別ブランチに commit を作る経路に入り、`create-pullrequest: false` のままだと PR 化もマージもされず孤立ブランチが残る。ジョブは "success" で終わるためサイレント失敗になる。実例: `update-git-harvest.rb-1777372050` が放置されていた。
-
-### 不採用: 手書き `git push` + `gh pr create`
-
-動くが Homebrew エコシステム非標準。本流は公式 [Autobump](https://docs.brew.sh/Autobump) でも使われている `brew bump-cask-pr` / `brew bump --casks`。
-
-### 採用: `brew bump-cask-pr` が肩代わりすること
+`brew bump-cask-pr` が肩代わりするのは次の 4 つ。
 
 - 新版 tarball を取得して `sha256` を自動再計算
 - `Casks/brooklyn.rb` のフィールド単位更新
 - API 経由で commit + PR 作成。重複 PR 検出も内蔵
 - `brew style` での文法検証
 
+### `mislav/bump-homebrew-formula-action` のサイレント失敗
+
+`homebrew-tap` の `main` は GitHub Rulesets で保護されている。この action は `branchRes.data.protected === true` を見て、`update-<file>-<timestamp>` という別ブランチに commit を作る経路へ入る。`create-pullrequest: false` のままだと PR 化もマージもされず、孤立ブランチだけが残る。
+
+ジョブは success で終わるため気付けない。実例として `update-git-harvest.rb-1777372050` が放置されていた。
+
 ## runner 選定
 
-`homebrew-update` は macos-26 で動かし、runner を `upload-assets` と統一する。Linux runner + `Homebrew/actions/setup-homebrew` も試したが、`Homebrew/actions` が monorepo で個別 tag を持たないため zizmor の `stale-action-refs` ルールに引っかかり、commit pin しても警告が出続ける。macOS runner なら `brew` がプリインストールされているので setup ステップごと不要になる。
+`homebrew-update` は macos-26 で動かし、runner を `upload-assets` と統一する。macOS runner なら `brew` がプリインストールされているので setup ステップごと不要になる。
+
+Linux runner + `Homebrew/actions/setup-homebrew` も試したが、`Homebrew/actions` が monorepo で個別 tag を持たないため zizmor の `stale-action-refs` に引っかかり、commit pin しても警告が出続ける。
 
 ## 周辺前提
 
