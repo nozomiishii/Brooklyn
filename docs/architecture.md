@@ -56,6 +56,8 @@ makePlayerItems
 
 `make install` も同じ登録をコマンドで行う。開発中に appex のパスが変わったときは `make reset` で WallpaperAgent を落とす。
 
+選択画面のタイルは appex から毎回読まれない。legacy プロバイダが thumbnail を一度抽出し、`$(getconf DARWIN_USER_CACHE_DIR)` 配下の `com.apple.wallpaper.extension.legacy/com.apple.wallpaper.legacy.thumbnails/` の PNG と `com.apple.wallpaper.agent/com.apple.wallpaper.view-model-cache/extension-com.apple.wallpaper.extension.legacy-screenSaver` の view-model で持ち続ける。appex を同じパスへ入れ替えても無効化されない (2026-08 実測)。サムネイルを変えたら `make reset` で消す。
+
 ## ライフサイクル (macOS 26 実測)
 
 ```

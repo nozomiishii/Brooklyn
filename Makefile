@@ -54,10 +54,15 @@ uninstall:
 # Reset caches and processes before testing.
 # WallpaperAgent caches resolved extension paths; a stale entry (e.g. a
 # DerivedData copy) makes System Settings silently refuse the selection.
+# The picker tile is a PNG extracted once into the legacy provider's cache
+# and never invalidated by replacing the appex, so it is flushed here too.
+USER_CACHE = $(shell getconf DARWIN_USER_CACHE_DIR)
 reset:
 	-killall WallpaperAgent 2>/dev/null
 	-killall "System Settings" 2>/dev/null
 	rm -f ~/Library/Containers/$(EXTENSION_ID)/Data/Library/Preferences/ByHost/$(EXTENSION_ID).*.plist
+	rm -rf "$(USER_CACHE)com.apple.wallpaper.extension.legacy/com.apple.wallpaper.legacy.thumbnails"
+	rm -f "$(USER_CACHE)com.apple.wallpaper.agent/com.apple.wallpaper.view-model-cache/extension-com.apple.wallpaper.extension.legacy-screenSaver"
 
 # Clean build artifacts
 clean:
