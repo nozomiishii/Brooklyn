@@ -27,57 +27,6 @@ final class BrooklynViewTests: XCTestCase {
         XCTAssertNotNil(view, "View should be created with a valid frame")
     }
 
-    // MARK: - isPreview Heuristic
-
-    /// The system does not pass a trustworthy isPreview flag.
-    /// BrooklynView uses frame size to determine the actual preview state.
-    func testSmallFrameIsDetectedAsPreview() {
-        let smallFrame = NSRect(x: 0, y: 0, width: 300, height: 200)
-        guard let view = BrooklynView(frame: smallFrame, isPreview: false) else {
-            XCTFail("View should be created")
-            return
-        }
-        XCTAssertTrue(view.isPreview, "Small frame (< 400x300) should be detected as preview")
-    }
-
-    func testLargeFrameIsNotPreview() {
-        let largeFrame = NSRect(x: 0, y: 0, width: 1920, height: 1080)
-        guard let view = BrooklynView(frame: largeFrame, isPreview: true) else {
-            XCTFail("View should be created")
-            return
-        }
-        XCTAssertFalse(view.isPreview, "Large frame (>= 400x300) should not be preview")
-    }
-
-    func testBoundaryFrameIsNotPreview() {
-        let boundaryFrame = NSRect(x: 0, y: 0, width: 400, height: 300)
-        guard let view = BrooklynView(frame: boundaryFrame, isPreview: true) else {
-            XCTFail("View should be created")
-            return
-        }
-        XCTAssertFalse(view.isPreview, "Frame exactly 400x300 should not be preview")
-    }
-
-    /// AND condition edge case: width below threshold but height at threshold.
-    func testWidthBelowThresholdButHeightAtThresholdIsNotPreview() {
-        let frame = NSRect(x: 0, y: 0, width: 399, height: 300)
-        guard let view = BrooklynView(frame: frame, isPreview: true) else {
-            XCTFail("View should be created")
-            return
-        }
-        XCTAssertFalse(view.isPreview, "Width < 400 but height >= 300 should not be preview")
-    }
-
-    /// AND condition edge case: width at threshold but height below threshold.
-    func testWidthAtThresholdButHeightBelowIsNotPreview() {
-        let frame = NSRect(x: 0, y: 0, width: 400, height: 299)
-        guard let view = BrooklynView(frame: frame, isPreview: true) else {
-            XCTFail("View should be created")
-            return
-        }
-        XCTAssertFalse(view.isPreview, "Width >= 400 but height < 300 should not be preview")
-    }
-
     // MARK: - startAnimation / stopAnimation Guards
 
     /// The system can call startAnimation multiple times.

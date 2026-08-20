@@ -5,14 +5,12 @@ import ScreenSaver
 ///
 /// Runs inside BrooklynExtension.appex, driven by BrooklynViewController.
 /// Defensive behaviors that stay even in the appex world:
-/// - `isPreview` is not passed in by the system → frame size heuristic
 /// - `startAnimation()`/`stopAnimation()` are not reliably called on the view →
 ///   the view controller drives them; `com.apple.screensaver.willstop` stays
 ///   as a second cleanup path
 /// - Degenerate zero-frame instances (seen in System Settings preview
 ///   machinery) → skip player setup to avoid loading 75 player items
 final class BrooklynView: ScreenSaverView {
-    private var manager: BrooklynManager?
     private var player: LoopPlayer?
     private var playerLayer: AVPlayerLayer?
     private var isAnimationStarted = false
@@ -20,13 +18,10 @@ final class BrooklynView: ScreenSaverView {
 
     // MARK: - Initialization
 
-    override init?(frame: NSRect, isPreview _: Bool) {
-        let actualIsPreview = frame.width < 400 && frame.height < 300
-        super.init(frame: frame, isPreview: actualIsPreview)
+    override init?(frame: NSRect, isPreview: Bool) {
+        super.init(frame: frame, isPreview: isPreview)
 
-        manager = BrooklynManager(bundle: Bundle(for: BrooklynView.self))
-
-        // Skip visual/player setup on degenerate instances to avoid wasting resources.
+        // Skip player setup on degenerate instances to avoid wasting resources.
         if frame == .zero {
             return
         }
@@ -45,10 +40,8 @@ final class BrooklynView: ScreenSaverView {
     }
 
     private func setupPlayer() {
-        guard let manager else { return }
-
-        let items = manager.makePlayerItems()
-        let loopPlayer = LoopPlayer(items: items)
+        let manager = BrooklynManager(bundle: Bundle(for: BrooklynView.self))
+        let loopPlayer = LoopPlayer(items: manager.makePlayerItems())
         loopPlayer.isMuted = true
 
         let layer = AVPlayerLayer(player: loopPlayer)

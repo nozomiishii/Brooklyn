@@ -25,12 +25,13 @@ final class BrooklynViewController: ScreenSaverViewController {
     }
 
     override func loadView() {
-        // No frame is handed in; mirror Apple's own savers and size to the
-        // main screen. Preview surfaces resize the view afterwards.
+        // No frame or isPreview is handed in; mirror Apple's own savers and
+        // size to the main screen. Preview surfaces resize the view afterwards
+        // and playback does not branch on isPreview.
         let frame = NSScreen.main?.frame ?? NSRect(x: 0, y: 0, width: 1920, height: 1080)
         logger.info("loadView() screenFrame=\(String(describing: frame), privacy: .public)")
 
-        let view = BrooklynView(frame: frame, isPreview: frame.width < 400)
+        let view = BrooklynView(frame: frame, isPreview: false)
         saverView = view
         self.view = view ?? NSView(frame: frame)
     }

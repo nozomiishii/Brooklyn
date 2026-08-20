@@ -49,7 +49,7 @@ BrooklynConfigurationViewController (設定シート)
 変更時はテストで regression を確認する。
 
 - 再生の開始・停止は BrooklynViewController の viewDidAppear / viewWillDisappear が駆動する。ScreenSaverView の startAnimation / stopAnimation は framework からは確実には呼ばれない
-- `isPreview` は渡ってこない → フレームサイズで判定し、幅 < 400 かつ高さ < 300 をプレビューと見なす
+- `isPreview` は渡ってこない。再生コードは isPreview で分岐しないため、view controller は false を渡す
 - サイズ 0 のインスタンスが生成されることがある → BrooklynView が player 構築をスキップ
 - `AVQueuePlayer` は 1 アイテムで停止する仕様 → `LoopPlayer` が自動複製
 - 設定シートに SwiftUI を載せるには NSHostingController + addChild が必須。NSHostingView 単体は ViewBridge のリモートシートで描画されない
@@ -59,7 +59,7 @@ BrooklynConfigurationViewController (設定シート)
 
 ### Swift 6 Strict Concurrency
 
-- `BrooklynManager`, `Database`, `ConfigureSheetViewModel` は `@MainActor`
+- `BrooklynManager`, `Database`, `ConfigureSheetViewModel`, `ExtensionRegistrar` は `@MainActor`
 - NotificationCenter オブザーバーは `nonisolated(unsafe)` で保持
 - 通知コールバックから `@MainActor` メソッドを呼ぶ際は `MainActor.assumeIsolated` を使用
 

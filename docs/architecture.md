@@ -1,6 +1,6 @@
 ---
 paths:
-  - "Brooklyn/**/*.swift"
+  - "Shared/**/*.swift"
   - "BrooklynApp/**/*.swift"
   - "BrooklynExtension/**/*"
   - "Canvas/**/*.swift"
@@ -47,7 +47,7 @@ CLAUDE.md の「アーキテクチャ」「触る前に読む」節の補足。�
 
 ### 残っている防御
 
-- `isPreview` は渡ってこない → フレームサイズで判定し、幅 < 400 かつ高さ < 300 をプレビューと見なす
+- `isPreview` は渡ってこない。再生コードは isPreview で分岐しないため、view controller は false を渡す
 - サイズ 0 のインスタンスが生成されることがある → `BrooklynView` が player 構築をスキップし、75 本の AVPlayerItem 読み込みを避ける
 - `AVQueuePlayer` はキューを使い切ると停止する仕様 → `LoopPlayer` が `AVPlayerItemDidPlayToEndTimeNotification` を監視し、終了したアイテムを末尾に再追加して無限ループ
 
