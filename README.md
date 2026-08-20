@@ -1,14 +1,18 @@
-# Brooklyn
+<div align="center">
+  <img src="demo/logo.jpg" alt="Brooklyn" width="600" />
+</div>
 
-English | [日本語](./README.ja.md)
+<p align="center">English | <a href="./README.ja.md">日本語</a></p>
+
+A macOS screen saver inspired by [Apple's 2018 Brooklyn event](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/).
 
 <br>
 <div align="center">
-  <img src="demo/demo.gif" alt="Brooklyn" width="600" />
+  <img src="demo/demo.gif" alt="demo" width="600" />
 </div>
 <br>
 
-A macOS screen saver inspired by [Apple's 2018 Brooklyn event](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/). 75 mesmerizing Apple logo animations looping endlessly on your screen.
+75 mesmerizing Apple logo animations looping endlessly on your screen.
 
 A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pedrommcarrasco/Brooklyn), rebuilt for Swift 6, macOS 26 (Tahoe), and Apple Silicon.
 

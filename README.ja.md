@@ -1,14 +1,18 @@
-# Brooklyn
+<div align="center">
+  <img src="demo/logo.jpg" alt="Brooklyn" width="600" />
+</div>
 
-[English](./README.md) | 日本語
+<p align="center"><a href="./README.md">English</a> | 日本語</p>
+
+[Apple の 2018 年 Brooklyn イベント](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/)にインスパイアされた macOS スクリーンセーバー。
 
 <br>
 <div align="center">
-  <img src="demo/demo.gif" alt="Brooklyn" width="600" />
+  <img src="demo/demo.gif" alt="demo" width="600" />
 </div>
 <br>
 
-[Apple の 2018 年 Brooklyn イベント](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/)にインスパイアされた macOS スクリーンセーバー。75 種類の美しい Apple ロゴアニメーションが画面でループし続けます。
+75 種類の美しい Apple ロゴアニメーションが画面でループし続けます。
 
 [Pedro Carrasco のオリジナル Brooklyn](https://github.com/pedrommcarrasco/Brooklyn) を Swift 6 / macOS 26 (Tahoe) / Apple Silicon 向けに再実装したものです。
 
