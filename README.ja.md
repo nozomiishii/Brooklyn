@@ -25,7 +25,7 @@
 brew install nozomiishii/tap/brooklyn
 ```
 
-Brooklyn アプリを一度起動するとスクリーンセーバー extension が登録されます。**システム設定 > 壁紙 > スクリーンセーバ** で **Brooklyn** を選択してください。
+Brooklyn アプリを一度起動するとスクリーンセーバー extension が登録されます。システム設定 > 壁紙 > スクリーンセーバ で Brooklyn を選択してください。
 
 ## Uninstall
 
@@ -37,17 +37,22 @@ brew uninstall nozomiishii/tap/brooklyn
 
 ### スクリーンセーバー
 
-**システム設定 > 壁紙 > スクリーンセーバ** で **Brooklyn** を選択し、**Options…** をクリックします。
+システム設定 > 壁紙 > スクリーンセーバ で Brooklyn を選択し、Options… をクリックします。
 
-- **Customize OFF（デフォルト）**: オリジナルの Apple ロゴアニメーションを最初に再生したあと、残りの 74 種をシャッフルして無限ループします
-- **Customize ON**: お気に入りのアニメーションを選んで、ループ回数やシャッフル順を設定できます
+- Customize OFF（デフォルト）: オリジナルの Apple ロゴアニメーションを最初に再生したあと、残りの 74 種をシャッフルして無限ループします
+- Customize ON: お気に入りのアニメーションを選んで、ループ回数やシャッフル順を設定できます
 
 ### アプリアイコン
 
-Brooklyn アプリを起動し、**App Icon** で選びます。
+Brooklyn アプリを起動し、App Icon で選びます。
 
-- **Brooklyn（デフォルト）**: スクリーンセーバーの 1 コマ目
-- **Classic**: オリジナルの Brooklyn ブランディング
+- Brooklyn（デフォルト）: スクリーンセーバーの 1 コマ目
+
+  <img src="demo/app-icon-brooklyn.png" alt="" width="128" />
+
+- Classic: オリジナルの Brooklyn ブランディング
+
+  <img src="demo/app-icon-classic.png" alt="" width="128" />
 
 選んだアイコンはアプリを終了しても残ります。起動中のアプリの Dock アイコンだけは、次の起動から切り替わります。
 
