@@ -6,6 +6,13 @@ import AVFoundation
 /// creating an infinite loop effect.
 final class LoopPlayer: AVQueuePlayer {
     private nonisolated(unsafe) var itemDidFinishObserver: NSObjectProtocol?
+    /// Items this player owns. AVPlayerItemDidPlayToEndTime is observed with
+    /// object: nil (the finished item is already dequeued by the time the
+    /// notification arrives, so it can't be matched against items()), and the
+    /// appex runs one player per display in a single process — without this
+    /// filter every player re-enqueues every other player's finished items and
+    /// queues grow without bound. Accessed on the main queue only.
+    private nonisolated(unsafe) var ownedItems = Set<ObjectIdentifier>()
 
     override init() {
         super.init()
@@ -19,6 +26,7 @@ final class LoopPlayer: AVQueuePlayer {
             queue.append(copy)
         }
         super.init(items: queue)
+        ownedItems = Set(queue.map { ObjectIdentifier($0) })
         itemDidFinishObserver = makeObserver()
     }
 
@@ -28,11 +36,13 @@ final class LoopPlayer: AVQueuePlayer {
             object: nil,
             queue: .main
         ) { [weak self] notification in
-            guard let finishedItem = notification.object as? AVPlayerItem,
-                  let copy = finishedItem.copy() as? AVPlayerItem
-            else { return }
+            guard let self, let finishedItem = notification.object as? AVPlayerItem else { return }
             MainActor.assumeIsolated {
-                self?.insert(copy, after: nil)
+                guard self.ownedItems.remove(ObjectIdentifier(finishedItem)) != nil,
+                      let copy = finishedItem.copy() as? AVPlayerItem
+                else { return }
+                self.ownedItems.insert(ObjectIdentifier(copy))
+                self.insert(copy, after: nil)
             }
         }
     }
@@ -40,6 +50,7 @@ final class LoopPlayer: AVQueuePlayer {
     /// Play a single item (used for preview in the configuration sheet).
     func playPreview(_ item: AVPlayerItem) {
         removeAllItems()
+        ownedItems = [ObjectIdentifier(item)]
         insert(item, after: nil)
         seek(to: .zero)
         play()
@@ -52,6 +63,7 @@ final class LoopPlayer: AVQueuePlayer {
             itemDidFinishObserver = nil
         }
         removeAllItems()
+        ownedItems.removeAll()
     }
 
     deinit {

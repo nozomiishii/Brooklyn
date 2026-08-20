@@ -50,7 +50,7 @@ BrooklynConfigurationViewController (設定シート)
 
 - 再生の開始・停止は BrooklynViewController の viewDidAppear / viewWillDisappear が駆動する。ScreenSaverView の startAnimation / stopAnimation は framework からは確実には呼ばれない
 - `isPreview` は渡ってこない。再生コードは isPreview で分岐しないため、view controller は false を渡す
-- サイズ 0 のインスタンスが生成されることがある → BrooklynView が player 構築をスキップ
+- player は初回 startAnimation で遅延構築する。サイズ 0 のインスタンスは構築をスキップ
 - `AVQueuePlayer` は 1 アイテムで停止する仕様 → `LoopPlayer` が自動複製
 - 設定シートに SwiftUI を載せるには NSHostingController + addChild が必須。NSHostingView 単体は ViewBridge のリモートシートで描画されない
 - シートを閉じる操作は extension 側の実装が全て。NSApp.keyWindow も sheetParent も nil で、`configureSheetDidEnd` を呼ぶのが唯一の閉じ方

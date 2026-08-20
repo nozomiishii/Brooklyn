@@ -7,9 +7,12 @@ import ScreenSaver
 /// Defensive behaviors that stay even in the appex world:
 /// - `startAnimation()`/`stopAnimation()` are not reliably called on the view →
 ///   the view controller drives them; `com.apple.screensaver.willstop` stays
-///   as a second cleanup path
-/// - Degenerate zero-frame instances (seen in System Settings preview
-///   machinery) → skip player setup to avoid loading 75 player items
+///   as a second stop path (pause only — the framework reuses live instances,
+///   so stopping must never leave the view unable to start again)
+/// - The player is built lazily on the first `startAnimation()`, so degenerate
+///   instances that never appear (zero-size instances seen in System Settings
+///   preview machinery) never load the 75 player items, and a torn-down
+///   player can be rebuilt on the next start
 final class BrooklynView: ScreenSaverView {
     private var player: LoopPlayer?
     private var playerLayer: AVPlayerLayer?
@@ -21,16 +24,9 @@ final class BrooklynView: ScreenSaverView {
     override init?(frame: NSRect, isPreview: Bool) {
         super.init(frame: frame, isPreview: isPreview)
 
-        // Skip player setup on degenerate instances to avoid wasting resources.
-        if frame == .zero {
-            return
-        }
-
         wantsLayer = true
         layer?.backgroundColor = NSColor(red: 0.0, green: 0.01, blue: 0.0, alpha: 1.0).cgColor
-        animationTimeInterval = 1.0 / 30.0
 
-        setupPlayer()
         observeLifecycle()
     }
 
@@ -39,7 +35,9 @@ final class BrooklynView: ScreenSaverView {
         fatalError("init(coder:) is not supported")
     }
 
-    private func setupPlayer() {
+    private func setupPlayerIfNeeded() {
+        guard player == nil, frame != .zero else { return }
+
         let manager = BrooklynManager(bundle: Bundle(for: BrooklynView.self))
         let loopPlayer = LoopPlayer(items: manager.makePlayerItems())
         loopPlayer.isMuted = true
@@ -63,31 +61,18 @@ final class BrooklynView: ScreenSaverView {
             queue: .main
         ) { [weak self] _ in
             MainActor.assumeIsolated {
-                self?.cleanUp()
+                self?.stopAnimation()
             }
-        }
-    }
-
-    private func cleanUp() {
-        if isAnimationStarted {
-            stopAnimation()
-        }
-        player?.tearDown()
-        player = nil
-        playerLayer?.removeFromSuperlayer()
-        playerLayer = nil
-        if let observer = willStopObserver {
-            DistributedNotificationCenter.default().removeObserver(observer)
-            willStopObserver = nil
         }
     }
 
     // MARK: - ScreenSaverView Overrides
 
     override func startAnimation() {
-        guard !isAnimationStarted, player != nil else { return }
+        guard !isAnimationStarted else { return }
         super.startAnimation()
         isAnimationStarted = true
+        setupPlayerIfNeeded()
         player?.play()
     }
 
