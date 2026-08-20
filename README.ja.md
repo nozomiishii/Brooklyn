@@ -27,8 +27,6 @@ brew install nozomiishii/tap/brooklyn
 
 Brooklyn アプリを一度起動するとスクリーンセーバー extension が登録されます。**システム設定 > 壁紙 > スクリーンセーバ** で **Brooklyn** を選択してください。
 
-1.1.x からのアップグレードで、旧 `Brooklyn.saver` を手動インストールしていた場合は、アプリ内の **Remove Legacy Brooklyn.saver** でワンクリック削除できます。
-
 ## Uninstall
 
 ```sh
