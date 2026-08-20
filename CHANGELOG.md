@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.1.0](https://github.com/nozomiishii/Brooklyn/compare/v2.0.0...v2.1.0) (2026-08-20)
+
+
+### Features
+
+* use the original brooklyn branding for the app icon and thumbnail ([#165](https://github.com/nozomiishii/Brooklyn/issues/165)) ([04115a1](https://github.com/nozomiishii/Brooklyn/commit/04115a18f8a59aaf0007f2e2456ca2070bdc0c10))
+* use the screen saver's first frame for the app icon and thumbnail ([#171](https://github.com/nozomiishii/Brooklyn/issues/171)) ([9437524](https://github.com/nozomiishii/Brooklyn/commit/94375247eea6e29d6d2b5cc740b2ff33f1d32805))
+
+
+### Miscellaneous
+
+* align English README with Japanese logo layout ([#169](https://github.com/nozomiishii/Brooklyn/issues/169)) ([e34ca3c](https://github.com/nozomiishii/Brooklyn/commit/e34ca3c40971ddc9cb30d4e97f93909bb12c550b))
+* drop the 1.1.x legacy .saver upgrade note ([#166](https://github.com/nozomiishii/Brooklyn/issues/166)) ([fd851f4](https://github.com/nozomiishii/Brooklyn/commit/fd851f462b4ee38ccd8d8346f4d8d66d5adb4bd2))
+* put the logo above the fold in the readme ([#168](https://github.com/nozomiishii/Brooklyn/issues/168)) ([51ed49b](https://github.com/nozomiishii/Brooklyn/commit/51ed49b760e4081c2816c878774364ca98c7dfc0))
+
 ## [2.0.0](https://github.com/nozomiishii/Brooklyn/compare/v1.1.1...v2.0.0) (2026-08-20)
 
 
