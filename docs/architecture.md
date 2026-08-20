@@ -14,13 +14,16 @@ CLAUDE.md の「アーキテクチャ」「触る前に読む」節の補足。�
 
 ## 再生ロジック (`BrooklynManager.makePlayerItems`)
 
-### Customize OFF
+```
+makePlayerItems
+  ├── Customize OFF … デフォルト。全 75 アニメーションを使う
+  │     → original を先頭に 1 回再生
+  │     → 残りをランダムシャッフル
+  └── Customize ON  … ユーザーが選んだアニメーションだけを使う
+        → ループ回数もランダム順も Database の設定に従う
+```
 
-デフォルトの動作。全 75 アニメーション使用。`original` を先頭に 1 回再生 → 残りをランダムシャッフル → `LoopPlayer` が各アイテムを末尾にコピーして無限ループ。
-
-### Customize ON
-
-ユーザー選択のアニメーションのみ使用。ループ回数・ランダム順も設定 (`Database`) に従う。
+どちらも `LoopPlayer` が無限ループさせる。実現方法は[残っている防御](#残っている防御)に書いた。
 
 ## App Extension の構成
 
@@ -36,22 +39,49 @@ CLAUDE.md の「アーキテクチャ」「触る前に読む」節の補足。�
 表示            BrooklynViewController → BrooklynView → LoopPlayer
 ```
 
-登録は pluginkit が持つ。ホストアプリが起動時に `pluginkit -a` + `-e use` を実行する。WallpaperAgent は解決済みモジュールパスをキャッシュするため、appex のパスが変わったら `killall WallpaperAgent` (`make reset`) が要る。
+登録は pluginkit が持ち、ホストアプリの `ExtensionRegistrar` が起動時に更新する。
+
+```
+起動   registerAndRefresh()
+         │
+         ├── 既存の登録が別パスを指していたら pluginkit -r で外す
+         │     → 外したときだけ killall WallpaperAgent
+         │        (解決済みパスのキャッシュを捨てさせる)
+         ├── pluginkit -a <appex パス>
+         ├── pluginkit -e use -i <extension id>
+         └── refresh()
+               → 未登録なら 1 秒待って再確認
+                  (pkd が登録を非同期に公開することがある)
+```
+
+`make install` も同じ登録をコマンドで行う。開発中に appex のパスが変わったときは `make reset` で WallpaperAgent を落とす。
 
 ## ライフサイクル (macOS 26 実測)
 
-- viewDidAppear / viewWillDisappear は開始・停止のたびに確実に届く。再生の開始・停止はここで駆動する
-- ScreenSaverView の startAnimation / stopAnimation は framework からは確実には呼ばれない。view controller が呼ぶ
-- `com.apple.screensaver.willstop` 通知の購読は BrooklynView に残している。viewWillDisappear が来ない構成が現れたときの第 2 の停止経路で、pause のみ行う。インスタンスは再利用されるため、player を破棄する後始末をここでやってはいけない
-- framework は principal class (`BrooklynExtension`) のインスタンスをプロセス内で複数回生成・破棄する。principal は stateless に保つ
-- 仮想ディスプレイ (Duet 等) では MediaToolbox が `VRP err=-12852` をクリップ遷移のたびに出し、そのディスプレイの描画が止まることがある (2026-08 実測)。再生自体は進み続けるため、ログ上はエラーの継続だけが手がかり
+```
+開始   viewDidAppear                          → startAnimation()
+                                                  → 初回だけ player を構築
+停止   viewWillDisappear                      → stopAnimation()
+       com.apple.screensaver.willstop 通知    → stopAnimation()
+```
+
+view controller のライフサイクルは開始・停止のたびに確実に届くので、再生はここで駆動する。ScreenSaverView の startAnimation / stopAnimation は framework からは確実には呼ばれず、view controller が呼ぶ。
+
+通知の購読は `BrooklynView` に残している。viewWillDisappear が来ない構成が現れたときの第 2 の停止経路。どちらの停止経路も pause しかしない。framework はインスタンスを再利用するため、player を破棄する後始末をここでやると次に開始できなくなる。
+
+framework は principal class (`BrooklynExtension`) のインスタンスをプロセス内で複数回生成・破棄する。principal は stateless に保つ。
+
+仮想ディスプレイ (Duet 等) では MediaToolbox が `VRP err=-12852` をクリップ遷移のたびに出し、そのディスプレイの描画が止まることがある (2026-08 実測)。再生自体は進み続けるため、ログ上はエラーの継続だけが手がかり。
 
 ### 残っている防御
 
-- `isPreview` は渡ってこない。再生コードは isPreview で分岐しないため、view controller は false を渡す
-- player は初回 startAnimation で遅延構築する。表示されないインスタンスは 75 本の AVPlayerItem を読み込まず、破棄された player も次の startAnimation で再構築される
-- サイズ 0 のインスタンスが生成されることがある → `BrooklynView` が player 構築をスキップ
-- `AVQueuePlayer` はキューを使い切ると停止する仕様 → `LoopPlayer` が `AVPlayerItemDidPlayToEndTimeNotification` を監視し、終了したアイテムを末尾に再追加して無限ループ。通知は object: nil で購読するため、自分が所有するアイテムかを `ownedItems` で判定する。プロセス内にはディスプレイごとの player が同居しており、判定なしでは互いのキューを際限なく膨らませる
+| 実挙動 | 防御 |
+| --- | --- |
+| `isPreview` は渡ってこない | 再生コードは isPreview で分岐しない。view controller は false を渡す |
+| 表示されないインスタンスが生成されることがある | player を初回 startAnimation で遅延構築する。表示されなければ 75 本の AVPlayerItem を読み込まず、破棄された player も次の開始で組み直せる |
+| サイズ 0 のインスタンスが生成されることがある | `BrooklynView` が player 構築をスキップする |
+| `AVQueuePlayer` はキューを使い切ると停止する | `LoopPlayer` が `AVPlayerItemDidPlayToEndTimeNotification` を監視し、終了したアイテムを末尾に再追加する |
+| 終了通知は object: nil でしか購読できない | 自分が所有するアイテムかを `ownedItems` で判定する。プロセス内にはディスプレイごとの player が同居しており、判定なしでは互いのキューを際限なく膨らませる |
 
 ## 設定シート
 
@@ -65,16 +95,18 @@ System Settings の Options… で `BrooklynConfigurationViewController` が開�
 
 ### `@MainActor` 対象クラス
 
+UI / 設定に直接触るため MainActor で隔離する。
+
 - `BrooklynManager`
 - `Database`
 - `ConfigureSheetViewModel`
 - `ExtensionRegistrar`
 
-UI / 設定に直接触るため MainActor で隔離。`ExtensionRegistrar` の pluginkit 呼び出しだけは nonisolated な async 関数で main 外に逃がす。
+`ExtensionRegistrar` の pluginkit 呼び出しだけは nonisolated な async 関数で main 外に逃がす。
 
 ### `NotificationCenter` オブザーバー
 
-`nonisolated(unsafe)` プロパティで保持する。理由: `NSObjectProtocol` トークン自体は thread-safe で actor isolation を要求しないため、わざわざ `@MainActor` で囲む必要がない。むしろデイニシャライザで解放する際に actor 制約が邪魔になる。
+`nonisolated(unsafe)` プロパティで保持する。`NSObjectProtocol` トークン自体は thread-safe で actor isolation を要求しないため、`@MainActor` で囲む必要がない。デイニシャライザで解放する際は actor 制約が邪魔になる。
 
 ### 通知コールバックから `@MainActor` メソッドを呼ぶ
 
