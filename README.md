@@ -1,8 +1,10 @@
+# Brooklyn
+
+English | [日本語](./README.ja.md)
+
 <div align="center">
   <img src="demo/logo.jpg" alt="Brooklyn" width="600" />
 </div>
-
-<p align="center">English | <a href="./README.ja.md">日本語</a></p>
 
 A macOS screen saver inspired by [Apple's 2018 Brooklyn event](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/).
 

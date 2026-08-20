@@ -1,8 +1,10 @@
+# Brooklyn
+
+[English](./README.md) | 日本語
+
 <div align="center">
   <img src="demo/logo.jpg" alt="Brooklyn" width="600" />
 </div>
-
-<p align="center"><a href="./README.md">English</a> | 日本語</p>
 
 [Apple の 2018 年 Brooklyn イベント](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/)にインスパイアされた macOS スクリーンセーバー。
 
