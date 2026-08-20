@@ -35,10 +35,21 @@ brew uninstall nozomiishii/tap/brooklyn
 
 ## Customization
 
+### Screen saver
+
 Select **Brooklyn** in **System Settings > Wallpaper > Screen Saver** and click **Options…**.
 
 - **Customize OFF (default)**: Plays the original Apple logo animation first, then shuffles the remaining 74 and loops endlessly
 - **Customize ON**: Pick your favorite animations and control the loop count and shuffle order
+
+### App icon
+
+Launch the Brooklyn app and pick one under **App Icon**.
+
+- **Brooklyn (default)**: The first frame of the screen saver
+- **Classic**: The original Brooklyn branding
+
+Your choice stays after you quit the app. The Dock icon of the running app only switches on its next launch.
 
 ## Acknowledgments
 
