@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var registrar = ExtensionRegistrar()
+    private let registrar = ExtensionRegistrar.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -28,20 +28,20 @@ struct ContentView: View {
                 .keyboardShortcut(.defaultAction)
 
                 Button("Re-register Extension") {
-                    registrar.registerAndRefresh()
+                    Task { await registrar.registerAndRefresh() }
                 }
             }
 
             if registrar.legacySaverExists {
                 Button("Remove Legacy Brooklyn.saver", role: .destructive) {
-                    registrar.removeLegacySaver()
+                    Task { await registrar.removeLegacySaver() }
                 }
             }
         }
         .padding(24)
         .frame(width: 480, alignment: .leading)
         .task {
-            registrar.registerAndRefresh()
+            await registrar.refresh()
         }
     }
 }

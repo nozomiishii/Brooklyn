@@ -19,8 +19,16 @@ struct BrooklynApp: App {
     }
 }
 
-/// Quits when the window closes; the app has no background role.
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    /// Registration runs from the launch path, not the window content, so it
+    /// happens even when the app is launched without showing its window.
+    func applicationDidFinishLaunching(_: Notification) {
+        Task { @MainActor in
+            await ExtensionRegistrar.shared.registerAndRefresh()
+        }
+    }
+
+    /// Quits when the window closes; the app has no background role.
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
         true
     }

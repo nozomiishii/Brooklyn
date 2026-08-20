@@ -38,6 +38,45 @@ final class LoopPlayerTests: XCTestCase {
         XCTAssertEqual(player.items().count, 2)
     }
 
+    /// Regression: the appex runs one player per display in a single process.
+    /// A finished item owned by another player must not grow this queue.
+    func testForeignItemEndDoesNotGrowQueue() {
+        let bundle = Bundle(for: type(of: self))
+        guard let url1 = Animation.appleBits.videoURL(in: bundle),
+              let url2 = Animation.ballPit.videoURL(in: bundle)
+        else {
+            XCTFail("MP4 files not found in test bundle")
+            return
+        }
+
+        let player = LoopPlayer(items: [AVPlayerItem(url: url1), AVPlayerItem(url: url2)])
+        let before = player.items().count
+
+        let foreignItem = AVPlayerItem(url: url1)
+        NotificationCenter.default.post(name: .AVPlayerItemDidPlayToEndTime, object: foreignItem)
+
+        XCTAssertEqual(player.items().count, before, "Foreign item must not be re-enqueued")
+    }
+
+    /// A finished item of this player must be re-appended to keep the loop alive.
+    func testOwnedItemEndReappendsCopy() {
+        let bundle = Bundle(for: type(of: self))
+        guard let url1 = Animation.appleBits.videoURL(in: bundle),
+              let url2 = Animation.ballPit.videoURL(in: bundle)
+        else {
+            XCTFail("MP4 files not found in test bundle")
+            return
+        }
+
+        let ownedItem = AVPlayerItem(url: url1)
+        let player = LoopPlayer(items: [ownedItem, AVPlayerItem(url: url2)])
+        let before = player.items().count
+
+        NotificationCenter.default.post(name: .AVPlayerItemDidPlayToEndTime, object: ownedItem)
+
+        XCTAssertEqual(player.items().count, before + 1, "Owned item must be re-enqueued as a copy")
+    }
+
     func testTearDownClearsQueue() {
         let bundle = Bundle(for: type(of: self))
         guard let url = Animation.appleBits.videoURL(in: bundle) else {

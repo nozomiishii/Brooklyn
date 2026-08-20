@@ -198,12 +198,13 @@ jobs:
             --sign "$IDENTITY" \
             "$APP"
 
-          # 署名が壊れていないか再検証し、署名内容をログに残す
-          codesign --verify --strict --verbose=2 "$APP"
+          # ネスト込みで署名を再検証し、署名内容をログに残す
+          codesign --verify --deep --strict --verbose=2 "$APP"
           codesign --display --verbose=2 "$APP"
-          codesign --display --entitlements - "$APPEX"
+          # sandbox entitlement が署名から落ちていたら fail させる
+          codesign --display --entitlements - "$APPEX" | tee /dev/stderr | grep -q app-sandbox
 
-      # Apple にスキャンさせ、公証チケットを .saver に staple する
+      # Apple にスキャンさせ、公証チケットを app に staple する
       - name: Notarize and staple
         env:
           ASC_KEY_ID: ${{ steps.secrets.outputs.ASC_KEY_ID }}
