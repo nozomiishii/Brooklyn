@@ -54,11 +54,11 @@ System Settings > Wallpaper > Screen Saver > Brooklyn > Options…
 Brooklyn.app > App Icon
 ```
 
-- Brooklyn (default): The first frame of the screen saver
+- Brooklyn (default)
 
   <img src="demo/app-icon-brooklyn.png" alt="" width="128" />
 
-- Classic: The original Brooklyn branding
+- Classic
 
   <img src="demo/app-icon-classic.png" alt="" width="128" />
 

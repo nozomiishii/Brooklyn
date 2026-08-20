@@ -54,11 +54,11 @@ brew uninstall nozomiishii/tap/brooklyn
 Brooklyn.app > App Icon
 ```
 
-- Brooklyn（デフォルト）: スクリーンセーバーの 1 コマ目
+- Brooklyn（デフォルト）
 
   <img src="demo/app-icon-brooklyn.png" alt="" width="128" />
 
-- Classic: オリジナルの Brooklyn ブランディング
+- Classic
 
   <img src="demo/app-icon-classic.png" alt="" width="128" />
 
