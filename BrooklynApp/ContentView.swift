@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     private let registrar = ExtensionRegistrar.shared
+    private let iconController = AppIconController.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -30,6 +31,25 @@ struct ContentView: View {
                 Button("Re-register Extension") {
                     Task { await registrar.registerAndRefresh() }
                 }
+            }
+
+            Divider()
+
+            Picker("App Icon", selection: Binding(
+                get: { iconController.selected },
+                set: { iconController.select($0) }
+            )) {
+                ForEach(AppIcon.allCases) { icon in
+                    Text(icon.displayName).tag(icon)
+                }
+            }
+            .pickerStyle(.segmented)
+            .fixedSize()
+
+            if let error = iconController.lastError {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(.red)
             }
 
             if registrar.legacySaverExists {

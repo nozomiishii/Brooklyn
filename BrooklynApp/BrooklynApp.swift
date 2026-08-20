@@ -24,6 +24,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// happens even when the app is launched without showing its window.
     func applicationDidFinishLaunching(_: Notification) {
         Task { @MainActor in
+            AppIconController.shared.restoreOnLaunch()
             await ExtensionRegistrar.shared.registerAndRefresh()
         }
     }
