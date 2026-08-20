@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.0.0](https://github.com/nozomiishii/Brooklyn/compare/v1.1.1...v2.0.0) (2026-08-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* distribute as an app with a screen saver extension ([#162](https://github.com/nozomiishii/Brooklyn/issues/162))
+
+### Features
+
+* distribute as an app with a screen saver extension ([#162](https://github.com/nozomiishii/Brooklyn/issues/162)) ([d948077](https://github.com/nozomiishii/Brooklyn/commit/d9480773df35dbbde32a6bf566ccda9510d08de0))
+
+
+### Bug Fixes
+
+* recover playback across stop paths and harden extension registration ([#164](https://github.com/nozomiishii/Brooklyn/issues/164)) ([3a4b342](https://github.com/nozomiishii/Brooklyn/commit/3a4b342221b295fe6e9eddefe2302a0ad79cb0f1))
+
+
+### Miscellaneous
+
+* document the homebrew cask token collision ([#160](https://github.com/nozomiishii/Brooklyn/issues/160)) ([af3a5b3](https://github.com/nozomiishii/Brooklyn/commit/af3a5b3b4478e2bd2f004c04e237d28f28788be3))
+* make the docs readable at a glance ([#159](https://github.com/nozomiishii/Brooklyn/issues/159)) ([9379e11](https://github.com/nozomiishii/Brooklyn/commit/9379e1131abf165b7f6153da798b2e3d63ecf070))
+* modernize the host app and shared source layout ([#163](https://github.com/nozomiishii/Brooklyn/issues/163)) ([3c96a33](https://github.com/nozomiishii/Brooklyn/commit/3c96a33da6a03f0af79cb94f5d933cbc8bde3002))
+* remove the temporary cask bump diagnosis workflow ([#157](https://github.com/nozomiishii/Brooklyn/issues/157)) ([9211967](https://github.com/nozomiishii/Brooklyn/commit/921196748959162c29fd39ebb1aaca91f65d4e61))
+
 ## [1.1.1](https://github.com/nozomiishii/Brooklyn/compare/v1.1.0...v1.1.1) (2026-08-19)
 
 
