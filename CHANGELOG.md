@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/nozomiishii/Brooklyn/compare/v2.1.0...v2.2.0) (2026-08-20)
+
+
+### Features
+
+* switch the app icon between the new and classic artwork ([#172](https://github.com/nozomiishii/Brooklyn/issues/172)) ([08d0803](https://github.com/nozomiishii/Brooklyn/commit/08d08036a790bd22c221d254f5650ad301690d39))
+
+
+### Miscellaneous
+
+* flush the saver tile cache in make reset ([#173](https://github.com/nozomiishii/Brooklyn/issues/173)) ([23d6358](https://github.com/nozomiishii/Brooklyn/commit/23d6358d4eb706386ca4af6d41d14ee54e8c242f))
+
 ## [2.1.0](https://github.com/nozomiishii/Brooklyn/compare/v2.0.0...v2.1.0) (2026-08-20)
 
 
