@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.1](https://github.com/nozomiishii/Brooklyn/compare/v2.2.0...v2.2.1) (2026-08-20)
+
+
+### Bug Fixes
+
+* document how to switch the app icon ([#175](https://github.com/nozomiishii/Brooklyn/issues/175)) ([8c839d5](https://github.com/nozomiishii/Brooklyn/commit/8c839d50d23c05662b8a872f0b69525d2ba35cd0))
+* mask the classic app icon into the app shape ([#178](https://github.com/nozomiishii/Brooklyn/issues/178)) ([4be49ec](https://github.com/nozomiishii/Brooklyn/commit/4be49ec00d6b72c61cf4cb0bf851b496912b5b04))
+
+
+### Miscellaneous
+
+* drop redundant app icon captions from the README ([#177](https://github.com/nozomiishii/Brooklyn/issues/177)) ([e42c5c0](https://github.com/nozomiishii/Brooklyn/commit/e42c5c0082e376af9f59b57045fb71279b4fb10b))
+
 ## [2.2.0](https://github.com/nozomiishii/Brooklyn/compare/v2.1.0...v2.2.0) (2026-08-20)
 
 
