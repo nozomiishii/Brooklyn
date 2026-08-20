@@ -27,8 +27,6 @@ brew install nozomiishii/tap/brooklyn
 
 Launch the Brooklyn app once — it registers the screen saver extension. Then select **Brooklyn** in **System Settings > Wallpaper > Screen Saver**.
 
-Upgrading from 1.1.x? If you installed the old `Brooklyn.saver` manually, the app offers a one-click **Remove Legacy Brooklyn.saver**.
-
 ## Uninstall
 
 ```sh
