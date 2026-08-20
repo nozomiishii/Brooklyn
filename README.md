@@ -8,15 +8,15 @@ English | [日本語](./README.ja.md)
 
 A macOS screen saver inspired by [Apple's 2018 Brooklyn event](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/).
 
+75 mesmerizing Apple logo animations looping endlessly on your screen.
+
+A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pedrommcarrasco/Brooklyn), rebuilt for Swift 6, macOS 26 (Tahoe), and Apple Silicon.
+
 <br>
 <div align="center">
   <img src="demo/demo.gif" alt="demo" width="600" />
 </div>
 <br>
-
-75 mesmerizing Apple logo animations looping endlessly on your screen.
-
-A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pedrommcarrasco/Brooklyn), rebuilt for Swift 6, macOS 26 (Tahoe), and Apple Silicon.
 
 ## Requirements
 
