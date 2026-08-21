@@ -44,7 +44,7 @@ BrooklynExtension.appex
 Brooklyn.app
   BrooklynApp (SwiftUI App)
     ├── ContentView
-    └── ExtensionRegistrar                  # pluginkit 登録・legacy .saver の掃除
+    └── ExtensionRegistrar                  # pluginkit 登録
 ```
 
 ## 触る前に読む

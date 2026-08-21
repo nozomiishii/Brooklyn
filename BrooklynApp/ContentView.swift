@@ -51,12 +51,6 @@ struct ContentView: View {
                     .font(.caption)
                     .foregroundStyle(.red)
             }
-
-            if registrar.legacySaverExists {
-                Button("Remove Legacy Brooklyn.saver", role: .destructive) {
-                    Task { await registrar.removeLegacySaver() }
-                }
-            }
         }
         .padding(24)
         .frame(width: 480, alignment: .leading)

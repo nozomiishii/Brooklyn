@@ -12,19 +12,11 @@ final class ExtensionRegistrar {
     static let shared = ExtensionRegistrar()
 
     private(set) var isRegistered = false
-    private(set) var legacySaverExists = false
 
     private let extensionIdentifier = "dev.nozomiishii.brooklyn.extension"
 
     private var embeddedExtensionURL: URL? {
         Bundle.main.builtInPlugInsURL?.appendingPathComponent("BrooklynExtension.appex")
-    }
-
-    /// The pre-1.2 Brooklyn was a .saver bundle here. It keeps working through
-    /// legacyScreenSaver but shadows this version in System Settings.
-    private var legacySaverURL: URL {
-        FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Library/Screen Savers/Brooklyn.saver")
     }
 
     /// Placement in /Applications alone is not always picked up until the next
@@ -64,12 +56,6 @@ final class ExtensionRegistrar {
     func refresh() async {
         let registered = await registeredPath()
         isRegistered = registered != nil && registered == embeddedExtensionURL?.path
-        legacySaverExists = FileManager.default.fileExists(atPath: legacySaverURL.path)
-    }
-
-    func removeLegacySaver() async {
-        try? FileManager.default.removeItem(at: legacySaverURL)
-        await refresh()
     }
 
     func openScreenSaverSettings() {
