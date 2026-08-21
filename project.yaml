@@ -36,7 +36,7 @@ targets:
       - target: BrooklynExtension
     postCompileScripts:
       # アイコンを切り替えたビルド成果物には Icon\r と com.apple.FinderInfo が
-      # 残る。codesign はこれを detritus として弾くため、署名の前に落とす
+      # 残る。codesign は署名できないメタデータとして拒否するため、署名の前に落とす
       - name: Strip custom icon leftovers
         basedOnDependencyAnalysis: false
         script: |
