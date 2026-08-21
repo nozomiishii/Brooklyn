@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.2](https://github.com/nozomiishii/Brooklyn/compare/v2.2.1...v2.2.2) (2026-08-21)
+
+
+### Bug Fixes
+
+* strip custom icon leftovers before code signing ([#180](https://github.com/nozomiishii/Brooklyn/issues/180)) ([7c2fd3d](https://github.com/nozomiishii/Brooklyn/commit/7c2fd3d572faaa56939c8baac224d402d63f9341))
+
+
+### Miscellaneous
+
+* drop the legacy .saver cleanup ([#179](https://github.com/nozomiishii/Brooklyn/issues/179)) ([c38dedc](https://github.com/nozomiishii/Brooklyn/commit/c38dedcba3a562b234db84cd221993a741eb8a46))
+
 ## [2.2.1](https://github.com/nozomiishii/Brooklyn/compare/v2.2.0...v2.2.1) (2026-08-20)
 
 
