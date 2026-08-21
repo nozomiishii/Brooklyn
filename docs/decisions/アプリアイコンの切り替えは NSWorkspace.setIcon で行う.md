@@ -46,6 +46,7 @@ macOS には iOS の `setAlternateIconName` に相当する API がない。
 
 - カスタムアイコン適用中はバンドルに `Icon\r` と `com.apple.FinderInfo` が付き、`codesign --verify --strict` が落ちる。通常の `--verify` は通り、デフォルトに戻せば両方消える
 - アイコンの形の比率を自前で持つ。macOS が形を変えたら実測し直す
+- ビルド成果物でアイコンを切り替えると、次のビルドで CodeSign が同じ detritus を弾く。署名の前に落とすビルドフェーズを project.yaml に置いている
 
 ### 保留した論点
 
