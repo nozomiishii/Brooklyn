@@ -31,8 +31,6 @@ private API 依存は残るが、依存先が変わる。予告なく壊れる l
 ### 引き受けたコスト
 
 - PrivateHeaders/ScreenSaverPrivate.h の private 宣言を自前保守する。macOS 更新時に動作確認が要る
-- 設定が appex の sandbox コンテナへ移り、既存ユーザーの選択状態は引き継がれない
-- 旧 `.saver` の掃除が要る。Homebrew で入れた場合は cask の入れ替えで消え、手動インストールの場合はアプリ内の削除ボタンで消す
 
 ### 保留した論点
 
