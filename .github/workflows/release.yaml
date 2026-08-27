@@ -69,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO_URL: ${{ github.repository }}
         run: |
-          npx --yes release-please@17.11.1 github-release \
+          npx --yes release-please@17.11.2 github-release \
             --repo-url="${REPO_URL}" \
             --config-file=.github/.release-please-config.json \
             --manifest-file=.github/.release-please-manifest.json \
@@ -317,7 +317,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO_URL: ${{ github.repository }}
         run: |
-          npx --yes release-please@17.11.1 release-pr \
+          npx --yes release-please@17.11.2 release-pr \
             --repo-url="${REPO_URL}" \
             --config-file=.github/.release-please-config.json \
             --manifest-file=.github/.release-please-manifest.json \
