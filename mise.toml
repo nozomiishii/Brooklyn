@@ -1,4 +1,2 @@
-# op のバージョン正本。1password/load-secrets-action は PATH 上に op (>=2.4.0) が
-# あればインストールを省略するため、CI でも mise 経由の op がそのまま使われる。
 [tools]
 op = "2.39.0"
