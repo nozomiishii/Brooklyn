@@ -69,7 +69,7 @@ Apple 純正 saver が全て同じ構成のため安定しているが、macOS �
 | `AVQueuePlayer` は 1 アイテムで停止する | `LoopPlayer` が自動複製する |
 | NSHostingView 単体は ViewBridge のリモートシートで描画されない | 設定シートに SwiftUI を載せるには NSHostingController + addChild を使う |
 | リモートシートでは NSApp.keyWindow も sheetParent も nil | `configureSheetDidEnd` を呼ぶのが唯一の閉じ方。閉じる操作は extension 側の実装が全て |
-| WallpaperAgent は解決済みモジュールパスとサムネイルのタイルをキャッシュする | 一覧に出すには pluginkit 登録 + use への election が要る。パスやサムネイルが変わったら `make reset` |
+| WallpaperAgent は解決済みモジュールパスとサムネイルのタイルをキャッシュする | 一覧に出すには pluginkit 登録 + use への election が要る。パスやサムネイルが変わったら `make reset`。cask の install / upgrade では tap の postflight が WallpaperAgent を再起動する |
 
 legacy の ScreenSaverEngine は appex を起動しない。
 
