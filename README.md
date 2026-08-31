@@ -25,7 +25,17 @@ A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pe
 brew install nozomiishii/tap/brooklyn
 ```
 
-Launch the Brooklyn app once — it registers the screen saver extension.
+### mise
+
+Requires mise 2026.8 or later.
+
+```sh
+mise bootstrap packages use -g brew-cask:nozomiishii/tap/brooklyn
+```
+
+### Register the screen saver
+
+Whichever way you installed, launch the Brooklyn app once — it registers the screen saver extension.
 
 ```
 System Settings > Wallpaper > Screen Saver > Brooklyn
@@ -33,9 +43,21 @@ System Settings > Wallpaper > Screen Saver > Brooklyn
 
 ## Uninstall
 
+### Homebrew
+
 ```sh
 brew uninstall nozomiishii/tap/brooklyn
 ```
+
+### mise
+
+Remove the entry from `~/.config/mise/config.toml`, then run:
+
+```sh
+mise bootstrap packages prune --manager brew-cask
+```
+
+prune targets every mise-managed cask no longer declared in your config, not just Brooklyn.
 
 ## Customization
 
