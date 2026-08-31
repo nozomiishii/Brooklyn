@@ -25,7 +25,17 @@
 brew install nozomiishii/tap/brooklyn
 ```
 
-Brooklyn アプリを一度起動するとスクリーンセーバー extension が登録されます。
+### mise
+
+mise 2026.8 以降が必要です。
+
+```sh
+mise bootstrap packages use -g brew-cask:nozomiishii/tap/brooklyn
+```
+
+### スクリーンセーバーの登録
+
+どちらの方法で入れた場合も、Brooklyn アプリを一度起動するとスクリーンセーバー extension が登録されます。
 
 ```
 システム設定 > 壁紙 > スクリーンセーバ > Brooklyn
@@ -33,9 +43,21 @@ Brooklyn アプリを一度起動するとスクリーンセーバー extension 
 
 ## Uninstall
 
+### Homebrew
+
 ```sh
 brew uninstall nozomiishii/tap/brooklyn
 ```
+
+### mise
+
+`~/.config/mise/config.toml` からエントリを削除してから実行します。
+
+```sh
+mise bootstrap packages prune --manager brew-cask
+```
+
+prune は Brooklyn だけでなく、設定から外れた mise 管理の cask すべてを削除対象にします。
 
 ## Customization
 
