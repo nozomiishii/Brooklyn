@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.2.3](https://github.com/nozomiishii/Brooklyn/compare/v2.2.2...v2.2.3) (2026-08-31)
+
+
+### Miscellaneous
+
+* add mise installation instructions ([#188](https://github.com/nozomiishii/Brooklyn/issues/188)) ([c61ca20](https://github.com/nozomiishii/Brooklyn/commit/c61ca2043ef48855d1ec6dfa8bdd1190ea81314e))
+* update 1password/load-secrets-action action to v5.0.1 ([#182](https://github.com/nozomiishii/Brooklyn/issues/182)) ([4364a76](https://github.com/nozomiishii/Brooklyn/commit/4364a76d1166115eb2f737cf365ddecfedd9a8a4))
+* update dependency release-please to v17.11.2 ([#185](https://github.com/nozomiishii/Brooklyn/issues/185)) ([f15943b](https://github.com/nozomiishii/Brooklyn/commit/f15943b443bada01f42e4e147825302350e93a2a))
+* update nozomiishii/workflows action to v4.3.0 ([#184](https://github.com/nozomiishii/Brooklyn/issues/184)) ([0f5b67c](https://github.com/nozomiishii/Brooklyn/commit/0f5b67c2ba9daf76e6aaece5310d652da0c4e410))
+
 ## [2.2.2](https://github.com/nozomiishii/Brooklyn/compare/v2.2.1...v2.2.2) (2026-08-21)
 
 
