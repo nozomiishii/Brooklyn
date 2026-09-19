@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.2.4](https://github.com/nozomiishii/Brooklyn/compare/v2.2.3...v2.2.4) (2026-09-19)
+
+
+### Miscellaneous
+
+* drop the CLAUDE.md bridge ([#194](https://github.com/nozomiishii/Brooklyn/issues/194)) ([5b5cc06](https://github.com/nozomiishii/Brooklyn/commit/5b5cc061478787487ad7b312afd379d9f4b97636))
+* stop ignoring CLAUDE.local.md ([#195](https://github.com/nozomiishii/Brooklyn/issues/195)) ([fdd2e0b](https://github.com/nozomiishii/Brooklyn/commit/fdd2e0b14526cc62f853426d4622a5032332a9b2))
+* update nozomiishii/workflows action to v4.5.0 ([#191](https://github.com/nozomiishii/Brooklyn/issues/191)) ([e868219](https://github.com/nozomiishii/Brooklyn/commit/e86821979a3bd1167082743712f0db8b1755c76c))
+* update nozomiishii/workflows action to v4.5.1 ([#193](https://github.com/nozomiishii/Brooklyn/issues/193)) ([48e5cd8](https://github.com/nozomiishii/Brooklyn/commit/48e5cd8bf0c83487c2e114508d113d4363cc3996))
+
 ## [2.2.3](https://github.com/nozomiishii/Brooklyn/compare/v2.2.2...v2.2.3) (2026-08-31)
 
 
