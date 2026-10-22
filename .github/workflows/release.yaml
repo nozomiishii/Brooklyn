@@ -40,8 +40,8 @@ jobs:
           version: "2.41.0"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          APP_ID: op://nozomiishii-release/github-app/username
-          APP_PRIVATE_KEY: op://nozomiishii-release/github-app/credential
+          APP_ID: op://nozomiishii-ci/github/APP_ID
+          APP_PRIVATE_KEY: op://nozomiishii-ci/github/APP_PRIVATE_KEY
 
       - name: Generate GitHub App token
         id: app-token
@@ -106,8 +106,8 @@ jobs:
           version: "2.41.0"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          APP_ID: op://nozomiishii-release/github-app/username
-          APP_PRIVATE_KEY: op://nozomiishii-release/github-app/credential
+          APP_ID: op://nozomiishii-ci/github/APP_ID
+          APP_PRIVATE_KEY: op://nozomiishii-ci/github/APP_PRIVATE_KEY
           # Apple の鍵は専用 vault。apple-developer vault を読めるのは Brooklyn の
           # service account だけにし、他リポジトリの CI 侵害から署名鍵を隔離する
           # (詳細: docs/release.md)
@@ -294,8 +294,8 @@ jobs:
           version: "2.41.0"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          APP_ID: op://nozomiishii-release/github-app/username
-          APP_PRIVATE_KEY: op://nozomiishii-release/github-app/credential
+          APP_ID: op://nozomiishii-ci/github/APP_ID
+          APP_PRIVATE_KEY: op://nozomiishii-ci/github/APP_PRIVATE_KEY
 
       - name: Generate GitHub App token
         id: app-token
@@ -343,8 +343,8 @@ jobs:
           version: "2.41.0"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          APP_ID: op://nozomiishii-release/github-app/username
-          APP_PRIVATE_KEY: op://nozomiishii-release/github-app/credential
+          APP_ID: op://nozomiishii-ci/github/APP_ID
+          APP_PRIVATE_KEY: op://nozomiishii-ci/github/APP_PRIVATE_KEY
 
       - name: Generate GitHub App token
         id: app-token
@@ -393,8 +393,8 @@ jobs:
 
           BRANCH="bump-brooklyn-${TAG_NAME}"
           MSG="chore: update brooklyn to ${TAG_NAME}"
-          git config user.name "nozomiishii-release[bot]"
-          git config user.email "nozomiishii-release[bot]@users.noreply.github.com"
+          git config user.name "nozomiishii-ci[bot]"
+          git config user.email "nozomiishii-ci[bot]@users.noreply.github.com"
           git checkout -b "$BRANCH"
           git add Casks/brooklyn.rb api/cask/brooklyn.json
           git commit -m "$MSG"

@@ -67,7 +67,7 @@ ditto                staple 済みバンドルを配布用 zip に固め直す
 
 ### 1Password vault `apple-developer`
 
-Apple の鍵は共有の `nozomiishii-release` vault ではなく専用 vault に置く。vault の切り方は「同じ場所に配る鍵は同じ vault」を基準にする。
+Apple の鍵は共有の `nozomiishii-ci` vault ではなく専用 vault に置く。vault の切り方は「同じ場所に配る鍵は同じ vault」を基準にする。
 
 - service account は repo ごとに 1 つ (Brooklyn 用は「Brooklyn」)。`apple-developer` vault を読めるのは Brooklyn の service account だけにし、他リポジトリの CI が侵害されても署名鍵に届かないようにする
 - 1Password の service account は作成後に vault の追加・権限変更ができない ([公式](https://www.1password.dev/service-accounts/manage-service-accounts/))。アクセスする vault を増やすときは service account を作り直し、`OP_SERVICE_ACCOUNT_TOKEN` の値を新トークンに差し替える
@@ -119,7 +119,7 @@ Linux runner + `Homebrew/actions/setup-homebrew` も試したが、`Homebrew/act
 
 ## 周辺前提
 
-- GitHub App `nozomiishii-release` に `homebrew-tap` への `contents: write` + `pull-requests: write` 権限が付与済み
+- GitHub App `nozomiishii-ci` に `homebrew-tap` への `contents: write` + `pull-requests: write` 権限が付与済み
 - `homebrew-tap` で `allow_auto_merge: true` 有効化済み
 - `homebrew-tap` の `main` は GitHub Rulesets で 4 つの required status checks (`pull-request / validate`, `github-actions / required`, `secret-scan / secretlint`, `GitGuardian Security Checks`) を要求
 - これらが pass 後 GitHub auto-merge で `brew bump-cask-pr` が作成した PR が自動 squash merge される
