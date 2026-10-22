@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.2.4](https://github.com/nozomiishii/Brooklyn/compare/v2.2.3...v2.2.4) (2026-10-22)
+
+
+### Bug Fixes
+
+* increase lint job timeout to 30 minutes ([#198](https://github.com/nozomiishii/Brooklyn/issues/198)) ([46a7b20](https://github.com/nozomiishii/Brooklyn/commit/46a7b20d78b2a6ee83962243ed5417cecf59b4ab))
+
+
+### Miscellaneous
+
+* drop redundant echo from required job ([#197](https://github.com/nozomiishii/Brooklyn/issues/197)) ([0d4dbca](https://github.com/nozomiishii/Brooklyn/commit/0d4dbca4c967f55f328590042620ed9d6ae09f22))
+* drop the CLAUDE.md bridge ([#194](https://github.com/nozomiishii/Brooklyn/issues/194)) ([5b5cc06](https://github.com/nozomiishii/Brooklyn/commit/5b5cc061478787487ad7b312afd379d9f4b97636))
+* rename the release GitHub App to nozomiishii-ci ([#203](https://github.com/nozomiishii/Brooklyn/issues/203)) ([be95c54](https://github.com/nozomiishii/Brooklyn/commit/be95c54b6d1c144e6dec2bc4999ecee494b7f38f))
+* split the recommended concurrency group by event action ([#200](https://github.com/nozomiishii/Brooklyn/issues/200)) ([d03fea7](https://github.com/nozomiishii/Brooklyn/commit/d03fea7312c362de8dcafded4f4e378fa47fc768))
+* stop ignoring CLAUDE.local.md ([#195](https://github.com/nozomiishii/Brooklyn/issues/195)) ([fdd2e0b](https://github.com/nozomiishii/Brooklyn/commit/fdd2e0b14526cc62f853426d4622a5032332a9b2))
+* update 1password/op docker tag to v2.40.0 ([#199](https://github.com/nozomiishii/Brooklyn/issues/199)) ([5cf9b93](https://github.com/nozomiishii/Brooklyn/commit/5cf9b9378b48c406b71859746aa928ec051f8ab2))
+* update 1password/op docker tag to v2.41.0 ([#201](https://github.com/nozomiishii/Brooklyn/issues/201)) ([a59bc8a](https://github.com/nozomiishii/Brooklyn/commit/a59bc8a400740f9f8392118a5d8c34aa01ec1753))
+* update actions/create-github-app-token action to v3.3.0 ([#202](https://github.com/nozomiishii/Brooklyn/issues/202)) ([18e4d5e](https://github.com/nozomiishii/Brooklyn/commit/18e4d5e609aeccab3981984a3a4154a9a66bc2fe))
+* update nozomiishii/workflows action to v4.5.0 ([#191](https://github.com/nozomiishii/Brooklyn/issues/191)) ([e868219](https://github.com/nozomiishii/Brooklyn/commit/e86821979a3bd1167082743712f0db8b1755c76c))
+* update nozomiishii/workflows action to v4.5.1 ([#193](https://github.com/nozomiishii/Brooklyn/issues/193)) ([48e5cd8](https://github.com/nozomiishii/Brooklyn/commit/48e5cd8bf0c83487c2e114508d113d4363cc3996))
+
 ## [2.2.3](https://github.com/nozomiishii/Brooklyn/compare/v2.2.2...v2.2.3) (2026-08-31)
 
 
