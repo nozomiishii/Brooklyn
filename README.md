@@ -90,10 +90,11 @@ Your choice stays after you quit the app. The Dock icon of the running app only 
 
 - Install and select the same Xcode version used in [CI](.github/workflows/ci.yaml).
 - Install mise using the [official setup guide](https://mise.jdx.dev/getting-started.html).
+- Enable [mise self-updates](https://mise.jdx.dev/configuration/settings.html#self-update-auto) in your global configuration.
 - From the repository root, prepare the development tools and Xcode project.
 
 ```sh
-mise install
+mise install --locked
 mise run generate
 open Brooklyn.xcodeproj
 ```

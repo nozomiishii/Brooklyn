@@ -90,10 +90,11 @@ Brooklyn.app > App Icon
 
 - [CI](.github/workflows/ci.yaml) と同じ版の Xcode を用意して選択します。
 - [公式の導入手順](https://mise.jdx.dev/getting-started.html)に従って mise をインストールします。
+- [本体の自動更新](https://mise.jdx.dev/configuration/settings.html#self-update-auto)を各自のグローバル設定で有効にします。
 - リポジトリのルートで、開発用ツールと Xcode プロジェクトを準備します。
 
 ```sh
-mise install
+mise install --locked
 mise run generate
 open Brooklyn.xcodeproj
 ```
