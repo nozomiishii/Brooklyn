@@ -36,8 +36,7 @@ jobs:
       - name: Set up mise
         uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
         with:
-          # renovate: datasource=github-releases depName=jdx/mise
-          version: "2026.10.25"
+          auto_update: true
 
       - name: Lint
         run: mise run lint
@@ -60,8 +59,7 @@ jobs:
       - name: Set up mise
         uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
         with:
-          # renovate: datasource=github-releases depName=jdx/mise
-          version: "2026.10.25"
+          auto_update: true
 
       - name: Show toolchain
         run: mise run toolchain
