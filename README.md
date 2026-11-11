@@ -86,6 +86,26 @@ Brooklyn.app > App Icon
 
 Your choice stays after you quit the app. The Dock icon of the running app only switches on its next launch.
 
+## Development
+
+- Install and select the same Xcode version used in [CI](.github/workflows/ci.yaml).
+- Install mise using the [official setup guide](https://mise.jdx.dev/getting-started.html).
+- From the repository root, prepare the development tools and Xcode project.
+
+```sh
+mise install
+mise run generate
+open Brooklyn.xcodeproj
+```
+
+In Xcode, select the `Canvas` scheme and Run to play the screen saver in a window.
+
+Run `mise tasks` to list the development tasks.
+
+- Follow [local testing](AGENTS.md#動作確認) to install locally or reset cached state.
+- Follow the [maintenance policy](docs/maintenance.md) when updating Swift, Xcode, or macOS.
+- Follow the [release workflow](docs/release.md) for distribution.
+
 ## Acknowledgments
 
 Brooklyn wouldn't exist without these amazing projects. Your Mac looks beautiful even during screen saver time.

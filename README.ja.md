@@ -86,6 +86,26 @@ Brooklyn.app > App Icon
 
 選んだアイコンはアプリを終了しても残ります。起動中のアプリの Dock アイコンだけは、次の起動から切り替わります。
 
+## Development
+
+- [CI](.github/workflows/ci.yaml) と同じ版の Xcode を用意して選択します。
+- [公式の導入手順](https://mise.jdx.dev/getting-started.html)に従って mise をインストールします。
+- リポジトリのルートで、開発用ツールと Xcode プロジェクトを準備します。
+
+```sh
+mise install
+mise run generate
+open Brooklyn.xcodeproj
+```
+
+Xcode で `Canvas` scheme を選び、Run するとウィンドウ内で再生できます。
+
+開発タスクの一覧は `mise tasks` で確認できます。
+
+- 実機への配置・キャッシュのリセットは [動作確認](AGENTS.md#動作確認)に従います。
+- Swift・Xcode・macOS の更新は [保守方針](docs/maintenance.md)に従います。
+- 配布は [リリースフロー](docs/release.md)に従います。
+
 ## 謝辞
 
 Brooklyn はこれらの素晴らしいプロジェクトなしには存在しませんでした。Screen Saver中のMacも美しいです。
