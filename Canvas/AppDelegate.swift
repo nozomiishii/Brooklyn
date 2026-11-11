@@ -15,14 +15,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             x: screenFrame.midX - 640,
             y: screenFrame.midY - 360,
             width: 1280,
-            height: 720
+            height: 720,
         )
 
         let window = NSWindow(
             contentRect: windowFrame,
             styleMask: [.titled, .closable, .resizable, .miniaturizable],
             backing: .buffered,
-            defer: false
+            defer: false,
         )
         window.title = "Brooklyn Canvas"
         window.backgroundColor = .black

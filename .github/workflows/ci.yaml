@@ -17,9 +17,12 @@ defaults:
   run:
     shell: bash
 
+env:
+  DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
+
 jobs:
   lint:
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 30
     permissions:
       contents: read  # required by actions/checkout to fetch repository code
@@ -50,7 +53,7 @@ jobs:
         run: make format-check
 
   build-and-test:
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 30
     permissions:
       contents: read  # required by actions/checkout to fetch repository code
@@ -63,6 +66,12 @@ jobs:
 
       - name: Install XcodeGen
         run: brew install xcodegen
+
+      - name: Show toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          xcrun swift --version
 
       - name: Build
         run: make build

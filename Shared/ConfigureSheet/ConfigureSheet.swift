@@ -2,11 +2,11 @@ import SwiftUI
 
 /// SwiftUI-based configuration sheet for selecting animations and playback options.
 struct ConfigureSheet: View {
-    @ObservedObject private var viewModel: ConfigureSheetViewModel
+    @State private var viewModel: ConfigureSheetViewModel
     private let onClose: () -> Void
 
     init(manager: BrooklynManager, onClose: @escaping () -> Void = {}) {
-        _viewModel = ObservedObject(wrappedValue: ConfigureSheetViewModel(manager: manager))
+        _viewModel = State(initialValue: ConfigureSheetViewModel(manager: manager))
         self.onClose = onClose
     }
 
@@ -66,7 +66,7 @@ struct ConfigureSheet: View {
                     AnimationRow(
                         animation: animation,
                         isSelected: viewModel.isSelected(animation),
-                        onToggle: { viewModel.toggle(animation) }
+                        onToggle: { viewModel.toggle(animation) },
                     )
                 }
             }

@@ -87,7 +87,8 @@ final class ExtensionRegistrar {
         _ = await runProcess("/usr/bin/killall", arguments: ["WallpaperAgent"])
     }
 
-    private nonisolated static func runProcess(_ path: String, arguments: [String]) async -> String {
+    @concurrent
+    private static func runProcess(_ path: String, arguments: [String]) async -> String {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: path)
         process.arguments = arguments
@@ -98,12 +99,15 @@ final class ExtensionRegistrar {
 
         do {
             try process.run()
+            let data = try pipe.fileHandleForReading.readToEnd() ?? Data()
+            process.waitUntilExit()
+            return String(data: data, encoding: .utf8) ?? ""
         } catch {
+            if process.isRunning {
+                process.terminate()
+                process.waitUntilExit()
+            }
             return ""
         }
-
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        process.waitUntilExit()
-        return String(data: data, encoding: .utf8) ?? ""
     }
 }

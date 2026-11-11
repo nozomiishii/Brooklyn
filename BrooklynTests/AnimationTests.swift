@@ -15,7 +15,7 @@ final class AnimationTests: XCTestCase {
             XCTAssertNotNil(
                 url,
                 "Missing MP4 file for animation '\(animation.rawValue)'. "
-                    + "Ensure \(animation.rawValue).mp4 exists in Resources/Animations/"
+                    + "Ensure \(animation.rawValue).mp4 exists in Resources/Animations/",
             )
         }
     }
@@ -27,7 +27,7 @@ final class AnimationTests: XCTestCase {
     func testOriginalAnimationExists() {
         XCTAssertNotNil(
             Animation(rawValue: "original"),
-            "The 'original' animation must exist in the enum"
+            "The 'original' animation must exist in the enum",
         )
     }
 

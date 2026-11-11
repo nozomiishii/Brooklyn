@@ -93,8 +93,10 @@ jobs:
   upload-assets:
     needs: create-draft-release
     if: needs.create-draft-release.outputs.release_created == 'true'
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 30
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
     permissions:
       contents: write  # required by gh release upload/edit to publish release assets
     steps:
@@ -133,6 +135,12 @@ jobs:
 
       - name: Install XcodeGen
         run: brew install xcodegen
+
+      - name: Show toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          xcrun swift --version
 
       - name: Build
         run: make build

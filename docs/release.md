@@ -18,7 +18,7 @@ CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/wor
 create-draft-release (ubuntu)
   │  outputs: release_created / tag_name
   ▼
-upload-assets (macos-26)          release_created == 'true' のときだけ
+upload-assets (xcode-27)          release_created == 'true' のときだけ
   ├── homebrew-update (macos-26)  同上
   └── release-pr (ubuntu)         upload-assets が失敗したときを除き常に走る
 ```
@@ -113,7 +113,7 @@ Apple の鍵は共有の `nozomiishii-ci` vault ではなく専用 vault に置�
 
 ## runner 選定
 
-`homebrew-update` は macos-26 で動かし、runner を `upload-assets` と統一する。macOS runner なら `brew` がプリインストールされているので setup ステップごと不要になる。
+`homebrew-update` は macos-26 で動かす。配布物をビルドする `upload-assets` は xcode-27 を使う。どちらも `brew` がプリインストールされている。
 
 Linux runner + `Homebrew/actions/setup-homebrew` も試したが、`Homebrew/actions` が monorepo で個別 tag を持たないため zizmor の `stale-action-refs` に引っかかり、commit pin しても警告が出続ける。
 

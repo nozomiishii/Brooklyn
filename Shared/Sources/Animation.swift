@@ -87,7 +87,7 @@ enum Animation: String, CaseIterable, Identifiable {
         let spaced = rawValue.replacingOccurrences(
             of: "([a-z])([A-Z0-9])",
             with: "$1 $2",
-            options: .regularExpression
+            options: .regularExpression,
         )
         return spaced.prefix(1).uppercased() + spaced.dropFirst()
     }
