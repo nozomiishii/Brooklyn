@@ -1,0 +1,90 @@
+min_version = "2026.10.25"
+
+[tools]
+swiftlint = "0.63.2"
+swiftformat = "0.61.0"
+xcodegen = "2.46.0"
+
+[vars]
+swift_sources = "Shared BrooklynApp BrooklynExtension BrooklynTests Canvas"
+extension_id = "dev.nozomiishii.brooklyn.extension"
+
+[tasks.generate]
+description = "Xcodeプロジェクトを生成する"
+run = "xcodegen generate --spec project.yaml"
+
+[tasks.build]
+description = "extensionを含むアプリをReleaseビルドする"
+depends = ["generate"]
+run = '''
+xcodebuild \
+  -project Brooklyn.xcodeproj \
+  -scheme Brooklyn \
+  -configuration Release \
+  -derivedDataPath build
+'''
+
+[tasks.test]
+description = "ユニットテストを実行する"
+depends = ["generate"]
+run = '''
+xcodebuild test \
+  -project Brooklyn.xcodeproj \
+  -scheme BrooklynTests \
+  -destination 'platform=macOS' \
+  -derivedDataPath build
+'''
+
+[tasks.format]
+description = "Swiftコードを整形する"
+run = "swiftformat {{vars.swift_sources}}"
+
+[tasks.format-check]
+description = "Swiftコードの整形を検査する"
+run = "swiftformat {{vars.swift_sources}} --lint"
+
+[tasks.lint]
+description = "Swiftコードを静的解析する"
+run = "swiftlint --strict --config .swiftlint.yaml --cache-path .swiftlint-cache {{vars.swift_sources}}"
+
+[tasks.toolchain]
+description = "使用中のmacOS・Xcode・Swiftを表示する"
+run = ["sw_vers", "xcodebuild -version", "xcrun swift --version"]
+
+[tasks.install]
+description = "ローカルビルドを/Applicationsに配置し、extensionを登録する"
+depends = ["build"]
+shell = "bash -euc"
+run = '''
+rm -rf /Applications/Brooklyn.app
+ditto build/Build/Products/Release/Brooklyn.app /Applications/Brooklyn.app
+pluginkit -r build/Build/Products/Release/Brooklyn.app/Contents/PlugIns/BrooklynExtension.appex 2>/dev/null || true
+pluginkit -a /Applications/Brooklyn.app/Contents/PlugIns/BrooklynExtension.appex
+pluginkit -e use -i {{vars.extension_id}}
+killall WallpaperAgent 2>/dev/null || true
+'''
+
+[tasks.uninstall]
+description = "ローカルアプリとextension登録を削除する"
+shell = "bash -euc"
+run = '''
+pluginkit -r /Applications/Brooklyn.app/Contents/PlugIns/BrooklynExtension.appex 2>/dev/null || true
+rm -rf /Applications/Brooklyn.app
+'''
+
+[tasks.reset]
+description = "スクリーンセーバーの設定と表示キャッシュを削除する"
+shell = "bash -euc"
+run = '''
+brooklyn_cache_dir=$(getconf DARWIN_USER_CACHE_DIR)
+test -n "$brooklyn_cache_dir"
+killall WallpaperAgent 2>/dev/null || true
+killall "System Settings" 2>/dev/null || true
+rm -f ~/Library/Containers/{{vars.extension_id}}/Data/Library/Preferences/ByHost/{{vars.extension_id}}.*.plist
+rm -rf "${brooklyn_cache_dir}com.apple.wallpaper.extension.legacy/com.apple.wallpaper.legacy.thumbnails"
+rm -f "${brooklyn_cache_dir}com.apple.wallpaper.agent/com.apple.wallpaper.view-model-cache/extension-com.apple.wallpaper.extension.legacy-screenSaver"
+'''
+
+[tasks.clean]
+description = "ビルド生成物とlintキャッシュを削除する"
+run = "rm -rf build Brooklyn.xcodeproj .swiftlint-cache"

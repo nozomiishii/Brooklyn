@@ -1,14 +1,14 @@
 ---
 paths:
   - ".github/workflows/release.yaml"
-  - "Makefile"
+  - "mise.toml"
   - "release-please-config.json"
   - ".release-please-manifest.json"
 ---
 
 # リリースフロー詳細
 
-CLAUDE.md の「CI / リリース」節の補足。`release.yaml` / `.github/workflows/*` / Homebrew Cask 関連を変更する前に必ず読むこと。
+`release.yaml` / `.github/workflows/*` / Homebrew Cask 関連を変更する前に必ず読むこと。
 
 ## ジョブ構成
 
@@ -24,13 +24,13 @@ upload-assets (xcode-27)          release_created == 'true' のときだけ
 ```
 
 - `create-draft-release`: release-please が conventional commits を集計し、release PR が既にマージされていれば draft release + tag を作成
-- `upload-assets`: XcodeGen + `make build` + `make test` で `Brooklyn.app` (screen saver extension 内蔵) をビルドし、[署名と公証](#署名と公証)を経て `Brooklyn.app.zip` を GitHub Release に upload 後 publish
+- `upload-assets`: XcodeGen + `mise run build` + `mise run test` で `Brooklyn.app` (screen saver extension 内蔵) をビルドし、[署名と公証](#署名と公証)を経て `Brooklyn.app.zip` を GitHub Release に upload 後 publish
 - `homebrew-update`: `brew bump-cask-pr` で `nozomiishii/homebrew-tap` の `Casks/brooklyn.rb` を更新する PR を作り、`gh pr merge --auto --squash` で auto-merge を有効化
 - `release-pr`: release-please で次の release PR を作成 / 更新
 
 ## 署名と公証
 
-`upload-assets` はビルド後に配布物を仕上げる。ローカルビルド (`make build` / `make install`) は ad-hoc 署名のままで、この処理はリリース CI だけで行う。
+`upload-assets` はビルド後に配布物を仕上げる。ローカルビルド (`mise run build` / `mise run install`) は ad-hoc 署名のままで、この処理はリリース CI だけで行う。
 
 ```
 security import      .p12 を一時キーチェーンへ。job 末尾の cleanup step で削除
