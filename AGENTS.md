@@ -1,5 +1,9 @@
 # Repository Guidelines
 
+## 保守
+
+Swift・Xcode・macOS の更新時は [保守方針](docs/maintenance.md)に従う。
+
 ## 動作確認
 
 | 手段 | 手順 |
