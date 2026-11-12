@@ -135,8 +135,6 @@ jobs:
 
       - name: Set up mise
         uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
-        with:
-          auto_update: true
 
       - name: Show toolchain
         run: mise run toolchain
