@@ -19,11 +19,7 @@ A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pe
 
 ## Install
 
-### Homebrew
-
-```sh
-brew install nozomiishii/tap/brooklyn
-```
+Choose either mise or Homebrew to install Brooklyn.
 
 ### mise
 
@@ -32,6 +28,15 @@ Requires mise 2026.8 or later.
 ```sh
 mise bootstrap packages use -g brew-cask:nozomiishii/tap/brooklyn
 ```
+
+<details>
+<summary>Use Homebrew instead</summary>
+
+```sh
+brew install nozomiishii/tap/brooklyn
+```
+
+</details>
 
 ### Register the screen saver
 

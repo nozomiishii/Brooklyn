@@ -19,11 +19,7 @@
 
 ## Install
 
-### Homebrew
-
-```sh
-brew install nozomiishii/tap/brooklyn
-```
+mise または Homebrew のどちらかを選んでインストールします。
 
 ### mise
 
@@ -32,6 +28,15 @@ mise 2026.8 以降が必要です。
 ```sh
 mise bootstrap packages use -g brew-cask:nozomiishii/tap/brooklyn
 ```
+
+<details>
+<summary>Homebrew を使う場合</summary>
+
+```sh
+brew install nozomiishii/tap/brooklyn
+```
+
+</details>
 
 ### スクリーンセーバーの登録
 
