@@ -8,7 +8,7 @@ Swift・Xcode・macOS の更新時は [保守方針](docs/maintenance.md)に従�
 
 | 手段 | 手順 |
 | --- | --- |
-| Canvas ターゲット | `mise run generate && open Brooklyn.xcodeproj`。インストール不要で、ウィンドウ内で再生する |
+| Canvas ターゲット | [開発環境の準備](README.ja.md#development)に従い、ウィンドウ内で再生する |
 | 実機 | `mise run install` で /Applications へ配置し、システム設定のスクリーンセーバー一覧から選ぶ |
 
 一覧に出ない、選んでも反映されないときは `mise run reset` を先に実行する。WallpaperAgent が解決済みのパスをキャッシュしている。

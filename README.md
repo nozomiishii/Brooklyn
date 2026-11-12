@@ -10,11 +10,11 @@ English | [日本語](./README.ja.md)
 
 A macOS screen saver inspired by [Apple's 2018 Brooklyn event](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/). 75 mesmerizing Apple logo animations looping endlessly on your screen.
 
-A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pedrommcarrasco/Brooklyn), rebuilt for Swift 6, macOS 26 (Tahoe), and Apple Silicon.
+A reimplementation of [Pedro Carrasco's original Brooklyn](https://github.com/pedrommcarrasco/Brooklyn), rebuilt for Swift 6, macOS, and Apple Silicon.
 
 ## Requirements
 
-- macOS 26 (Tahoe) or later
+- macOS: see the [project configuration](project.yaml) for the minimum supported version.
 - Apple Silicon (arm64)
 
 ## Install
@@ -85,6 +85,27 @@ Brooklyn.app > App Icon
   <img src="demo/app-icon-classic.png" alt="" width="128" />
 
 Your choice stays after you quit the app. The Dock icon of the running app only switches on its next launch.
+
+## Development
+
+- Install and select the same Xcode version used in [CI](.github/workflows/ci.yaml).
+- Install mise using the [official setup guide](https://mise.jdx.dev/getting-started.html).
+- Enable [mise self-updates](https://mise.jdx.dev/configuration/settings.html#self-update-auto) in your global configuration.
+- From the repository root, prepare the development tools and Xcode project.
+
+```sh
+mise install --locked
+mise run generate
+open Brooklyn.xcodeproj
+```
+
+In Xcode, select the `Canvas` scheme and Run to play the screen saver in a window.
+
+Run `mise tasks` to list the development tasks.
+
+- Follow [local testing](AGENTS.md#動作確認) to install locally or reset cached state.
+- Follow the [maintenance policy](docs/maintenance.md) when updating Swift, Xcode, or macOS.
+- Follow the [release workflow](docs/release.md) for distribution.
 
 ## Acknowledgments
 

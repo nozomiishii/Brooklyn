@@ -10,11 +10,11 @@
 
 [Apple の 2018 年 Brooklyn イベント](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/)にインスパイアされた macOS スクリーンセーバー。75 種類の美しい Apple ロゴアニメーションが画面でループし続けます。
 
-[Pedro Carrasco のオリジナル Brooklyn](https://github.com/pedrommcarrasco/Brooklyn) を Swift 6 / macOS 26 (Tahoe) / Apple Silicon 向けに再実装したものです。
+[Pedro Carrasco のオリジナル Brooklyn](https://github.com/pedrommcarrasco/Brooklyn) を Swift 6 / macOS / Apple Silicon 向けに再実装したものです。
 
 ## Requirements
 
-- macOS 26 (Tahoe) 以降
+- macOS：最低対応バージョンは[プロジェクト設定](project.yaml)を参照
 - Apple Silicon (arm64)
 
 ## Install
@@ -85,6 +85,27 @@ Brooklyn.app > App Icon
   <img src="demo/app-icon-classic.png" alt="" width="128" />
 
 選んだアイコンはアプリを終了しても残ります。起動中のアプリの Dock アイコンだけは、次の起動から切り替わります。
+
+## Development
+
+- [CI](.github/workflows/ci.yaml) と同じ版の Xcode を用意して選択します。
+- [公式の導入手順](https://mise.jdx.dev/getting-started.html)に従って mise をインストールします。
+- [本体の自動更新](https://mise.jdx.dev/configuration/settings.html#self-update-auto)を各自のグローバル設定で有効にします。
+- リポジトリのルートで、開発用ツールと Xcode プロジェクトを準備します。
+
+```sh
+mise install --locked
+mise run generate
+open Brooklyn.xcodeproj
+```
+
+Xcode で `Canvas` scheme を選び、Run するとウィンドウ内で再生できます。
+
+開発タスクの一覧は `mise tasks` で確認できます。
+
+- 実機への配置・キャッシュのリセットは [動作確認](AGENTS.md#動作確認)に従います。
+- Swift・Xcode・macOS の更新は [保守方針](docs/maintenance.md)に従います。
+- 配布は [リリースフロー](docs/release.md)に従います。
 
 ## 謝辞
 
