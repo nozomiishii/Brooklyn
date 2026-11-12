@@ -19,7 +19,7 @@ final class LoopPlayerTests: XCTestCase {
         // AVQueuePlayer needs at least 2 items to loop
         XCTAssertGreaterThanOrEqual(
             player.items().count, 2,
-            "Single item must be duplicated to prevent queue from stopping"
+            "Single item must be duplicated to prevent queue from stopping",
         )
     }
 
@@ -53,7 +53,7 @@ final class LoopPlayerTests: XCTestCase {
         let before = player.items().count
 
         let foreignItem = AVPlayerItem(url: url1)
-        NotificationCenter.default.post(name: .AVPlayerItemDidPlayToEndTime, object: foreignItem)
+        NotificationCenter.default.post(name: AVPlayerItem.didPlayToEndTimeNotification, object: foreignItem)
 
         XCTAssertEqual(player.items().count, before, "Foreign item must not be re-enqueued")
     }
@@ -72,7 +72,7 @@ final class LoopPlayerTests: XCTestCase {
         let player = LoopPlayer(items: [ownedItem, AVPlayerItem(url: url2)])
         let before = player.items().count
 
-        NotificationCenter.default.post(name: .AVPlayerItemDidPlayToEndTime, object: ownedItem)
+        NotificationCenter.default.post(name: AVPlayerItem.didPlayToEndTimeNotification, object: ownedItem)
 
         XCTAssertEqual(player.items().count, before + 1, "Owned item must be re-enqueued as a copy")
     }

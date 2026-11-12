@@ -32,9 +32,9 @@ final class LoopPlayer: AVQueuePlayer {
 
     private nonisolated func makeObserver() -> NSObjectProtocol {
         NotificationCenter.default.addObserver(
-            forName: .AVPlayerItemDidPlayToEndTime,
+            forName: AVPlayerItem.didPlayToEndTimeNotification,
             object: nil,
-            queue: .main
+            queue: .main,
         ) { [weak self] notification in
             guard let self, let finishedItem = notification.object as? AVPlayerItem else { return }
             MainActor.assumeIsolated {

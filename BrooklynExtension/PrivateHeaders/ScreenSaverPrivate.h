@@ -27,17 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// Main view controller for screensaver animation.
 /// Specify your subclass name as ScreenSaverViewControllerClass in Info.plist.
 @interface ScreenSaverViewController : NSViewController
-
-/// The ScreenSaverView that provides the animation.
-@property (nonatomic, weak, nullable) ScreenSaverView *representedView;
-
-/// Whether the screensaver is currently animating.
-@property (nonatomic, getter=isAnimating) BOOL animating;
-
-/// Called to create the view for the given frame.
-/// Swift name: loadView(forFrame:isPreview:)
-- (void)loadViewForFrame:(NSRect)frame isPreview:(BOOL)isPreview NS_SWIFT_NAME(loadView(forFrame:isPreview:));
-
 @end
 
 #pragma mark - ScreenSaverConfigurationViewController

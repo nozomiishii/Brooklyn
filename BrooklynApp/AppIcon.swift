@@ -40,33 +40,30 @@ enum AppIcon: String, CaseIterable, Identifiable {
         let inset = canvas * 0.1015
         let body = canvas - inset * 2
         let rect = NSRect(x: inset, y: inset, width: body, height: body)
-        let shape = RoundedRectangle(cornerRadius: body * 0.2237, style: .continuous)
-            .path(in: rect)
-            .cgPath
+        return NSImage(size: NSSize(width: canvas, height: canvas), flipped: false) { _ in
+            guard let context = NSGraphicsContext.current?.cgContext else { return false }
+            let shape = RoundedRectangle(cornerRadius: body * 0.2237, style: .continuous)
+                .path(in: rect)
+                .cgPath
 
-        let image = NSImage(size: NSSize(width: canvas, height: canvas))
-        image.lockFocus()
-        defer { image.unlockFocus() }
+            context.saveGState()
+            context.setShadow(
+                offset: CGSize(width: 0, height: -canvas * 0.012),
+                blur: canvas * 0.024,
+                color: NSColor.black.withAlphaComponent(0.28).cgColor,
+            )
+            context.addPath(shape)
+            context.setFillColor(NSColor.black.cgColor)
+            context.fillPath()
+            context.restoreGState()
 
-        guard let context = NSGraphicsContext.current?.cgContext else { return artwork }
+            context.saveGState()
+            context.addPath(shape)
+            context.clip()
+            artwork.draw(in: rect)
+            context.restoreGState()
 
-        context.saveGState()
-        context.setShadow(
-            offset: CGSize(width: 0, height: -canvas * 0.012),
-            blur: canvas * 0.024,
-            color: NSColor.black.withAlphaComponent(0.28).cgColor
-        )
-        context.addPath(shape)
-        context.setFillColor(NSColor.black.cgColor)
-        context.fillPath()
-        context.restoreGState()
-
-        context.saveGState()
-        context.addPath(shape)
-        context.clip()
-        artwork.draw(in: rect)
-        context.restoreGState()
-
-        return image
+            return true
+        }
     }
 }

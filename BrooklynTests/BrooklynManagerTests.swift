@@ -64,7 +64,7 @@ final class BrooklynManagerTests: XCTestCase {
 
         XCTAssertTrue(
             firstURL.lastPathComponent == "original.mp4",
-            "First item must be original.mp4, got \(firstURL.lastPathComponent)"
+            "First item must be original.mp4, got \(firstURL.lastPathComponent)",
         )
     }
 

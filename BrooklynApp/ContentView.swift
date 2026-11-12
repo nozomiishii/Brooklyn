@@ -18,7 +18,7 @@ struct ContentView: View {
 
             Label(
                 registrar.isRegistered ? "Extension registered" : "Extension not registered yet",
-                systemImage: registrar.isRegistered ? "checkmark.circle.fill" : "exclamationmark.triangle"
+                systemImage: registrar.isRegistered ? "checkmark.circle.fill" : "exclamationmark.triangle",
             )
             .foregroundStyle(registrar.isRegistered ? Color.green : Color.orange)
 
@@ -37,7 +37,7 @@ struct ContentView: View {
 
             Picker("App Icon", selection: Binding(
                 get: { iconController.selected },
-                set: { iconController.select($0) }
+                set: { iconController.select($0) },
             )) {
                 ForEach(AppIcon.allCases) { icon in
                     Text(icon.displayName).tag(icon)

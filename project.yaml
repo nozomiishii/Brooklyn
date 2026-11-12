@@ -3,7 +3,7 @@ options:
   bundleIdPrefix: dev.nozomiishii
   deploymentTarget:
     macOS: "26.0"
-  xcodeVersion: "26.4"
+  xcodeVersion: "27.2"
   createIntermediateGroups: true
 
 settings:

@@ -58,7 +58,7 @@ final class BrooklynView: ScreenSaverView {
         willStopObserver = DistributedNotificationCenter.default().addObserver(
             forName: NSNotification.Name("com.apple.screensaver.willstop"),
             object: nil,
-            queue: .main
+            queue: .main,
         ) { [weak self] _ in
             MainActor.assumeIsolated {
                 self?.stopAnimation()
