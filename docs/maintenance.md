@@ -10,7 +10,7 @@
 
 - Swift コンパイラと SDK は Xcode に付属するものを使い、Xcode 自体の更新は Renovate と別に行う。
 - 旧環境のためだけの互換処理は追加しない。
-- mise 本体と管理ツールの更新は [mise の更新方針](<decisions/mise 本体は固定せず自動更新する.md>)に従う。
+- mise 本体と管理ツールの更新は [mise の更新方針](<decisions/mise 本体は固定せず既存の運用に揃える.md>)に従う。
 
 ## macOS 更新時の確認
 
