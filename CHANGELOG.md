@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.1](https://github.com/nozomiishii/Brooklyn/compare/v2.3.0...v2.3.1) (2026-11-12)
+
+
+### Miscellaneous
+
+* trust brooklyn cask in release ci ([#212](https://github.com/nozomiishii/Brooklyn/issues/212)) ([e052e5d](https://github.com/nozomiishii/Brooklyn/commit/e052e5df4e39fe30dda9a0805f48fd00d30ddb43))
+
 ## [2.3.0](https://github.com/nozomiishii/Brooklyn/compare/v2.2.3...v2.3.0) (2026-11-12)
 
 
