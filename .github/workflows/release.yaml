@@ -370,6 +370,7 @@ jobs:
           set -x
           VERSION="${TAG_NAME#v}"
           brew tap nozomiishii/homebrew-tap
+          brew trust --cask nozomiishii/tap/brooklyn
           # `--write-only` だとファイル書き換え + brew style --fix + brew audit のみ
           # 走り、commit/push/PR 作成は行われない。後段で自前に PR を作ることで
           # PR title を最初から Conventional Commits 形式にし、CI の二重起動を避ける。
