@@ -10,11 +10,11 @@
 
 [Apple の 2018 年 Brooklyn イベント](https://www.apple.com/newsroom/2018/10/highlights-from-apples-keynote-event/)にインスパイアされた macOS スクリーンセーバー。75 種類の美しい Apple ロゴアニメーションが画面でループし続けます。
 
-[Pedro Carrasco のオリジナル Brooklyn](https://github.com/pedrommcarrasco/Brooklyn) を Swift 6 / macOS 26 (Tahoe) / Apple Silicon 向けに再実装したものです。
+[Pedro Carrasco のオリジナル Brooklyn](https://github.com/pedrommcarrasco/Brooklyn) を Swift 6 / macOS / Apple Silicon 向けに再実装したものです。
 
 ## Requirements
 
-- macOS 26 (Tahoe) 以降
+- macOS：最低対応バージョンは[プロジェクト設定](project.yaml)を参照
 - Apple Silicon (arm64)
 
 ## Install
