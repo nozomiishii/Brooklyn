@@ -133,20 +133,17 @@ jobs:
           ref: ${{ needs.create-draft-release.outputs.tag_name }}
           persist-credentials: false
 
-      - name: Install XcodeGen
-        run: brew install xcodegen
+      - name: Set up mise
+        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
 
       - name: Show toolchain
-        run: |
-          sw_vers
-          xcodebuild -version
-          xcrun swift --version
+        run: mise run toolchain
 
       - name: Build
-        run: make build
+        run: mise run build
 
       - name: Run tests
-        run: make test
+        run: mise run test
 
       # .p12 を一時キーチェーンに取り込む (詳細: docs/release.md)
       # Apple 公式の CI 署名ツールが出たら置き換える:

@@ -4,10 +4,10 @@
 
 | 手段 | 手順 |
 | --- | --- |
-| Canvas ターゲット | `make generate && open Brooklyn.xcodeproj`。インストール不要で、ウィンドウ内で再生する |
-| 実機 | `make install` で /Applications へ配置し、システム設定のスクリーンセーバー一覧から選ぶ |
+| Canvas ターゲット | `mise run generate && open Brooklyn.xcodeproj`。インストール不要で、ウィンドウ内で再生する |
+| 実機 | `mise run install` で /Applications へ配置し、システム設定のスクリーンセーバー一覧から選ぶ |
 
-一覧に出ない、選んでも反映されないときは `make reset` を先に実行する。WallpaperAgent が解決済みのパスをキャッシュしている。
+一覧に出ない、選んでも反映されないときは `mise run reset` を先に実行する。WallpaperAgent が解決済みのパスをキャッシュしている。
 
 ## アーキテクチャ
 
@@ -69,7 +69,7 @@ Apple 純正 saver が全て同じ構成のため安定しているが、macOS �
 | `AVQueuePlayer` は 1 アイテムで停止する | `LoopPlayer` が自動複製する |
 | NSHostingView 単体は ViewBridge のリモートシートで描画されない | 設定シートに SwiftUI を載せるには NSHostingController + addChild を使う |
 | リモートシートでは NSApp.keyWindow も sheetParent も nil | `configureSheetDidEnd` を呼ぶのが唯一の閉じ方。閉じる操作は extension 側の実装が全て |
-| WallpaperAgent は解決済みモジュールパスとサムネイルのタイルをキャッシュする | 一覧に出すには pluginkit 登録 + use への election が要る。パスやサムネイルが変わったら `make reset`。cask の install / upgrade では tap の postflight が WallpaperAgent を再起動する |
+| WallpaperAgent は解決済みモジュールパスとサムネイルのタイルをキャッシュする | 一覧に出すには pluginkit 登録 + use への election が要る。パスやサムネイルが変わったら `mise run reset`。cask の install / upgrade では tap の postflight が WallpaperAgent を再起動する |
 
 legacy の ScreenSaverEngine は appex を起動しない。
 

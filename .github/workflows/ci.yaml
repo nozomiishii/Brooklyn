@@ -33,24 +33,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install Mint
-        run: brew install mint
-
-      - name: Cache Mint packages
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.mint
-          key: mint-${{ runner.os }}-${{ hashFiles('Mintfile') }}
-          restore-keys: mint-${{ runner.os }}-
-
-      - name: Bootstrap tools
-        run: mint bootstrap
+      - name: Set up mise
+        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
 
       - name: Lint
-        run: make lint
+        run: mise run lint
 
       - name: Format check
-        run: make format-check
+        run: mise run format-check
 
   build-and-test:
     runs-on: xcode-27
@@ -64,17 +54,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install XcodeGen
-        run: brew install xcodegen
+      - name: Set up mise
+        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
 
       - name: Show toolchain
-        run: |
-          sw_vers
-          xcodebuild -version
-          xcrun swift --version
+        run: mise run toolchain
 
       - name: Build
-        run: make build
+        run: mise run build
 
       - name: Verify arm64 binaries
         run: |
@@ -93,7 +80,7 @@ jobs:
           [ "$count" -eq 75 ] || (echo "Expected 75 MP4 files, got $count" && exit 1)
 
       - name: Run tests
-        run: make test
+        run: mise run test
 
   required:
     # name 変更時は infra 側の required_status_checks も更新する
