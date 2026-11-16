@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.2](https://github.com/nozomiishii/Brooklyn/compare/v2.3.1...v2.3.2) (2026-11-16)
+
+
+### Miscellaneous
+
+* update dependency swiftformat to v0.64.6 ([#214](https://github.com/nozomiishii/Brooklyn/issues/214)) ([13b8ae3](https://github.com/nozomiishii/Brooklyn/commit/13b8ae3de9f0b487cf676c5d3a5264d7f56cfd3f))
+* update dependency swiftlint to v0.65.1 ([#215](https://github.com/nozomiishii/Brooklyn/issues/215)) ([18f9a51](https://github.com/nozomiishii/Brooklyn/commit/18f9a51ad308170c5818bf83d1f5b043641dea0a))
+
 ## [2.3.1](https://github.com/nozomiishii/Brooklyn/compare/v2.3.0...v2.3.1) (2026-11-12)
 
 
