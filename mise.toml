@@ -1,5 +1,5 @@
 [tools]
-swiftlint = "0.63.2"
+swiftlint = "0.65.1"
 swiftformat = "0.64.6"
 xcodegen = "2.46.0"
 
