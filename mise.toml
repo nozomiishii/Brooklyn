@@ -1,7 +1,7 @@
 [tools]
 swiftlint = "0.65.1"
 swiftformat = "0.64.6"
-xcodegen = "2.46.0"
+xcodegen = "2.48.0"
 
 [vars]
 swift_sources = "Shared BrooklynApp BrooklynExtension BrooklynTests Canvas"

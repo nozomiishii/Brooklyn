@@ -28,12 +28,12 @@ url = "https://github.com/realm/SwiftLint/releases/download/0.65.1/portable_swif
 url_api = "https://api.github.com/repos/realm/SwiftLint/releases/assets/524187565"
 
 [[tools.xcodegen]]
-version = "2.46.0"
+version = "2.48.0"
 backend = "aqua:yonaskolb/XcodeGen"
-specifiers = ["2.46.0"]
+specifiers = ["2.48.0"]
 
 [tools.xcodegen."platforms.macos-arm64"]
-checksum = "sha256:4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806"
+checksum = "sha256:620c9f0dc10849f94728ab5df52d225ebab8187439dd6fee1925e59e80dff892"
 checksum_source = "mise-versions"
-url = "https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip"
-url_api = "https://api.github.com/repos/yonaskolb/XcodeGen/releases/assets/478866069"
+url = "https://github.com/yonaskolb/XcodeGen/releases/download/2.48.0/xcodegen.zip"
+url_api = "https://api.github.com/repos/yonaskolb/XcodeGen/releases/assets/767651385"
