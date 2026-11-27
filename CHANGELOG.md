@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.2](https://github.com/nozomiishii/Brooklyn/compare/v2.3.1...v2.3.2) (2026-11-27)
+
+
+### Miscellaneous
+
+* update actions/create-github-app-token action to v3.4.0 ([#218](https://github.com/nozomiishii/Brooklyn/issues/218)) ([3a1e4c6](https://github.com/nozomiishii/Brooklyn/commit/3a1e4c69e039ba33375b4405ef6f82eee0f2fb99))
+* update dependency swiftformat to v0.64.6 ([#214](https://github.com/nozomiishii/Brooklyn/issues/214)) ([13b8ae3](https://github.com/nozomiishii/Brooklyn/commit/13b8ae3de9f0b487cf676c5d3a5264d7f56cfd3f))
+* update dependency swiftformat to v0.64.7 ([#217](https://github.com/nozomiishii/Brooklyn/issues/217)) ([a117ba5](https://github.com/nozomiishii/Brooklyn/commit/a117ba5fc35dc40322ba3c0d97c6ed65b7855e05))
+* update dependency swiftlint to v0.65.1 ([#215](https://github.com/nozomiishii/Brooklyn/issues/215)) ([18f9a51](https://github.com/nozomiishii/Brooklyn/commit/18f9a51ad308170c5818bf83d1f5b043641dea0a))
+* update dependency xcodegen to v2.48.0 ([#219](https://github.com/nozomiishii/Brooklyn/issues/219)) ([b67f9e4](https://github.com/nozomiishii/Brooklyn/commit/b67f9e464cad2241ef0342739b55fefb1305e98f))
+* update jdx/mise-action action to v5.3.0 ([#220](https://github.com/nozomiishii/Brooklyn/issues/220)) ([39a4fba](https://github.com/nozomiishii/Brooklyn/commit/39a4fbae447a069260aee7178e0f0ec4fc2f258c))
+
 ## [2.3.1](https://github.com/nozomiishii/Brooklyn/compare/v2.3.0...v2.3.1) (2026-11-12)
 
 
